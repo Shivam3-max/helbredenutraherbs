@@ -1,0 +1,286 @@
+/**
+ * DOM smoke tests against the running harness.
+ *
+ *   node dev/server.mjs &   ->   npm run smoke
+ *
+ * These assert on *rendered markup*, not status codes, on purpose: the two
+ * LiquidJS traps this theme has to avoid both produce a valid HTTP 200 page
+ * with whole sections silently missing. A status check would pass while the
+ * page was half empty.
+ */
+const BASE = process.env.BASE || 'http://localhost:3660';
+
+let pass = 0;
+const fails = [];
+
+const count = (html, re) => (html.match(re) || []).length;
+
+function check(label, got, want) {
+  const ok = typeof want === 'function' ? want(got) : got === want;
+  if (ok) { pass++; return; }
+  fails.push(`${label}: got ${got}${typeof want === 'function' ? '' : `, want ${want}`}`);
+}
+
+const gt = (n) => (got) => got > n;
+const gte = (n) => (got) => got >= n;
+
+async function get(path) {
+  const res = await fetch(BASE + path);
+  if (!res.ok) throw new Error(`${path} -> HTTP ${res.status}`);
+  return res.text();
+}
+
+/* Every page must satisfy these, whatever the template. */
+function assertChrome(html, where) {
+  check(`${where} · no missing sections`, count(html, /<!-- section .+? missing/g), 0);
+  check(`${where} · no unrendered liquid`, count(html, /\{\{|\{%/g), 0);
+  check(`${where} · header`, count(html, /class="hdr"/g), 1);
+  check(`${where} · footer`, count(html, /class="ftr"/g), 1);
+  check(`${where} · cart drawer`, count(html, /data-panel="cart"/g), 1);
+  check(`${where} · search overlay`, count(html, /data-panel="search"/g), 1);
+  /* desktop primary nav — was missing entirely until the mega menu landed */
+  check(`${where} · desktop nav links`, count(html, /class="hdr__navlink/g), 7);
+  check(`${where} · concern mega items`, count(html, /class="megaitem"/g), 8);
+  check(`${where} · mega tools`, count(html, /class="megatool"/g), 3);
+  check(`${where} · mega toggle`, count(html, /data-drop-btn/g), 1);
+  /* phone search bar is always on screen, never behind an icon */
+  check(`${where} · phone search bar`, count(html, /class="hdr__msearch"/g), 1);
+  check(`${where} · stylesheets`, count(html, /<link rel="stylesheet"/g), gte(3));
+  check(`${where} · no raw entity leak`, count(html, /&amp;amp;|&lt;p&gt;/g), 0);
+  /* real contact details, on every page, with no placeholder left behind */
+  check(`${where} · phone`, count(html, /\+91 70090 40553/g), gte(1));
+  check(`${where} · email`, count(html, /info@helbredenutraherbs\.com/g), gte(1));
+  check(`${where} · whatsapp`, count(html, /wa\.me\/917009040553/g), gte(1));
+  check(`${where} · no stale contact`, count(html, /62838|care@helbrede/g), 0);
+}
+
+const run = async () => {
+  /* ---------------------------------------------------------- homepage --- */
+  {
+    const html = await get('/');
+    assertChrome(html, 'home');
+    check('home · hero banners', count(html, /data-hero-slide/g), 3);
+    check('home · hero dots', count(html, /data-hero-dot/g), 3);
+    check('home · hero arrows', count(html, /data-hero-(prev|next)/g), 2);
+    /* one desktop + one mobile artwork per banner — a 3.49:1 strip cannot crop
+       to a portrait phone screen, so they are separate slots */
+    check('home · desktop banner slots', count(html, /class="hb__desk"/g), 3);
+    check('home · mobile banner slots', count(html, /class="hb__mob"/g), 3);
+    check('home · banner slot codes', count(html, /HERO-0\d-[DM]/g), 6);
+    check('home · banner dimensions labelled', count(html, /1920 × 550 px/g), 3);
+    check('home · mobile dimensions labelled', count(html, /1130 × 1640 px/g), 3);
+    check('home · no empty slot labels', count(html, /class="slot__label"><\/div>/g), 0);
+    /* the banner leads the page, the concern shelf follows it */
+    check('home · hero leads the page',
+      html.indexOf('shopify-section-hero') < html.indexOf('shopify-section-concern'), true);
+    check('home · concern chips', count(html, /class="chip cs__chip/g), 8);
+    check('home · concern panes', count(html, /data-tab-pane="/g), 8);
+    /* 35 in the concern switcher + 8 in the best-sellers rail */
+    check('home · product cards', count(html, /<article class="card"/g), 43);
+    check('home · best-seller rail', count(html, /data-rail-wrap/g), gte(1));
+    check('home · label teaser', count(html, /class="label-panel"/g), 1);
+    check('home · ritual teaser', count(html, /class="rit"/g), 3);
+    check('home · discount badges', count(html, /badge--save/g), gt(20));
+    check('home · announcement items', count(html, /data-anno-item/g), 3);
+    check('home · section headings', count(html, /sec-head__main/g), gte(1));
+  }
+
+  /* ------------------------------------------------------- product page --- */
+  {
+    const handle = 'helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules';
+    const html = await get(`/products/${handle}`);
+    assertChrome(html, 'pdp');
+    check('pdp · breadcrumb', count(html, /class="wrap crumbs"/g), 1);
+    check('pdp · gallery shots', count(html, /class="pdp__shot/g), gte(5));
+    check('pdp · gallery thumbs', count(html, /class="pdp__thumb/g), gte(5));
+    check('pdp · title', count(html, /class="pdp__title"/g), 1);
+    check('pdp · pack ladder rows', count(html, /class="pack /g), 3);
+    check('pdp · pack badges', count(html, /pack__badge/g), 3);
+    check('pdp · per-unit price', count(html, /pack__each/g), 2);
+    check('pdp · add to cart', count(html, /data-add-to-cart/g), 1);
+    check('pdp · buy now', count(html, /data-buy-now/g), 1);
+    check('pdp · pincode check', count(html, /data-pincode/g), 1);
+    check('pdp · call to order', count(html, /class="pdp__call"/g), 1);
+    check('pdp · benefit cards', count(html, /class="ben"/g), gte(4));
+    check('pdp · LABEL PANEL', count(html, /class="label-panel"/g), 1);
+    check('pdp · label rows', count(html, /class="label-row"/g), gte(3));
+    check('pdp · declared doses', count(html, /class="label-row__d"/g), gte(3));
+    check('pdp · ingredient cards', count(html, /class="ing"/g), gte(3));
+    check('pdp · how-to steps', count(html, /class="step"/g), gte(1));
+    check('pdp · SAFETY CHECK', count(html, /data-safety/g), gte(1));
+    check('pdp · safety conditions', count(html, /data-cond="/g), 7);
+    check('pdp · safety lines', count(html, /<li>/g), gte(5));
+    check('pdp · FAQ items', count(html, /class="acc__item"/g), gte(3));
+    check('pdp · spec rows', count(html, /class="specs__row"/g), gte(3));
+    check('pdp · ROUTINE', count(html, /data-ritual-item/g), gte(3));
+    check('pdp · related rail', count(html, /data-rail/g), gte(1));
+    check('pdp · why helbrede', count(html, /class="val"/g), 4);
+  }
+
+  /* Every product must render its buy box and at least the parsed content. */
+  {
+    const shop = await (await fetch(`${BASE}/cart.js`)).json().catch(() => null);
+    if (!shop) fails.push('cart.js did not respond');
+  }
+
+  /* ------------------------------------------------------------ cart API -- */
+  {
+    await fetch(`${BASE}/cart/clear.js`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+    const pdp = await get('/products/virgin-hair-oil');
+    const id = (pdp.match(/data-variant-id="(\d+)"/) || [])[1];
+    check('cart · variant id present', Boolean(id), true);
+
+    const added = await (await fetch(`${BASE}/cart/add.js`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: [{ id: Number(id), quantity: 2 }] }),
+    })).json();
+    check('cart · add returns a line', added.items?.length, 1);
+
+    const cart = await (await fetch(`${BASE}/cart.js`)).json();
+    check('cart · item count', cart.item_count, 2);
+    check('cart · total > 0', cart.total_price, gt(0));
+    await fetch(`${BASE}/cart/clear.js`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
+  }
+
+  /* ------------------------------------------------------------- search --- */
+  {
+    const r = await (await fetch(`${BASE}/search/suggest?q=ashwagandha`)).json();
+    check('search · suggests products', r.products.length, gt(0));
+  }
+
+  /* --------------------------------------------------------- every route -- */
+  {
+    const shop = JSON.parse(
+      await (await import('node:fs')).promises.readFile(new URL('../data/shop.json', import.meta.url), 'utf8'),
+    );
+    let broken = 0;
+    for (const p of shop.products) {
+      const res = await fetch(`${BASE}/products/${p.handle}`);
+      if (!res.ok) { broken++; continue; }
+      const html = await res.text();
+      if (count(html, /<!-- section .+? missing/g) || count(html, /\{\{|\{%/g)) broken++;
+      if (!count(html, /class="pdp__title"/g)) broken++;
+    }
+    check('all 35 product pages render clean', broken, 0);
+
+    for (const h of Object.keys(shop.collections)) {
+      const res = await fetch(`${BASE}/collections/${h}`);
+      if (!res.ok) fails.push(`collection ${h} -> HTTP ${res.status}`);
+      else pass++;
+    }
+  }
+
+  /* ------------------------------------------------ contact + local SEO -- */
+  {
+    const html = await get('/pages/contact');
+    check('contact · postal address', count(html, /Sushant Complex SCO 2/g), gte(1));
+    check('contact · address element', count(html, /<address/g), gte(1));
+    check('contact · manufacturing line', count(html, /Kenko Healthcare/g), gte(1));
+  }
+  {
+    const html = await get('/');
+    const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+    check('seo · JSON-LD present', Boolean(m), true);
+    if (m) {
+      let d = null;
+      try { d = JSON.parse(m[1]); } catch (_) {}
+      check('seo · JSON-LD parses', Boolean(d), true);
+      check('seo · postal code', d?.address?.postalCode, '134109');
+      check('seo · locality', d?.address?.addressLocality, 'Panchkula');
+      check('seo · telephone', d?.telephone, '+917009040553');
+    }
+  }
+
+  /* -------------------------------------------------- collection page --- */
+  {
+    const html = await get('/collections/skin-care');
+    assertChrome(html, 'collection');
+    check('collection · heading', count(html, /sec-head__main/g), gte(1));
+    check('collection · filter chips', count(html, /data-filter="/g), gte(2));
+    check('collection · sort control', count(html, /data-sort/g), 1);
+    check('collection · grid items', count(html, /data-item /g), 7);
+    check('collection · cards', count(html, /<article class="card"/g), 7);
+  }
+  {
+    const html = await get('/collections/all');
+    check('collection all · 35 cards', count(html, /<article class="card"/g), 35);
+  }
+
+  /* -------------------------------------------------------- tool pages --- */
+  {
+    const html = await get('/pages/ritual-builder');
+    assertChrome(html, 'ritual');
+    check('ritual · concern chips', count(html, /data-rb-concern="/g), 8);
+    check('ritual · depth chips', count(html, /data-rb-depth="/g), 3);
+    check('ritual · catalog payload', count(html, /id="hb-catalog"/g), 1);
+    check('ritual · add button', count(html, /data-rb-add/g), 1);
+  }
+  {
+    const html = await get('/pages/label-check');
+    assertChrome(html, 'label');
+    check('label · two pickers', count(html, /data-cmp="/g), 2);
+    check('label · catalog payload', count(html, /id="hb-catalog"/g), 1);
+  }
+  {
+    const html = await get('/pages/ingredients');
+    assertChrome(html, 'ingredients');
+    check('ingredients · cards', count(html, /class="ing"/g), gte(50));
+  }
+  {
+    const html = await get('/pages/ingredients/ashwagandha');
+    check('ingredient detail · cards', count(html, /<article class="card"/g), gte(1));
+  }
+
+  /* ------------------------------------------------------ content pages -- */
+  for (const [path, label, needle] of [
+    ['/pages/about', 'about', /class="val"/g],
+    ['/pages/contact', 'contact', /class="pdp__call"/g],
+    ['/pages/faq', 'faq', /class="acc__item"/g],
+    ['/pages/consultancy', 'consultancy', /class="fld"/g],
+  ]) {
+    const html = await get(path);
+    assertChrome(html, label);
+    check(`${label} · body content`, count(html, needle), gte(3));
+  }
+
+  /* -------------------------------------------------------- cart/search -- */
+  {
+    const html = await get('/cart');
+    assertChrome(html, 'cart page');
+    check('cart page · heading', count(html, /sec-head__main/g), gte(1));
+  }
+  {
+    const html = await get('/search?q=ashwagandha');
+    assertChrome(html, 'search page');
+    check('search page · results', count(html, /<article class="card"/g), gte(1));
+  }
+
+  /* ---------------------------------------------- catalog data integrity -- */
+  {
+    const shop = JSON.parse(
+      await (await import('node:fs')).promises.readFile(new URL('../data/shop.json', import.meta.url), 'utf8'),
+    );
+    check('data · 35 products', shop.products.length, 35);
+    check('data · every product has 3 packs', shop.products.every((p) => p.variants.length === 3), true);
+    check('data · every product has a concern', shop.products.every((p) => p.concern), true);
+    check('data · every product has images', shop.products.every((p) => p.images.length > 0), true);
+    check('data · no title is just the brand',
+      shop.products.filter((p) => /^(helbrede|nutraherbs)$/i.test(p.title.trim())).length, 0);
+    check('data · no HTML entities in titles',
+      shop.products.filter((p) => /&(amp|lt|gt|quot|#39);/.test(p.title + p.subtitle)).length, 0);
+    check('data · every product has benefits', shop.products.every((p) => p.metafields.benefits.length), true);
+    check('data · every product has how-to-use', shop.products.every((p) => p.metafields.how_to_use.length), true);
+    check('data · dosed ingredient rows',
+      shop.products.reduce((n, p) => n + p.metafields.ingredients.filter((i) => i.dose).length, 0), gte(80));
+  }
+
+  /* -------------------------------------------------------------- report -- */
+  console.log(`\n  ${pass} passed, ${fails.length} failed\n`);
+  if (fails.length) {
+    fails.forEach((f) => console.log(`  ✗ ${f}`));
+    console.log('');
+    process.exit(1);
+  }
+};
+
+run().catch((e) => { console.error('\n  smoke run failed:', e.message, '\n'); process.exit(1); });

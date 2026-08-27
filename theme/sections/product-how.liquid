@@ -1,0 +1,44 @@
+{%- assign steps = product.hb.how_to_use -%}
+{%- assign who = product.hb.suitable_for -%}
+{%- if steps.size > 0 or who.size > 0 -%}
+<section class="sec sec--tint" id="how" data-reveal>
+  <div class="wrap split">
+    {%- if steps.size > 0 -%}
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">how to</span>
+        <h2 class="sec-head__main">Use it</h2>
+      </div>
+      <ol class="steps">
+        {%- for s in steps limit: 8 -%}
+          <li class="step">
+            <span class="step__n">{{ forloop.index }}</span>
+            <p class="step__t">{{ s }}</p>
+          </li>
+        {%- endfor -%}
+      </ol>
+      {%- if product.hb.usage_horizon != blank -%}
+        <p class="note note--warn" style="margin-top:1.25rem">
+          {% render 'icon', name: 'leaf', size: 17 %} {{ product.hb.usage_horizon }}
+        </p>
+      {%- endif -%}
+    </div>
+    {%- endif -%}
+
+    {%- if who.size > 0 -%}
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">who it is</span>
+        <h2 class="sec-head__main">Suitable for</h2>
+      </div>
+      <ul class="ticks">
+        {%- for w in who limit: 8 -%}<li>{{ w }}</li>{%- endfor -%}
+      </ul>
+    </div>
+    {%- endif -%}
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — how to use", "settings": [] }
+{% endschema %}

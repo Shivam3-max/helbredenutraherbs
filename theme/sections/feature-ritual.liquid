@@ -1,0 +1,63 @@
+{%- comment -%}
+  Homepage teaser for the Ritual Builder — the second signature feature.
+  Shows one worked example: a topical, a daily base and a night formula, drawn
+  from three different concerns, which is the shelf an ingestibles-only brand
+  cannot assemble.
+{%- endcomment -%}
+{%- assign morning = all_products | where: 'concern', 'hair-care' | first -%}
+{%- assign daily   = all_products | where: 'concern', 'daily-essentials' | first -%}
+{%- assign night   = all_products | where: 'concern', 'sleep-stress' | first -%}
+
+<section class="sec" data-reveal>
+  <div class="wrap split split--flip">
+
+    <div class="split__art">
+      <div class="ritual">
+        {%- assign slots = 'Morning,Daily,Night' | split: ',' -%}
+        {%- for slot in slots -%}
+          {%- case slot -%}
+            {%- when 'Morning' -%}{%- assign pr = morning -%}
+            {%- when 'Daily'   -%}{%- assign pr = daily -%}
+            {%- else           -%}{%- assign pr = night -%}
+          {%- endcase -%}
+          {%- if pr -%}
+            {%- assign v = pr.variants | first -%}
+            <a class="rit" href="{{ pr.url }}">
+              <span class="rit__slot">{{ slot }}</span>
+              <img class="rit__img" src="{{ pr.featured_image.src }}" alt="" width="64" height="64" loading="lazy">
+              <span>
+                <span class="rit__t">{{ pr.title }}</span>
+                <span class="rit__n">{{ pr.concern_label }}</span>
+              </span>
+              <span class="rit__p">{{ v.price | money }}</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">one capsule is rarely the</span>
+        <h2 class="sec-head__main">Whole answer</h2>
+      </div>
+      <p class="t-lede">
+        Helbrede makes both halves of a routine — the tablet you take and the serum
+        or oil you apply. So instead of selling you one bottle, we can lay out the
+        full day: something in the morning, the daily base underneath it, and the
+        recovery step at night.
+      </p>
+      <ul class="ticks" style="margin-top:1.25rem">
+        <li>Built across concerns, not just within one</li>
+        <li>Swap or remove anything you already own</li>
+        <li>Add the whole routine to your cart in one action</li>
+      </ul>
+      <a class="btn btn--primary" href="/pages/ritual-builder" style="margin-top:1.5rem">Build your ritual</a>
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Feature — ritual", "settings": [], "presets": [{ "name": "Feature — ritual" }] }
+{% endschema %}

@@ -1,0 +1,59 @@
+{%- assign c = collection -%}
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span>
+  {%- if c.kind == 'concern' -%}<span class="t-dim">Concern</span><span>/</span>{%- endif -%}
+  <span class="t-dim">{{ c.title }}</span>
+</nav>
+
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap">
+    <header class="coll__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">{% if c.kind == 'concern' %}for{% else %}browse{% endif %}</span>
+        <h1 class="sec-head__main">{{ c.title }}</h1>
+      </div>
+      {%- if c.tagline != blank -%}<p class="coll__tag">{{ c.tagline }}</p>{%- endif -%}
+      {%- if c.description != blank -%}<p class="t-lede coll__desc">{{ c.description }}</p>{%- endif -%}
+    </header>
+
+    <div class="coll__bar" data-collection>
+      {%- if c.filters.size > 0 -%}
+        <div class="coll__filters" role="group" aria-label="Refine">
+          <button class="chip is-on" type="button" data-filter="*" aria-pressed="true">
+            <span class="chip__dot" aria-hidden="true"></span>All {{ c.products_count }}
+          </button>
+          {%- for f in c.filters -%}
+            <button class="chip" type="button" data-filter="{{ f }}" aria-pressed="false">
+              <span class="chip__dot" aria-hidden="true"></span>{{ f }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      <label class="coll__sort">
+        <span class="t-mono">Sort</span>
+        <select data-sort>
+          <option value="featured">Featured</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="name">Name A–Z</option>
+        </select>
+      </label>
+    </div>
+
+    <p class="coll__count" data-count hidden></p>
+
+    <div class="grid grid--4" data-grid>
+      {%- for p in c.products -%}
+        <div data-item data-filters="{{ p.filters | join: '|' }}" data-price="{{ p.price }}" data-name="{{ p.title }}">
+          {% render 'product-card', product: p %}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    <p class="coll__none" data-none hidden>Nothing matches that combination. Clear a filter to see more.</p>
+  </div>
+</section>
+{% schema %}
+{ "name": "Collection", "settings": [] }
+{% endschema %}

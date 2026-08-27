@@ -1,0 +1,22 @@
+{%- assign items = product.hb.benefits -%}
+{%- if items.size > 0 -%}
+<section class="sec" id="benefits" data-reveal>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-head__pre">what it does</span>
+      <h2 class="sec-head__main">Benefits of {{ product.title }}</h2>
+    </div>
+    <div class="bens" data-reveal-stagger>
+      {%- for b in items limit: 9 -%}
+        <div class="ben">
+          <span class="ben__n">{{ forloop.index }}</span>
+          <p class="ben__t">{{ b }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — benefits", "settings": [] }
+{% endschema %}

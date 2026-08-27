@@ -1,0 +1,147 @@
+{%- comment -%}
+  Product buy box. Follows Kapiva's module order: gallery, promise, description,
+  pack ladder, quantity, call-to-order, delivery check, dual CTA, trust strip.
+{%- endcomment -%}
+{%- assign p = product -%}
+{%- assign v = p.variants | first -%}
+
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span>
+  <a href="/collections/{{ p.concern }}">{{ p.concern_label }}</a><span>/</span>
+  <span class="t-dim">{{ p.title }}</span>
+</nav>
+
+<section class="wrap pdp" data-product='{{ p.variants | json }}'>
+
+  {%- comment -%} ---------- gallery ---------- {%- endcomment -%}
+  <div class="pdp__media">
+    <div class="pdp__stage">
+      {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+        {%- assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price | round -%}
+        <span class="badge badge--save pdp__stage-flag">{{ pct }}% off</span>
+      {%- endif -%}
+      {%- for img in p.images limit: 8 -%}
+        <img class="pdp__shot {% if forloop.first %}is-on{% endif %}"
+             data-shot="{{ forloop.index0 }}"
+             src="{{ img.src }}" alt="{{ img.alt }}"
+             width="900" height="900"
+             {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
+      {%- endfor -%}
+    </div>
+    {%- if p.images.size > 1 -%}
+      <div class="pdp__thumbs" role="tablist" aria-label="Product images">
+        {%- for img in p.images limit: 8 -%}
+          <button class="pdp__thumb {% if forloop.first %}is-on{% endif %}" data-thumb="{{ forloop.index0 }}"
+                  role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                  aria-label="View image {{ forloop.index }}">
+            <img src="{{ img.src }}" alt="" width="120" height="120" loading="lazy">
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ---------- buy box ---------- {%- endcomment -%}
+  <div class="pdp__buy">
+    <p class="t-eyebrow">{{ p.concern_label }}</p>
+    <h1 class="pdp__title">{{ p.title }}</h1>
+    {%- if p.subtitle -%}<p class="pdp__sub">{{ p.subtitle }}</p>{%- endif -%}
+
+    {%- if p.hb.description != blank -%}
+      <div class="pdp__desc" data-clamp>
+        <p>{{ p.hb.description }}</p>
+      </div>
+      <button class="pdp__more" data-clamp-toggle aria-expanded="false">Read more</button>
+    {%- endif -%}
+
+    {%- if p.hb.benefits.size > 0 -%}
+      <ul class="ticks pdp__ticks">
+        {%- for b in p.hb.benefits limit: 4 -%}<li>{{ b }}</li>{%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    {%- if p.hb.usage_horizon != blank -%}
+      <p class="pdp__horizon">{% render 'icon', name: 'leaf', size: 15 %}{{ p.hb.usage_horizon }}</p>
+    {%- endif -%}
+
+    {%- comment -%} ---------- pack ladder ---------- {%- endcomment -%}
+    {%- if p.variants.size > 1 -%}
+      <div class="pdp__block">
+        <h2 class="pdp__block-h">Select a pack</h2>
+        <div class="packs" role="radiogroup" aria-label="Select a pack">
+          {%- for pv in p.variants -%}
+            <label class="pack {% if forloop.first %}is-on{% endif %}" data-pack="{{ pv.id }}">
+              <input class="sr" type="radio" name="id" value="{{ pv.id }}" {% if forloop.first %}checked{% endif %}>
+              <span class="pack__radio" aria-hidden="true"></span>
+              <span class="pack__mid">
+                <span class="pack__t">{{ pv.title }}</span>
+                <span class="pack__u">{{ pv.unit_label }}</span>
+                <span class="pack__ship {% unless pv.shipping == 'free' %}pack__ship--paid{% endunless %}">{{ pv.shipping_label }}</span>
+              </span>
+              <span class="pack__right">
+                <span class="pack__price">{{ pv.price | money }}</span>
+                {%- if pv.compare_at_price and pv.compare_at_price > pv.price -%}
+                  <span class="pack__was">{{ pv.compare_at_price | money }}</span>
+                {%- endif -%}
+                {%- if pv.units > 1 -%}<span class="pack__each">{{ pv.per_unit | money }} each</span>{%- endif -%}
+              </span>
+              {%- if pv.badge != blank -%}
+                <span class="badge {% if pv.badge == 'Super Saver' %}badge--best{% else %}badge--gold{% endif %} pack__badge">{{ pv.badge }}</span>
+              {%- endif -%}
+            </label>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ---------- quantity + CTA ---------- {%- endcomment -%}
+    <div class="pdp__actions">
+      <div class="pdp__qty">
+        <span class="t-mono">Qty</span>
+        <span class="qty">
+          <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
+          <span data-qty-value>1</span>
+          <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
+        </span>
+        <input type="hidden" name="quantity" value="1" data-qty-input>
+      </div>
+      <div class="pdp__cta">
+        <button class="btn btn--ghost btn--lg" data-add-to-cart data-variant-id="{{ v.id }}">Add to cart</button>
+        <button class="btn btn--primary btn--lg" data-buy-now data-variant-id="{{ v.id }}">Buy now</button>
+      </div>
+    </div>
+    <p class="pdp__tax t-sm t-dim-3">MRP inclusive of all taxes. {{ p.pack_size }} per unit.</p>
+
+    {%- comment -%} ---------- delivery check ---------- {%- endcomment -%}
+    <div class="pdp__pin" data-pincode>
+      <div class="pdp__pin-row">
+        {% render 'icon', name: 'truck', size: 18 %}
+        <label class="sr" for="pin">Delivery pincode</label>
+        <input id="pin" type="text" inputmode="numeric" maxlength="6" placeholder="Enter pincode" data-pin-input>
+        <button class="btn btn--ghost btn--sm" type="button" data-pin-check>Check</button>
+      </div>
+      <p class="pdp__pin-out" data-pin-out hidden></p>
+    </div>
+
+    {%- comment -%} ---------- call to order ---------- {%- endcomment -%}
+    <a class="pdp__call" href="tel:{{ settings.phone | replace: ' ', '' }}">
+      {% render 'icon', name: 'phone', size: 18 %}
+      <span>
+        <b>Difficulty ordering online? Call to order</b>
+        <small>{{ settings.phone }} · {{ settings.call_hours }}</small>
+      </span>
+    </a>
+
+    {%- comment -%} ---------- trust ---------- {%- endcomment -%}
+    <div class="pdp__trust">
+      <span class="trust__item">{% render 'icon', name: 'leaf', size: 17 %} Formulated by Ayurvedic experts</span>
+      <span class="trust__item">{% render 'icon', name: 'flask', size: 17 %} Every dose on the label</span>
+      <span class="trust__item">{% render 'icon', name: 'shield', size: 17 %} GMP-certified facility</span>
+      <span class="trust__item">{% render 'icon', name: 'truck', size: 17 %} Free delivery over {{ settings.free_ship_threshold | money }}</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{ "name": "Product buy box", "settings": [] }
+{% endschema %}

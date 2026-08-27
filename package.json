@@ -1,0 +1,18 @@
+{
+  "name": "helbrede-theme",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Custom Shopify Online Store 2.0 theme for Helbrede Nutraherbs — Ayurvedic & nutraceutical D2C",
+  "scripts": {
+    "dev": "node scripts/build-theme-data.mjs && node dev/server.mjs",
+    "data": "node scripts/build-theme-data.mjs",
+    "smoke": "node scripts/smoke.mjs",
+    "shopify:push": "shopify theme push --path theme --unpublished",
+    "shopify:dev": "shopify theme dev --path theme"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "liquidjs": "^10.21.0"
+  }
+}

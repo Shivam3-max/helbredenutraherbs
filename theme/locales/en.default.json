@@ -1,0 +1,23 @@
+{
+  "general": {
+    "search": { "placeholder": "Search formulas, concerns or ingredients", "submit": "Search", "results": "results" },
+    "cart": { "title": "Your cart", "empty": "Your cart is empty", "subtotal": "Subtotal", "checkout": "Checkout" },
+    "nav": { "menu": "Menu", "close": "Close", "concerns": "Shop by concern" }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "buy_now": "Buy now",
+      "select_pack": "Select a pack",
+      "quantity": "Qty",
+      "benefits": "Benefits",
+      "ingredients": "Key ingredients",
+      "how_to_use": "How to use",
+      "safety": "Safety information",
+      "faq": "Questions",
+      "specs": "Specifications",
+      "tax_line": "MRP inclusive of all taxes"
+    }
+  },
+  "collections": { "general": { "sort": "Sort", "all": "All", "no_matches": "Nothing matches that combination." } }
+}

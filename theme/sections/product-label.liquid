@@ -1,0 +1,59 @@
+{%- comment -%}
+  THE LABEL PANEL — signature feature.
+
+  Kapiva describes ingredients in prose ("rich in Omega 7"); Helbrede's own copy
+  already states quantities, so this publishes them as a supplement-facts panel.
+  Where a dose is genuinely not declared in the source, it says so rather than
+  inventing one — that honesty is the point of the feature.
+{%- endcomment -%}
+{%- assign ings = product.hb.ingredients -%}
+{%- if ings.size > 0 -%}
+{%- assign dosed = 0 -%}
+{%- for i in ings %}{% if i.dose != blank %}{% assign dosed = dosed | plus: 1 %}{% endif %}{% endfor -%}
+
+<section class="sec sec--tint" id="label" data-reveal>
+  <div class="wrap split">
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">read the</span>
+        <h2 class="sec-head__main">Label first</h2>
+      </div>
+      <p class="t-lede">
+        Every active in this formula, with the quantity stated on the pack. No
+        proprietary blends, no “clinically inspired” hand-waving — if we can put
+        a number on it, it is printed here.
+      </p>
+      <ul class="ticks" style="margin-top:1.25rem">
+        <li>{{ dosed }} of {{ ings.size }} actives carry a declared quantity</li>
+        <li>Serving size and daily amount taken from the pack label</li>
+        <li>Compare it against anything else on your shelf</li>
+      </ul>
+      <a class="btn btn--ghost" href="/pages/label-check" style="margin-top:1.25rem">Compare two formulas</a>
+    </div>
+
+    <div class="label-panel">
+      <div class="label-panel__hd">
+        <span class="label-panel__t">Supplement facts</span>
+        <span class="label-panel__s">{{ product.pack_size }}</span>
+      </div>
+      <div class="label-panel__rule"></div>
+      {%- for i in ings -%}
+        <div class="label-row">
+          <span class="label-row__n">{{ i.name }}</span>
+          <span class="label-row__d">
+            {%- if i.dose != blank -%}{{ i.dose }}{%- else -%}<em class="t-dim-3">not declared</em>{%- endif -%}
+          </span>
+          {%- if i.body != blank -%}<span class="label-row__b">{{ i.body }}</span>{%- endif -%}
+        </div>
+      {%- endfor -%}
+      <p class="label-panel__ft">
+        Quantities as stated by the manufacturer on the product label.
+        This is a nutraceutical / Ayurvedic proprietary formulation, not a medicine.
+      </p>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — label panel", "settings": [] }
+{% endschema %}

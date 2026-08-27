@@ -1,0 +1,18 @@
+{%- comment -%}
+  Emits the minimum catalog the client-side tools need (Ritual Builder, Label
+  compare). Kept deliberately small — no descriptions, no FAQ — so it stays
+  under a few KB rather than shipping the whole catalog to every visitor.
+{%- endcomment -%}
+<script type="application/json" id="hb-catalog">
+[
+{%- for p in all_products -%}
+  {%- assign v = p.variants | first -%}
+  {"h":{{ p.handle | json }},"t":{{ p.title | json }},"s":{{ p.subtitle | json }},
+   "c":{{ p.concern | json }},"cl":{{ p.concern_label | json }},
+   "img":{{ p.featured_image.src | json }},"pack":{{ p.pack_size | json }},
+   "vid":{{ v.id }},"price":{{ v.price }},"was":{{ v.compare_at_price | default: 0 }},
+   "ing":[{% for i in p.hb.ingredients %}{"n":{{ i.name | json }},"d":{{ i.dose | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}],
+   "ben":{{ p.hb.benefits | json }}}{%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}
+]
+</script>

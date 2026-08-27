@@ -1,0 +1,36 @@
+<section class="sec" data-reveal>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-head__pre">search</span>
+      <h1 class="sec-head__main">{% if search.terms != blank %}“{{ search.terms }}”{% else %}Find a formula{% endif %}</h1>
+    </div>
+
+    <form class="srch__form" action="{{ routes.search_url }}" method="get" role="search" data-search-form
+          style="max-width:44rem;margin-bottom:2rem">
+      {% render 'icon', name: 'search', size: 20 %}
+      <label class="sr" for="page-q">Search</label>
+      <input id="page-q" type="search" name="q" value="{{ search.terms }}" autocomplete="off"
+             placeholder="Search formulas, concerns or ingredients">
+      <button class="btn btn--primary btn--sm" type="submit">Search</button>
+    </form>
+
+    {%- if search.performed -%}
+      <p class="coll__count">{{ search.results_count }} result{% if search.results_count != 1 %}s{% endif %}</p>
+      {%- if search.results_count > 0 -%}
+        <div class="grid grid--4">
+          {%- for p in search.results -%}{% render 'product-card', product: p %}{%- endfor -%}
+        </div>
+      {%- else -%}
+        <p class="coll__none">Nothing matched. Try a concern like “hair” or an ingredient like “ashwagandha”.</p>
+      {%- endif -%}
+    {%- else -%}
+      <div class="srch__quick">
+        <span class="t-mono">Popular</span>
+        {%- for c in concerns -%}<a class="chip" href="{{ c.url }}">{{ c.label }}</a>{%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}
+{ "name": "Search", "settings": [] }
+{% endschema %}

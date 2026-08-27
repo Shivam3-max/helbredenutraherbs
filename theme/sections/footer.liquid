@@ -1,0 +1,67 @@
+<footer class="ftr">
+  <div class="wrap">
+
+    <div class="ftr__top">
+      <div class="ftr__brand">
+        <a class="brand-link" href="{{ routes.root_url }}">
+          {% render 'brand-mark', variant: 'full', class: 'brand--lg' %}
+        </a>
+        <address class="ftr__addr">{{ settings.address }}</address>
+        <div class="ftr__contact">
+          <a href="tel:{{ settings.phone | replace: ' ', '' }}">{% render 'icon', name: 'phone', size: 15 %} {{ settings.phone }}</a>
+          <a href="mailto:{{ settings.email }}">{% render 'icon', name: 'leaf', size: 15 %} {{ settings.email }}</a>
+        </div>
+      </div>
+
+      <nav class="ftr__col" aria-label="Shop by concern">
+        <h2 class="ftr__h t-mono">Shop by concern</h2>
+        {%- for c in concerns -%}<a href="{{ c.url }}">{{ c.label }}</a>{%- endfor -%}
+      </nav>
+
+      <nav class="ftr__col" aria-label="Tools and pages">
+        <h2 class="ftr__h t-mono">Helbrede</h2>
+        {%- for l in linklists.footer.links -%}<a href="{{ l.url }}">{{ l.title }}</a>{%- endfor -%}
+      </nav>
+
+      <div class="ftr__col ftr__col--wide">
+        <h2 class="ftr__h t-mono">Speak to an expert</h2>
+        <p class="ftr__note">Not sure which formula fits? Our Ayurvedic team will talk you through it — no charge, no obligation.</p>
+        <a class="btn btn--gold" href="/pages/consultancy">Book a free consultation</a>
+        <a class="ftr__wa" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener">
+          {% render 'icon', name: 'whatsapp', size: 18 %} Chat on WhatsApp
+        </a>
+      </div>
+    </div>
+
+    <div class="ftr__trust">
+      <span class="trust__item">{% render 'icon', name: 'leaf', size: 18 %} Formulated by Ayurvedic experts</span>
+      <span class="trust__item">{% render 'icon', name: 'flask', size: 18 %} Dosed and label-declared</span>
+      <span class="trust__item">{% render 'icon', name: 'shield', size: 18 %} Made in India · GMP facility</span>
+      <span class="trust__item">{% render 'icon', name: 'truck', size: 18 %} Free delivery over {{ settings.free_ship_threshold | money }}</span>
+    </div>
+
+    <div class="ftr__legal">
+      {%- if settings.legal_line != blank -%}
+        <p class="ftr__legal-line">{{ settings.legal_line }}</p>
+      {%- endif -%}
+      <p class="ftr__disc">
+        These products are nutraceutical and Ayurvedic proprietary formulations. They are
+        not intended to diagnose, treat, cure or prevent any disease. Not for medicinal use.
+        Consult a qualified healthcare professional before use if you are pregnant,
+        breastfeeding, taking prescription medicines or managing an ongoing condition.
+      </p>
+      <div class="ftr__legal-row">
+        <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+        <nav aria-label="Policies">
+          <a href="/policies/privacy-policy">Privacy</a>
+          <a href="/policies/terms-of-service">Terms</a>
+          <a href="/policies/shipping-policy">Shipping</a>
+          <a href="/policies/refund-policy">Returns</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</footer>
+{% schema %}
+{ "name": "Footer", "settings": [] }
+{% endschema %}

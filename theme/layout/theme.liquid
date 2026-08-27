@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#2F4A2F">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <title>{% if page_title %}{{ page_title }} · {{ shop.name }}{% else %}{{ shop.name }}{% endif %}</title>
+  {% if page_description %}<meta name="description" content="{{ page_description | strip_html }}">{% endif %}
+
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:title" content="{{ page_title | default: shop.name }}">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+
+  {%- comment -%}
+    Organization / LocalBusiness data. Real registered address, so Google can
+    surface it in the knowledge panel and local results.
+  {%- endcomment -%}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "HealthAndBeautyBusiness",
+    "name": {{ shop.name | json }},
+    "url": {{ shop.url | json }},
+    "email": {{ settings.email | json }},
+    "telephone": {{ settings.phone | replace: ' ', '' | json }},
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Sushant Complex SCO 2, Adjoining Union Bank of India, Devi Nagar",
+      "addressLocality": "Panchkula",
+      "addressRegion": "Haryana",
+      "postalCode": "134109",
+      "addressCountry": "IN"
+    },
+    "openingHours": "Mo-Sa 10:00-19:00"
+  }
+  </script>
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ 'components.css' | asset_url | stylesheet_tag }}
+  {{ 'sections.css' | asset_url | stylesheet_tag }}
+
+  <script>
+    /* `reveal-ready` gates the scroll-reveal styles. Nothing is hidden unless
+       this runs AND IntersectionObserver exists, so a JS failure can never
+       strand a section at opacity 0. */
+    var d = document.documentElement;
+    d.classList.remove('no-js');
+    d.classList.add('js');
+    if ('IntersectionObserver' in window &&
+        !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      d.classList.add('reveal-ready');
+    }
+  </script>
+</head>
+
+<body class="template-{{ request.page_type }}">
+  <a class="skip" href="#main">Skip to content</a>
+
+  {% section 'announcement-bar' %}
+  {% section 'header' %}
+
+  <main id="main" role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% section 'footer' %}
+
+  {% render 'cart-drawer' %}
+  {% render 'search-overlay' %}
+
+  <div class="scrim" data-scrim hidden></div>
+
+  <a class="wa-fab" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"
+     aria-label="Chat with us on WhatsApp">
+    {% render 'icon', name: 'whatsapp', size: 26 %}
+  </a>
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+</body>
+</html>

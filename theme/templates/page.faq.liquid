@@ -1,0 +1,91 @@
+{%- comment -%}
+  Written out as literal blocks rather than looped over a delimited string:
+  the client edits these in the theme editor, and a flat pipe-split list is
+  both unreadable there and awkward in Liquid.
+{%- endcomment -%}
+<section class="sec" data-reveal>
+  <div class="wrap wrap--narrow">
+    <div class="sec-head">
+      <span class="sec-head__pre">frequently asked</span>
+      <h1 class="sec-head__main">Questions</h1>
+    </div>
+
+    <div class="acc" data-acc-single>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">How long before I see results?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Ayurvedic and nutraceutical formulas are cumulative rather than immediate. Most of our
+          products are intended to be taken consistently for at least three months, alongside a
+          balanced diet and regular activity. Individual responses vary.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Can I take more than one Helbrede product together?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Often yes — that is what the <a href="/pages/ritual-builder">Ritual Builder</a> is for.
+          But combinations still need care, particularly if you take prescription medicines. Use the
+          safety check on each product page, and call our consultants if you are unsure.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Are these medicines?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          No. They are nutraceutical and Ayurvedic proprietary formulations, labelled “not for
+          medicinal use”. They are not intended to diagnose, treat, cure or prevent any disease.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Why do some ingredients say “not declared”?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Because the quantity is not stated on that product’s label. We would rather show you the
+          gap than invent a number. Where a dose is declared, it appears exactly as printed on the pack.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Where are the products made?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          At a GMP-certified facility — Kenko Healthcare, Panchkula, Haryana. They are marketed by
+          Helbrede Healthcare Ltd, and both names are printed on every pack.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Do you ship across India?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Yes. Enter your pincode on any product page for an estimated delivery date. Cash on
+          delivery is available on most pincodes, and delivery is free above
+          {{ settings.free_ship_threshold | money }}.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Can I return a product?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Unopened products can be returned within the window set out in our shipping and returns
+          policy. Opened supplements cannot be returned for hygiene reasons — please call us and we
+          will work it out.
+        </div></div>
+      </div>
+
+      <div class="acc__item">
+        <button class="acc__btn" aria-expanded="false">Is the consultation really free?<span class="acc__sign" aria-hidden="true"></span></button>
+        <div class="acc__panel" style="height:0"><div class="acc__panel-in">
+          Yes, and there is no obligation to buy. Our consultants are allowed to tell you that you
+          do not need a supplement.
+        </div></div>
+      </div>
+
+    </div>
+
+    <div class="note note--warn" style="margin-top:2rem">
+      {% render 'icon', name: 'phone', size: 17 %}
+      <span>Still stuck? Call {{ settings.phone }} between {{ settings.call_hours }}, or
+      <a href="/pages/consultancy">book a free consultation</a>.</span>
+    </div>
+  </div>
+</section>

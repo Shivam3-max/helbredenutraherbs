@@ -1,0 +1,77 @@
+{
+ "skin-care": {
+  "label": "Skin Care",
+  "handles": [
+   "helbrede-l-glutathione-reduced-capsules-500mg-antioxidant-skin-hair-nail-support",
+   "helbrede-nutraherbs-niaglow-face-serum-niacinamide-10-hyaluronic-acid-2-serum-for-glowing-skin",
+   "helbrede-nutraherbs-eye-lift-pro-face-serum-dark-circle-puffiness-reduction-serum-under-eye-care-serum-30ml",
+   "helbrede-nutraherbs-even-tone-face-serum-kojic-acid-alpha-arbutin-serum",
+   "helbrede-balance-clear-face-serum-niacinamide-10-salicylic-acid-2-for-acne-pores",
+   "helbrede-nutra-herbs-radiance-vitamin-c-face-serum-brightening-hydrating-glow-boosting-serum",
+   "helbrede-nutra-herbs-age-defense-face-serum-anti-aging-hydrating-skin-brightening-serum"
+  ]
+ },
+ "hair-care": {
+  "label": "Hair Care",
+  "handles": [
+   "helbrede-nutraherbs-virgin-hair-serum-nourishing-hair-scalp-serum-30ml",
+   "helbrede-nutraherbs-hydra-boost-hair-serum-deep-hydration-frizz-control-30ml",
+   "helbrede-nutraherbs-scalp-detox-hair-serum-healthy-scalp-stronger-hair-30ml",
+   "helbrede-bio-fully-hair-tablet-hair-growth-supplement-with-biotin-zinc-selenium",
+   "virgin-hair-oil",
+   "weherbal-s-2-in-1-shampoo-conditioner-ancient-ayurveda-modern-haircare-copy-copy-copy"
+  ]
+ },
+ "liver-detox": {
+  "label": "Liver & Detox",
+  "handles": [
+   "lung-detox-tablets-herbal-respiratory-support-supplement",
+   "levohel-liver-detox-tablets-advanced-liver-support-natural-detox-formula",
+   "helbrede-nutraherbs-livohel-gold-liver-detox-powder-ayurvedic-liver-cleanse-digestive-support"
+  ]
+ },
+ "weight-metabolism": {
+  "label": "Weight & Metabolism",
+  "handles": [
+   "helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules",
+   "helbrede-fit-tummy-capsule-best-ayurvedic-weight-management-capsule-for-men-women-fat-metabolism-digestive-support",
+   "helbrede-nutra-herbs-fat-burner-capsule-ayurvedic-weight-management-metabolism-support"
+  ]
+ },
+ "sleep-stress": {
+  "label": "Sleep & Stress",
+  "handles": [
+   "helbrede-nutraherbs-ashwagandha-capsules-500mg-withania-somnifera-root-60-capsules",
+   "helbrede-nutraherbs-relax-mind-sleep-capsule"
+  ]
+ },
+ "digestion-gut": {
+  "label": "Digestion & Gut",
+  "handles": [
+   "helbrede-nutraherbs-digestive-enzyme-tablets-fungal-diastase-papain"
+  ]
+ },
+ "strength-performance": {
+  "label": "Strength & Performance",
+  "handles": [
+   "helbrede-l-arginine-1000-mg-tablets-amino-acid-for-endurance-amp-workout-support-60-tablets",
+   "mahabali-capsule-for-men-women-gym-athlete-strength-booster-ayurvedic-power-booster-with-shilajit-ashwagandha-safed-musli-kaunch-beej-boost-strength-stamina-energy-vitality-60-capsules-copy",
+   "helbrede-nutraherbs-bulk-gainer-tablets-muscle-growth-strength-healthy-weight-gain-supplement",
+   "helbrede-nutraherbs-muscle-gainer-capsule-muscle-strength-recovery-lean-muscle-support-60-capsules",
+   "helbrede-nutraherbs-cordyceps-mushroom-complex-energy-stamina-immune-support-60-vegetarian-capsules",
+   "mahabali-power-drops-ayurvedic-strength-energy-stamina-support-30ml",
+   "helbrede-testosterone-booster-capsule-best-ayurvedic-testosterone-booster-for-men-strength-stamina-vitality-support",
+   "balwan-capsules-for-men-gym-athlete-strength-booster-ayurvedic-power-booster-with-shilajit-ashwagandha-safed-musli-kaunch-beej-strength-stamina-energy-vitality-support-30-capsules-10-free"
+  ]
+ },
+ "daily-essentials": {
+  "label": "Daily Essentials & Immunity",
+  "handles": [
+   "helbrede-nutraherbs-vitamin-c-chewable-tablets-with-zinc-d3",
+   "helbrede-nutraherbs-sea-buckthorn-99-pulp-juice-500-ml",
+   "helbrede-nutraherbs-calcium-magnesium-zinc-d3-b12-k2-7-tablets-bone-muscle-joint-support-60-tablets",
+   "helbrede-nutraherbs-magnesium-complex-5x-5-forms-of-magnesium-with-zinc-vitamin-d3-b12-vitamin-c-60-tablets",
+   "helbrede-nutra-herbs-one-daily-complete-daily-support-tablet-multivitamin-minerals-amino-acids-antioxidants"
+  ]
+ }
+}

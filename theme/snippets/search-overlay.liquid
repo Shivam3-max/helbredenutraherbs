@@ -1,0 +1,19 @@
+<div class="srch" data-panel="search" aria-hidden="true" role="dialog" aria-label="Search">
+  <div class="srch__inner wrap">
+    <form class="srch__form" action="{{ routes.search_url }}" method="get" role="search" data-search-form>
+      {% render 'icon', name: 'search', size: 22 %}
+      <label class="sr" for="ov-q">Search products</label>
+      <input id="ov-q" type="search" name="q" autocomplete="off" placeholder="Search formulas, concerns or ingredients">
+      <button class="iconbtn" type="button" data-close aria-label="Close search">
+        {% render 'icon', name: 'close', size: 22 %}
+      </button>
+    </form>
+    <div class="srch__suggest" data-suggest></div>
+    <div class="srch__quick">
+      <span class="t-mono">Popular</span>
+      {%- for c in concerns -%}
+        <a class="chip" href="{{ c.url }}">{{ c.label }}</a>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>

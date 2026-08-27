@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "main":        { "type": "main-product" },
+    "benefits":    { "type": "product-benefits" },
+    "label":       { "type": "product-label" },
+    "ingredients": { "type": "product-ingredients" },
+    "how":         { "type": "product-how" },
+    "ritual":      { "type": "product-ritual" },
+    "safety":      { "type": "product-safety" },
+    "faq":         { "type": "product-faq" },
+    "specs":       { "type": "product-specs" },
+    "related":     { "type": "product-related" },
+    "why":         { "type": "why-helbrede" }
+  },
+  "order": ["main","benefits","label","ingredients","how","ritual","safety","faq","specs","related","why"]
+}

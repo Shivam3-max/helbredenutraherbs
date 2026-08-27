@@ -1,0 +1,15 @@
+{%- comment -%}
+  Renders selling price, and the struck MRP only when there is a genuine one.
+  On the live catalog compare_at == price on 34/35 products, so the saving
+  markup must never render a "0% off" — it simply disappears.
+{%- endcomment -%}
+{%- assign has_save = false -%}
+{%- if compare and compare > amount -%}{%- assign has_save = true -%}{%- endif -%}
+<div class="price {{ class }}">
+  <span class="price__now">{{ amount | money }}</span>
+  {%- if has_save -%}
+    <span class="price__was">{{ compare | money }}</span>
+    {%- assign pct = compare | minus: amount | times: 100 | divided_by: compare | round -%}
+    <span class="price__off">{{ pct }}% off</span>
+  {%- endif -%}
+</div>

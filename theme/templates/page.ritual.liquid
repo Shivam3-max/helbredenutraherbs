@@ -1,0 +1,82 @@
+{%- comment -%}
+  RITUAL BUILDER — signature feature.
+
+  Helbrede sells ingestibles AND topicals; Kapiva is ingestibles-only, so a
+  cross-category routine is a shelf they structurally cannot build. Pick a
+  concern, pick a depth, get a morning / day / night routine you can add whole.
+{%- endcomment -%}
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span><span class="t-dim">Build your ritual</span>
+</nav>
+
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap">
+    <header class="coll__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">build your</span>
+        <h1 class="sec-head__main">Ritual</h1>
+      </div>
+      <p class="t-lede">
+        One capsule is rarely the whole answer. Tell us what you are working on and
+        we will lay out a routine across the day — something you take, something you
+        apply, and the daily base underneath both — drawn from formulas that actually
+        sit in the same regimen.
+      </p>
+    </header>
+
+    <div class="rb" data-rb>
+      <div class="rb__controls">
+        <div class="rb__step">
+          <span class="rb__lbl t-mono">1 · What are you working on</span>
+          <div class="rb__chips">
+            {%- for c in concerns -%}
+              <button class="chip {% if forloop.first %}is-on{% endif %}" type="button"
+                      data-rb-concern="{{ c.slug }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
+                <span class="chip__dot" aria-hidden="true"></span>{{ c.label }}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        <div class="rb__step">
+          <span class="rb__lbl t-mono">2 · How deep</span>
+          <div class="rb__chips">
+            <button class="chip" type="button" data-rb-depth="2" aria-pressed="false"><span class="chip__dot"></span>Starter · 2 products</button>
+            <button class="chip is-on" type="button" data-rb-depth="3" aria-pressed="true"><span class="chip__dot"></span>Full routine · 3</button>
+            <button class="chip" type="button" data-rb-depth="4" aria-pressed="false"><span class="chip__dot"></span>Complete · 4</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="rb__out">
+        <div class="rb__routine">
+          <span class="rb__lbl t-mono">3 · Your routine</span>
+          <div class="ritual" data-rb-list></div>
+          <p class="t-sm t-dim-3" data-rb-note style="margin-top:.85rem"></p>
+        </div>
+
+        <aside class="panel rb__summary">
+          <h2 class="pdp__block-h">Summary</h2>
+          <p class="t-sm t-dim" data-rb-desc></p>
+          <div class="ritual-tot">
+            <span>Routine total</span>
+            <strong data-rb-total>—</strong>
+          </div>
+          <button class="btn btn--primary btn--block btn--lg" data-rb-add>Add routine to cart</button>
+          <p class="t-sm t-dim-3" style="margin-top:.8rem">
+            Ayurvedic formulas are cumulative. Most of these are meant to be taken
+            consistently for at least three months before you judge them.
+          </p>
+          <div class="note note--warn" style="margin-top:1rem">
+            {% render 'icon', name: 'shield', size: 16 %}
+            <span>Check each product’s safety information before combining supplements,
+            especially if you take prescription medicines.</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% render 'catalog-json' %}
+{% section 'why-helbrede' %}

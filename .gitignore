@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# macOS
+.DS_Store
+
+# local scratch
+*.log
+tmp/
+
+# Held out of the public repo pending a call from Shivam — this is the internal
+# audit of the client's live storefront (its defects, pricing analysis and
+# commercial recommendations). Remove this line to publish it.
+docs/roadmap.html

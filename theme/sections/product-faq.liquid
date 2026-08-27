@@ -1,0 +1,27 @@
+{%- assign faqs = product.hb.faq -%}
+{%- if faqs.size > 0 -%}
+<section class="sec" id="faq" data-reveal>
+  <div class="wrap wrap--narrow">
+    <div class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__pre">still deciding</span>
+        <h2 class="sec-head__main">Questions</h2>
+      </div>
+      <a class="link-more" href="/pages/consultancy">Ask an expert {% render 'icon', name: 'arrow', size: 15 %}</a>
+    </div>
+    <div class="acc" data-acc-single>
+      {%- for f in faqs -%}
+        <div class="acc__item">
+          <button class="acc__btn" aria-expanded="false">
+            {{ f.q }}<span class="acc__sign" aria-hidden="true"></span>
+          </button>
+          <div class="acc__panel" style="height:0"><div class="acc__panel-in">{{ f.a }}</div></div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — FAQ", "settings": [] }
+{% endschema %}

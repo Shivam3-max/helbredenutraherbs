@@ -1,0 +1,22 @@
+{%- assign specs = product.hb.specs -%}
+{%- if specs.size > 0 -%}
+<section class="sec sec--tint" id="specs" data-reveal>
+  <div class="wrap wrap--narrow">
+    <div class="sec-head">
+      <span class="sec-head__pre">the fine</span>
+      <h2 class="sec-head__main">Print</h2>
+    </div>
+    <dl class="specs">
+      {%- for kv in specs -%}
+        <div class="specs__row">
+          <dt>{{ kv[0] }}</dt>
+          <dd>{{ kv[1] }}</dd>
+        </div>
+      {%- endfor -%}
+    </dl>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — specifications", "settings": [] }
+{% endschema %}

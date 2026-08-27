@@ -1,0 +1,64 @@
+{%- comment -%}
+  The signature Kapiva module: pick a concern, the shelf below swaps.
+  All panes render server-side and toggle client-side, so it works without JS
+  and costs no round-trip on tab change.
+{%- endcomment -%}
+<section class="sec sec--tight cs" data-tabs data-reveal>
+  <div class="wrap">
+
+    <div class="cs__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">start with</span>
+        <h2 class="sec-head__main">What you want to fix</h2>
+      </div>
+      <p class="t-lede cs__lede">{{ section.settings.body }}</p>
+    </div>
+
+    <div class="cs__chips" role="group" aria-label="Choose a concern">
+      {%- for c in concerns -%}
+        <button class="chip cs__chip {% if forloop.first %}is-on{% endif %}"
+                data-tab="{{ c.slug }}"
+                aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
+          <span class="chip__dot" aria-hidden="true"></span>
+          {{ c.label }}
+        </button>
+      {%- endfor -%}
+    </div>
+
+    {%- for c in concerns -%}
+      {%- assign coll = collections[c.slug] -%}
+      <div class="cs__pane" data-tab-pane="{{ c.slug }}" {% unless forloop.first %}hidden{% endunless %}>
+
+        <div class="cs__pane-head">
+          <div>
+            <h3 class="cs__pane-t">{{ c.label }}</h3>
+            <p class="cs__pane-s">{{ c.tagline }}</p>
+          </div>
+          <a class="link-more" href="{{ c.url }}">
+            All {{ coll.products_count }} products {% render 'icon', name: 'arrow', size: 15 %}
+          </a>
+        </div>
+
+        <div data-rail-wrap>
+          <div class="rail {% if coll.products_count <= 4 %}rail--4{% endif %}" data-rail>
+            {%- for p in coll.products limit: 8 -%}
+              {% render 'product-card', product: p %}
+            {%- endfor -%}
+          </div>
+        </div>
+
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Concern switcher",
+  "settings": [
+    { "type": "textarea", "id": "body", "label": "Intro",
+      "default": "Eight concerns, thirty-five formulas. Pick the one you came for and we will show you only what is relevant — including the topical and the ingestible halves of the same routine." }
+  ],
+  "presets": [{ "name": "Concern switcher" }]
+}
+{% endschema %}

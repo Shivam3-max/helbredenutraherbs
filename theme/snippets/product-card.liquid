@@ -1,0 +1,34 @@
+{%- comment -%}
+  Kapiva's card anatomy, minus the two elements Helbrede has no source for:
+  star ratings (no reviews app) and loyalty coins (no loyalty app). Both slots
+  exist and light up the moment their data does.
+{%- endcomment -%}
+{%- assign v = product.variants | first -%}
+<article class="card" data-reveal-child>
+  <a class="card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    {% render 'media-slot',
+       code: 'PDP-IMG', label: product.title, w: 1, h: 1,
+       src: product.featured_image.src, alt: product.title %}
+    <div class="card__flags">
+      {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+        {%- assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price | round -%}
+        <span class="badge badge--save">{{ pct }}% off</span>
+      {%- else -%}<span></span>{%- endif -%}
+      {%- if settings.show_ratings and product.metafields.reviews.rating.value -%}
+        <span class="badge badge--gold">{{ product.metafields.reviews.rating.value }} ★</span>
+      {%- endif -%}
+    </div>
+  </a>
+
+  <div class="card__body">
+    <div class="card__concern">{{ product.concern_label }}</div>
+    <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    {%- if product.subtitle %}<p class="card__sub">{{ product.subtitle }}</p>{% endif -%}
+    {%- if product.pack_size %}<div class="card__pack">{{ product.pack_size }}</div>{% endif -%}
+
+    <div class="card__foot">
+      {% render 'price', amount: v.price, compare: v.compare_at_price %}
+      <a class="btn btn--primary btn--sm card__cta" href="{{ product.url }}">Buy now</a>
+    </div>
+  </div>
+</article>

@@ -1,0 +1,16 @@
+<section class="sec" data-reveal>
+  <div class="wrap wrap--narrow" style="text-align:center;padding-block:clamp(3rem,8vw,6rem)">
+    <div class="sec-head sec-head--center">
+      <span class="sec-head__pre">that page has</span>
+      <h1 class="sec-head__main">Moved on</h1>
+    </div>
+    <p class="t-lede" style="margin-inline:auto">
+      The link you followed does not lead anywhere any more. Start from a concern instead —
+      it is usually faster than searching.
+    </p>
+    <div class="srch__quick" style="justify-content:center;margin-top:2rem">
+      {%- for c in concerns -%}<a class="chip" href="{{ c.url }}">{{ c.label }}</a>{%- endfor -%}
+    </div>
+    <a class="btn btn--primary" href="/collections/all" style="margin-top:2rem">Shop all formulas</a>
+  </div>
+</section>

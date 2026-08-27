@@ -1,0 +1,24 @@
+{%- comment -%}
+  One offer at a time, rotating slowly. The live site scrolls four competing
+  offers in a marquee — this is the deliberate replacement.
+{%- endcomment -%}
+<div class="anno" data-anno>
+  <div class="wrap anno__row">
+    <button class="anno__nav" data-anno-prev aria-label="Previous announcement">
+      {% render 'icon', name: 'chevron', size: 14 %}
+    </button>
+    <div class="anno__track" aria-live="polite">
+      {%- for a in settings.announcements -%}
+        <p class="anno__item {% if forloop.first %}is-on{% endif %}" data-anno-item>{{ a }}</p>
+      {%- endfor -%}
+    </div>
+    <button class="anno__nav anno__nav--next" data-anno-next aria-label="Next announcement">
+      {% render 'icon', name: 'chevron', size: 14 %}
+    </button>
+  </div>
+</div>
+{% schema %}
+{ "name": "Announcement bar", "settings": [
+  { "type": "range", "id": "interval", "label": "Rotate every (seconds)", "min": 3, "max": 12, "step": 1, "default": 6 }
+] }
+{% endschema %}

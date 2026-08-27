@@ -1,0 +1,27 @@
+<section class="sec sec--sand" data-reveal>
+  <div class="wrap wrap--narrow" style="text-align:center">
+    <div class="sec-head sec-head--center">
+      <span class="sec-head__pre">{{ section.settings.pre }}</span>
+      <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+    </div>
+    <p class="t-lede" style="margin-inline:auto;text-align:center">{{ section.settings.body }}</p>
+    <div class="hero__cta" style="justify-content:center;margin-top:1.75rem">
+      <a class="btn btn--primary" href="{{ section.settings.link }}">{{ section.settings.cta }}</a>
+      <a class="btn btn--ghost" href="/pages/consultancy">Talk to a practitioner</a>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Brand story",
+  "settings": [
+    { "type": "text", "id": "pre", "label": "Small line", "default": "made in Panchkula, sold on its" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Own evidence" },
+    { "type": "textarea", "id": "body", "label": "Body",
+      "default": "Helbrede formulas are manufactured at a GMP-certified facility in Panchkula, Haryana and marketed by Helbrede Healthcare Ltd. Traditional Ayurvedic herbs, amino acids and dermatological actives — described the way the label describes them, with the safety information kept in plain sight rather than in the footer." },
+    { "type": "text", "id": "cta", "label": "Button", "default": "Shop all formulas" },
+    { "type": "text", "id": "link", "label": "Link", "default": "/collections/all" }
+  ],
+  "presets": [{ "name": "Brand story" }]
+}
+{% endschema %}

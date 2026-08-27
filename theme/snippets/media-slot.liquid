@@ -1,0 +1,23 @@
+{%- comment -%}
+  Every image on the site goes through here. Until a real asset is set it renders
+  a *marked* box — slot code, purpose and exact pixel size — so a missing photo
+  is a visible, costable gap rather than a blank.
+
+  {% render 'media-slot', code:'HERO-01', label:'Hero banner', w:1600, h:760, src:image, alt:'…' %}
+{%- endcomment -%}
+{%- assign sw = w | default: 4 -%}
+{%- assign sh = h | default: 3 -%}
+<div class="slot {% if src %}slot--filled{% endif %} {{ class }}"
+     style="aspect-ratio:{{ sw }}/{{ sh }}">
+  {%- if src -%}
+    <img src="{{ src }}" alt="{{ alt | escape }}"
+         {% if eager %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+         width="{{ sw }}" height="{{ sh }}">
+  {%- else -%}
+    <div class="slot__in">
+      <div class="slot__code">{{ code }}</div>
+      <div class="slot__label">{{ label }}</div>
+      <div class="slot__dim">{{ sw }} × {{ sh }} px</div>
+    </div>
+  {%- endif -%}
+</div>

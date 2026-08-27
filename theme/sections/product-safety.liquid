@@ -1,0 +1,60 @@
+{%- comment -%}
+  SAFETY & INTERACTION CHECK — signature feature.
+
+  Helbrede's own descriptions already carry precise interaction warnings
+  ("may interact with medicines for diabetes and blood pressure, thyroid
+  medicines, sedatives..."). Kapiva buries this class of information. Here the
+  buyer declares their situation and the relevant lines from THIS product's own
+  safety text are surfaced before they add to cart.
+
+  Matching happens client-side against the product's real safety copy — nothing
+  is generated, and if nothing matches it says so rather than inventing comfort.
+{%- endcomment -%}
+{%- assign lines = product.hb.safety -%}
+{%- if lines.size > 0 -%}
+<section class="sec" id="safety" data-reveal>
+  <div class="wrap split">
+
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">before you buy</span>
+        <h2 class="sec-head__main">Check it against you</h2>
+      </div>
+      <p class="t-lede">
+        Supplements interact with medicines and conditions. Tell us what applies
+        to you and we will pull the relevant warnings out of this product’s own
+        safety information — before it goes in your cart, not after.
+      </p>
+
+      <div class="safety-chk" data-safety data-lines='{{ lines | json }}'>
+        <div class="safety-chk__chips" role="group" aria-label="What applies to you">
+          {%- assign conds = "Pregnant or breastfeeding|Thyroid condition|Diabetes medication|Blood pressure medication|Sedatives or sleep aids|Under 18|Surgery scheduled" | split: "|" -%}
+          {%- for c in conds -%}
+            <button class="chip safety-chk__chip" type="button" data-cond="{{ c }}" aria-pressed="false">
+              <span class="chip__dot" aria-hidden="true"></span>{{ c }}
+            </button>
+          {%- endfor -%}
+        </div>
+        <div class="safety-chk__out" data-safety-out hidden></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel panel--tint">
+        <h3 class="pdp__block-h">Safety information</h3>
+        <ul class="safety-list">
+          {%- for l in lines -%}<li>{{ l }}</li>{%- endfor -%}
+        </ul>
+        <p class="t-sm t-dim-3" style="margin-top:1rem">
+          Not for medicinal use. This product is not intended to diagnose, treat,
+          cure or prevent any disease. Consult a qualified healthcare professional
+          if you are unsure.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — safety check", "settings": [] }
+{% endschema %}

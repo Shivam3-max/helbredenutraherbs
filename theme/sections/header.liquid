@@ -1,0 +1,153 @@
+<header class="hdr" data-header>
+  <div class="hdr__main">
+    <div class="wrap hdr__row">
+
+      <button class="iconbtn hide-lg" data-open="menu" aria-label="Open menu" aria-expanded="false">
+        {% render 'icon', name: 'menu', size: 22 %}
+      </button>
+
+      <a class="brand-link" href="{{ routes.root_url }}" aria-label="{{ shop.name }} — home">
+        {% render 'brand-mark' %}
+      </a>
+
+      <form class="hdr__search hide-sm" action="{{ routes.search_url }}" method="get" role="search"
+            data-search-form>
+        {% render 'icon', name: 'search', size: 18 %}
+        <label class="sr" for="hdr-q">Search products</label>
+        <input id="hdr-q" type="search" name="q" autocomplete="off"
+               data-rotating-placeholder='["Ashwagandha","Hair fall","Liver detox","Glowing skin","Shilajit","Magnesium"]'
+               placeholder="Search for “Ashwagandha”">
+        <div class="hdr__suggest" data-suggest hidden></div>
+      </form>
+
+      <div class="hdr__actions">
+        <a class="hdr__call hide-sm" href="tel:{{ settings.phone | replace: ' ', '' }}">
+          {% render 'icon', name: 'phone', size: 16 %}
+          <span>
+            <b>{{ settings.phone }}</b>
+            <small>{{ settings.call_hours }}</small>
+          </span>
+        </a>
+        <a class="iconbtn hide-sm" href="{{ routes.account_url }}" aria-label="Account">
+          {% render 'icon', name: 'user', size: 20 %}
+        </a>
+        <button class="iconbtn" data-open="cart" aria-label="Open cart">
+          {% render 'icon', name: 'cart', size: 20 %}
+          <span class="iconbtn__count" data-cart-count {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {%- comment -%}
+    Phone search. The Man Company keeps a full-width bar on screen rather than
+    hiding search behind an icon, which is the right call for a catalogue people
+    arrive at with a symptom in mind. Sits under the masthead, above the banner —
+    never over it, so it cannot cover the artwork.
+  {%- endcomment -%}
+  <div class="hdr__msearch-wrap hide-lg">
+    <form class="hdr__msearch" action="{{ routes.search_url }}" method="get" role="search"
+          data-search-form>
+      {% render 'icon', name: 'search', size: 18 %}
+      <label class="sr" for="m-q">Search products</label>
+      <input id="m-q" type="search" name="q" autocomplete="off"
+             data-rotating-placeholder='["hair serum","ashwagandha","liver detox","glowing skin","shilajit"]'
+             placeholder="Search for hair serum">
+      <div class="hdr__suggest" data-suggest hidden></div>
+    </form>
+  </div>
+
+  {%- comment -%}
+    Desktop primary navigation. The eight concerns live inside a mega panel
+    rather than a flat rail — at 1440px the rail ran off the right edge and the
+    last two concerns were unreachable.
+  {%- endcomment -%}
+  <nav class="hdr__nav" aria-label="Main">
+    <div class="wrap hdr__nav-row">
+
+      <div class="hdr__drop" data-drop>
+        <button class="hdr__navlink hdr__navlink--drop" data-drop-btn aria-expanded="false" aria-haspopup="true">
+          Shop by concern
+          {% render 'icon', name: 'chevron', size: 14 %}
+        </button>
+
+        <div class="hdr__mega" data-drop-panel hidden>
+          <div class="wrap hdr__mega-in">
+            <div class="hdr__mega-grid">
+              {%- for c in concerns -%}
+                <a class="megaitem" href="{{ c.url }}">
+                  <span class="megaitem__t">{{ c.label }}<i>{{ c.count }}</i></span>
+                  <span class="megaitem__s">{{ c.tagline }}</span>
+                </a>
+              {%- endfor -%}
+            </div>
+
+            <div class="hdr__mega-side">
+              <span class="t-mono hdr__mega-lbl">Not sure where to start</span>
+              <a class="megatool" href="/pages/ritual-builder">
+                {% render 'icon', name: 'leaf', size: 18 %}
+                <span><b>Build your ritual</b><small>A routine across the whole day</small></span>
+              </a>
+              <a class="megatool" href="/pages/label-check">
+                {% render 'icon', name: 'flask', size: 18 %}
+                <span><b>Read the label</b><small>Compare two formulas by dose</small></span>
+              </a>
+              <a class="megatool" href="/pages/consultancy">
+                {% render 'icon', name: 'phone', size: 18 %}
+                <span><b>Free consultation</b><small>Talk to an Ayurvedic expert</small></span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a class="hdr__navlink" href="/collections/all">Shop all</a>
+      <a class="hdr__navlink" href="/collections/best-sellers">Best sellers</a>
+      <a class="hdr__navlink" href="/pages/ritual-builder">Build a ritual</a>
+      <a class="hdr__navlink" href="/pages/label-check">Read the label</a>
+      <a class="hdr__navlink" href="/pages/ingredients">Ingredients</a>
+      <a class="hdr__navlink hdr__navlink--gold" href="/pages/consultancy">Free consultancy</a>
+    </div>
+  </nav>
+
+</header>
+
+{%- comment -%} Mobile drawer {%- endcomment -%}
+<div class="drawer drawer--left" data-panel="menu" aria-hidden="true">
+  <div class="drawer__hd">
+    <span class="t-mono">Menu</span>
+    <button class="iconbtn" data-close aria-label="Close menu">{% render 'icon', name: 'close', size: 20 %}</button>
+  </div>
+  <div class="drawer__body">
+    <nav class="mnav" aria-label="Main">
+      <span class="mnav__grp t-mono">Shop by concern</span>
+      {%- for c in concerns -%}
+        <a class="mnav__link" href="{{ c.url }}">{{ c.label }}<i>{{ c.count }}</i></a>
+      {%- endfor -%}
+      <span class="mnav__grp t-mono">Tools</span>
+      <a class="mnav__link" href="/pages/ritual-builder">Build Your Ritual</a>
+      <a class="mnav__link" href="/pages/label-check">Read the Label</a>
+      <a class="mnav__link" href="/pages/ingredients">Ingredient Library</a>
+      <span class="mnav__grp t-mono">More</span>
+      <a class="mnav__link" href="/collections/all">Shop all</a>
+      <a class="mnav__link" href="/collections/best-sellers">Best sellers</a>
+      <a class="mnav__link" href="/pages/consultancy">Free Consultancy</a>
+      <a class="mnav__link" href="/pages/about">About Helbrede</a>
+      <a class="mnav__link" href="/pages/contact">Contact</a>
+    </nav>
+  </div>
+  <div class="drawer__foot">
+    <a class="btn btn--primary btn--block" href="tel:{{ settings.phone | replace: ' ', '' }}">
+      {% render 'icon', name: 'phone', size: 16 %} Call to order
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    { "type": "checkbox", "id": "sticky", "label": "Stick to top on scroll", "default": true }
+  ]
+}
+{% endschema %}

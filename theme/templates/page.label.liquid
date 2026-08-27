@@ -1,0 +1,43 @@
+{%- comment -%}
+  READ THE LABEL — signature feature.
+  Put two formulas side by side and compare declared doses. Kapiva publishes
+  adjectives ("rich in Omega 7"); this publishes numbers, or admits there aren't any.
+{%- endcomment -%}
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span><span class="t-dim">Read the label</span>
+</nav>
+
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap">
+    <header class="coll__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">read the</span>
+        <h1 class="sec-head__main">Label</h1>
+      </div>
+      <p class="t-lede">
+        Most supplement marketing describes ingredients without ever telling you how
+        much of them you get. Pick any two Helbrede formulas and compare what is
+        actually declared, active by active. Where a quantity is not stated on the
+        pack, this page says so instead of filling the gap.
+      </p>
+    </header>
+
+    <div class="cmp" data-compare>
+      <div class="cmp__pickers">
+        <label class="cmp__pick">
+          <span class="t-mono">Formula A</span>
+          <select data-cmp="a"></select>
+        </label>
+        <span class="cmp__vs" aria-hidden="true">vs</span>
+        <label class="cmp__pick">
+          <span class="t-mono">Formula B</span>
+          <select data-cmp="b"></select>
+        </label>
+      </div>
+      <div class="cmp__panels" data-cmp-out></div>
+    </div>
+  </div>
+</section>
+
+{% render 'catalog-json' %}
+{% section 'why-helbrede' %}

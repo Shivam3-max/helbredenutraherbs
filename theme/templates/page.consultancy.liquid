@@ -1,0 +1,44 @@
+<section class="sec" data-reveal>
+  <div class="wrap split">
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">talk to a</span>
+        <h1 class="sec-head__main">Practitioner</h1>
+      </div>
+      <p class="t-lede">
+        Ayurveda is not one-size-fits-all, and a product page can only take you so far.
+        Tell us what you are dealing with and an Ayurvedic consultant will call you
+        back — no charge, no obligation to buy anything.
+      </p>
+      <ul class="ticks" style="margin-top:1.5rem">
+        <li>A real conversation, not a chatbot script</li>
+        <li>Honest answers, including “you don’t need a supplement for that”</li>
+        <li>Guidance on combining formulas safely with medicines you already take</li>
+      </ul>
+      <a class="pdp__call" href="tel:{{ settings.phone | replace: ' ', '' }}" style="margin-top:1.5rem;max-width:26rem">
+        {% render 'icon', name: 'phone', size: 18 %}
+        <span><b>Or just call us</b><small>{{ settings.phone }} · {{ settings.call_hours }}</small></span>
+      </a>
+    </div>
+
+    <div class="panel">
+      <h2 class="pdp__block-h">Request a call back</h2>
+      {% form 'contact' %}
+        <div class="fld"><label for="c-name">Your name</label><input id="c-name" name="name" required></div>
+        <div class="fld"><label for="c-phone">Phone</label><input id="c-phone" name="phone" inputmode="tel" required></div>
+        <div class="fld"><label for="c-concern">What are you working on</label>
+          <select id="c-concern" name="concern">
+            {%- for c in concerns -%}<option>{{ c.label }}</option>{%- endfor -%}
+          </select>
+        </div>
+        <div class="fld"><label for="c-note">Anything we should know</label>
+          <textarea id="c-note" name="note" rows="4" placeholder="Medicines you take, conditions, what you have already tried"></textarea>
+        </div>
+        <button class="btn btn--primary btn--block" type="submit">Request a call back</button>
+        <p class="t-sm t-dim-3" style="margin-top:.7rem">
+          We use your number only to call you about this request.
+        </p>
+      {% endform %}
+    </div>
+  </div>
+</section>

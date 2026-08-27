@@ -1,0 +1,118 @@
+{%- comment -%}
+  Hero banner — full-bleed image slideshow, modelled on themancompany.com.
+
+  There is deliberately no text, button or product composition in the markup:
+  the artwork carries all of it, exactly as it does on The Man Company. Each
+  slide is a link wrapping two slots, because a 3.49:1 desktop banner cannot be
+  cropped into a portrait phone screen — the two are separate artworks.
+
+    desktop  1920 × 550   (28.65% padding-bottom — TMC's own ratio)
+    mobile   1130 × 1640
+
+  Both render as marked placeholders until real artwork is set in the theme
+  editor, so the slot codes double as the shot list for the design team.
+{%- endcomment -%}
+{%- assign slides = section.blocks -%}
+
+{%- if slides.size > 0 -%}
+<section class="hb" data-hero aria-roledescription="carousel" aria-label="Featured offers">
+
+  <div class="hb__viewport">
+    {%- for b in slides -%}
+      {%- comment -%}
+        Filters must not appear inside {% render %} arguments — LiquidJS lets the
+        filter swallow every argument after it, so `label`, `w` and `h` silently
+        arrive empty. Resolve the defaults first, pass plain variables.
+      {%- endcomment -%}
+      {%- assign href = b.settings.link | default: '/collections/all' -%}
+      {%- assign slot_d = b.settings.code | default: 'HERO-D' -%}
+      {%- assign slot_m = b.settings.code_mobile | default: 'HERO-M' -%}
+      {%- assign slot_label = b.settings.label | default: 'Hero banner artwork — all copy baked into the image' -%}
+      <a class="hb__slide {% if forloop.first %}is-on{% endif %}"
+         href="{{ href }}"
+         data-hero-slide
+         aria-hidden="{% if forloop.first %}false{% else %}true{% endif %}"
+         {% unless forloop.first %}tabindex="-1"{% endunless %}>
+
+        <span class="hb__desk">
+          {% render 'media-slot', code: slot_d, label: slot_label,
+             w: 1920, h: 550, src: b.settings.image_desktop,
+             alt: b.settings.alt, eager: forloop.first %}
+        </span>
+
+        <span class="hb__mob">
+          {% render 'media-slot', code: slot_m, label: slot_label,
+             w: 1130, h: 1640, src: b.settings.image_mobile,
+             alt: b.settings.alt, eager: forloop.first %}
+        </span>
+
+        {%- if b.settings.alt != blank -%}<span class="sr">{{ b.settings.alt }}</span>{%- endif -%}
+      </a>
+    {%- endfor -%}
+  </div>
+
+  {%- if slides.size > 1 -%}
+    <button class="hb__arrow hb__arrow--prev" data-hero-prev aria-label="Previous banner">
+      {% render 'icon', name: 'chevron', size: 18 %}
+    </button>
+    <button class="hb__arrow hb__arrow--next" data-hero-next aria-label="Next banner">
+      {% render 'icon', name: 'chevron', size: 18 %}
+    </button>
+
+    <div class="hb__dots" role="tablist" aria-label="Choose banner">
+      {%- for b in slides -%}
+        <button class="hb__dot {% if forloop.first %}is-on{% endif %}" data-hero-dot
+                role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+                aria-label="Banner {{ forloop.index }}"></button>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Hero banner",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "paragraph", "content": "Full-bleed banner slideshow. All copy and buttons live inside the artwork — upload a desktop banner at 1920 × 550 and a mobile banner at 1130 × 1640." },
+    { "type": "range", "id": "interval", "label": "Auto-advance (seconds)", "min": 3, "max": 12, "step": 1, "default": 5 },
+    { "type": "checkbox", "id": "autoplay", "label": "Auto-advance", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "banner",
+      "name": "Banner",
+      "settings": [
+        { "type": "image_picker", "id": "image_desktop", "label": "Desktop banner (1920 × 550)" },
+        { "type": "image_picker", "id": "image_mobile", "label": "Mobile banner (1130 × 1640)" },
+        { "type": "text", "id": "alt", "label": "Alt text (describe the offer)" },
+        { "type": "url", "id": "link", "label": "Links to" },
+        { "type": "text", "id": "code", "label": "Slot code (desktop)" },
+        { "type": "text", "id": "code_mobile", "label": "Slot code (mobile)" },
+        { "type": "text", "id": "label", "label": "Slot note for the design team" }
+      ]
+    }
+  ],
+  "presets": [{
+    "name": "Hero banner",
+    "blocks": [
+      { "type": "banner", "settings": {
+        "code": "HERO-01-D", "code_mobile": "HERO-01-M",
+        "label": "Primary campaign banner — hero offer of the month",
+        "alt": "Shop all Helbrede formulas",
+        "link": "/collections/all" }},
+      { "type": "banner", "settings": {
+        "code": "HERO-02-D", "code_mobile": "HERO-02-M",
+        "label": "Strength & Performance campaign — Mahabali / Balwan",
+        "alt": "Shop strength and performance",
+        "link": "/collections/strength-performance" }},
+      { "type": "banner", "settings": {
+        "code": "HERO-03-D", "code_mobile": "HERO-03-M",
+        "label": "Skin & hair campaign — serum range",
+        "alt": "Shop skin care",
+        "link": "/collections/skin-care" }}
+    ]
+  }]
+}
+{% endschema %}

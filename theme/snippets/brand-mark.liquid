@@ -1,0 +1,29 @@
+{%- comment -%}
+  The official Helbrede lockup.
+
+  Two cuts of the same artwork: `compact` stops after NUTRAHERBS and is used
+  wherever height is tight (the header), `full` keeps the
+  Skin · Hair · Healthcare descriptor and is used where there is room (footer).
+  Below roughly 80px tall the descriptor stops being legible, which is why the
+  header does not carry it.
+
+  An uploaded logo in theme settings overrides both.
+
+  {% render 'brand-mark', variant: 'full', class: 'brand--lg' %}
+{%- endcomment -%}
+{%- assign file = 'logo-compact.png' -%}
+{%- assign nat_h = 194 -%}
+{%- if variant == 'full' -%}
+  {%- assign file = 'logo.png' -%}
+  {%- assign nat_h = 238 -%}
+{%- endif -%}
+
+<span class="brand {{ class }}">
+  {%- if settings.logo != blank -%}
+    <img class="brand__img" src="{{ settings.logo | image_url: width: 460 }}"
+         alt="{{ shop.name }}" width="385" height="{{ nat_h }}">
+  {%- else -%}
+    <img class="brand__img" src="{{ file | asset_url }}"
+         alt="{{ shop.name }}" width="385" height="{{ nat_h }}">
+  {%- endif -%}
+</span>

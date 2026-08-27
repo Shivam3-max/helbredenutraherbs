@@ -1,0 +1,33 @@
+{%- assign coll = collections[section.settings.collection] -%}
+{%- if coll and coll.products.size > 0 -%}
+<section class="sec" data-reveal>
+  <div class="wrap">
+    <div class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__pre">{{ section.settings.pre }}</span>
+        <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+      </div>
+      <div class="rail-nav">
+        <button data-rail-prev aria-label="Scroll left">{% render 'icon', name: 'chevron', size: 16 %}</button>
+        <button data-rail-next aria-label="Scroll right">{% render 'icon', name: 'chevron', size: 16 %}</button>
+      </div>
+    </div>
+    <div data-rail-wrap>
+      <div class="rail" data-rail>
+        {%- for p in coll.products -%}{% render 'product-card', product: p %}{%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Product rail",
+  "settings": [
+    { "type": "text", "id": "collection", "label": "Collection handle", "default": "best-sellers" },
+    { "type": "text", "id": "pre", "label": "Small line", "default": "what people keep" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Coming back for" }
+  ],
+  "presets": [{ "name": "Product rail" }]
+}
+{% endschema %}

@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "hero":     { "type": "hero" },
+    "concern":  { "type": "concern-switcher" },
+    "best":     { "type": "featured-rail",
+                  "settings": { "collection": "best-sellers", "pre": "what people keep", "heading": "Coming back for" } },
+    "label":    { "type": "feature-label" },
+    "ritual":   { "type": "feature-ritual" },
+    "story":    { "type": "brand-story" },
+    "why":      { "type": "why-helbrede" }
+  },
+  "order": ["hero", "concern", "best", "label", "ritual", "story", "why"]
+}

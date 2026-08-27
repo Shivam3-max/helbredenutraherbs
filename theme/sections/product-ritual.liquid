@@ -1,0 +1,58 @@
+{%- comment -%}
+  RITUAL — signature feature, on-PDP entry point.
+  Helbrede spans ingestibles and topicals; Kapiva is ingestibles-only, so this
+  cross-category routine is a shelf they cannot build.
+{%- endcomment -%}
+{%- if routine.size > 1 -%}
+<section class="sec sec--sand" id="ritual" data-reveal>
+  <div class="wrap">
+    <div class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__pre">it works better as a</span>
+        <h2 class="sec-head__main">Routine</h2>
+      </div>
+      <a class="link-more" href="/pages/ritual-builder">Build your own {% render 'icon', name: 'arrow', size: 15 %}</a>
+    </div>
+
+    <div class="split">
+      <div class="ritual" data-ritual>
+        {%- assign total = 0 -%}
+        {%- for r in routine -%}
+          {%- assign rv = r.product.variants | first -%}
+          {%- assign total = total | plus: rv.price -%}
+          <label class="rit">
+            <input class="sr" type="checkbox" checked data-ritual-item value="{{ rv.id }}" data-price="{{ rv.price }}">
+            <span class="rit__slot">{{ r.slot }}</span>
+            <img class="rit__img" src="{{ r.product.featured_image.src }}" alt="" width="64" height="64" loading="lazy">
+            <span>
+              <span class="rit__t">{{ r.product.title }}</span>
+              <span class="rit__n">{{ r.note }}</span>
+            </span>
+            <span class="rit__p">{{ rv.price | money }}</span>
+          </label>
+        {%- endfor -%}
+      </div>
+
+      <div class="panel">
+        <h3 class="pdp__block-h">Your routine</h3>
+        <p class="t-sm t-dim">
+          {{ routine.size }} products across morning, day and night — one ingestible,
+          one topical, one support. Untick anything you already own.
+        </p>
+        <div class="ritual-tot">
+          <span>Routine total</span>
+          <strong data-ritual-total>{{ total | money }}</strong>
+        </div>
+        <button class="btn btn--primary btn--block btn--lg" data-ritual-add>Add routine to cart</button>
+        <p class="t-sm t-dim-3" style="margin-top:.7rem">
+          Ayurvedic formulas are cumulative — most of these are meant to be taken
+          for at least three months.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — routine", "settings": [] }
+{% endschema %}

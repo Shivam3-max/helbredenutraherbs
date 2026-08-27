@@ -1,0 +1,43 @@
+<section class="sec sec--deep" data-reveal>
+  <div class="wrap">
+    <div class="sec-head sec-head--center">
+      <span class="sec-head__pre">why</span>
+      <h2 class="sec-head__main">Helbrede</h2>
+    </div>
+    <div class="vals" data-reveal-stagger>
+      {%- for b in section.blocks -%}
+        <div class="val">
+          <span class="val__ico">{% render 'icon', name: b.settings.icon, size: 21 %}</span>
+          <h3 class="val__t">{{ b.settings.title }}</h3>
+          <p class="val__b">{{ b.settings.body }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Why Helbrede",
+  "blocks": [{
+    "type": "value", "name": "Value",
+    "settings": [
+      { "type": "text", "id": "icon", "label": "Icon (leaf/flask/shield/truck/phone)" },
+      { "type": "text", "id": "title", "label": "Title" },
+      { "type": "textarea", "id": "body", "label": "Body" }
+    ]
+  }],
+  "presets": [{
+    "name": "Why Helbrede",
+    "blocks": [
+      { "type": "value", "settings": { "icon": "flask", "title": "Doses on the label",
+        "body": "Where a quantity exists, we print it — 500 mg Ashwagandha root, 10% Niacinamide, 400 mg Berberine. Where it does not, we say so." }},
+      { "type": "value", "settings": { "icon": "leaf", "title": "Ayurveda, not folklore",
+        "body": "Classical herbs formulated to a stated strength, with the traditional use described honestly rather than dressed up as a cure." }},
+      { "type": "value", "settings": { "icon": "shield", "title": "Made in a GMP facility",
+        "body": "Manufactured at Kenko Healthcare, Panchkula, and marketed by Helbrede Healthcare Ltd. The names are on every pack." }},
+      { "type": "value", "settings": { "icon": "phone", "title": "A person on the phone",
+        "body": "Ayurvedic consultation at no charge, and a number that a human answers between 10am and 7pm." }}
+    ]
+  }]
+}
+{% endschema %}

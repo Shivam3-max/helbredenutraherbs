@@ -1,0 +1,30 @@
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span><span class="t-dim">Ingredient library</span>
+</nav>
+
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap">
+    <header class="coll__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">every herb, acid and mineral we use</span>
+        <h1 class="sec-head__main">Ingredient library</h1>
+      </div>
+      <p class="t-lede">
+        {{ ingredients.size }} ingredients across the range, each described the way it
+        appears on the pack it came from — with the products that contain it.
+      </p>
+    </header>
+
+    <div class="ings" data-reveal-stagger>
+      {%- for i in ingredients -%}
+        <article class="ing">
+          <div class="ing__hd">
+            <h2 class="ing__n"><a href="/pages/ingredients/{{ i.handle }}">{{ i.name }}</a></h2>
+            <span class="ing__d">{{ i.products.size }} product{% if i.products.size != 1 %}s{% endif %}</span>
+          </div>
+          <p class="ing__b">{{ i.body }}</p>
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>

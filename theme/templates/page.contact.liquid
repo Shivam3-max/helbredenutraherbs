@@ -1,0 +1,45 @@
+<section class="sec" data-reveal>
+  <div class="wrap split">
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">get in</span>
+        <h1 class="sec-head__main">Touch</h1>
+      </div>
+      <p class="t-lede">Orders, returns, product questions or wholesale enquiries — whichever it is, a person will answer.</p>
+
+      <div class="stack" style="margin-top:1.75rem;max-width:26rem">
+        <a class="pdp__call" href="tel:{{ settings.phone | replace: ' ', '' }}">
+          {% render 'icon', name: 'phone', size: 18 %}
+          <span><b>{{ settings.phone }}</b><small>{{ settings.call_hours }}</small></span>
+        </a>
+        <a class="pdp__call" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener">
+          {% render 'icon', name: 'whatsapp', size: 18 %}
+          <span><b>WhatsApp us</b><small>Usually replies within a few hours</small></span>
+        </a>
+        <a class="pdp__call" href="mailto:{{ settings.email }}">
+          {% render 'icon', name: 'leaf', size: 18 %}
+          <span><b>{{ settings.email }}</b><small>For orders, returns and wholesale</small></span>
+        </a>
+      </div>
+
+      <div class="contact-addr">
+        <h2 class="pdp__block-h">Visit us</h2>
+        <address class="ftr__addr">{{ settings.address }}</address>
+        {%- if settings.legal_line != blank -%}
+          <p class="t-sm t-dim-3" style="margin-top:.6rem">{{ settings.legal_line }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2 class="pdp__block-h">Send a message</h2>
+      {% form 'contact' %}
+        <div class="fld"><label for="m-name">Your name</label><input id="m-name" name="name" required></div>
+        <div class="fld"><label for="m-email">Email</label><input id="m-email" type="email" name="email" required></div>
+        <div class="fld"><label for="m-order">Order number (if any)</label><input id="m-order" name="order"></div>
+        <div class="fld"><label for="m-msg">Message</label><textarea id="m-msg" name="body" rows="5" required></textarea></div>
+        <button class="btn btn--primary btn--block" type="submit">Send message</button>
+      {% endform %}
+    </div>
+  </div>
+</section>

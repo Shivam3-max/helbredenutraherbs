@@ -1,0 +1,48 @@
+{%- comment -%} Homepage teaser for the Label Panel — the signature feature. {%- endcomment -%}
+{%- assign p = all_products | where: 'handle', section.settings.product | first -%}
+{%- unless p -%}{%- assign p = all_products | first -%}{%- endunless -%}
+<section class="sec sec--tint" data-reveal>
+  <div class="wrap split">
+    <div>
+      <div class="sec-head">
+        <span class="sec-head__pre">the difference is</span>
+        <h2 class="sec-head__main">A number, not an adjective</h2>
+      </div>
+      <p class="t-lede">
+        Most wellness brands tell you a formula is “rich in” something. That is a
+        description, not a dose. Every Helbrede product page carries a supplement-facts
+        panel with the quantity of each active exactly as it appears on the pack —
+        and where a quantity genuinely is not declared, it says so.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="/pages/label-check">Compare two formulas</a>
+        <a class="btn btn--ghost" href="/pages/ingredients">Ingredient library</a>
+      </div>
+    </div>
+
+    <div class="label-panel">
+      <div class="label-panel__hd">
+        <span class="label-panel__t">Supplement facts</span>
+        <span class="label-panel__s">{{ p.pack_size }}</span>
+      </div>
+      <div class="label-panel__rule"></div>
+      {%- for i in p.hb.ingredients limit: 5 -%}
+        <div class="label-row">
+          <span class="label-row__n">{{ i.name }}</span>
+          <span class="label-row__d">{% if i.dose != blank %}{{ i.dose }}{% else %}<em class="t-dim-3">not declared</em>{% endif %}</span>
+        </div>
+      {%- endfor -%}
+      <p class="label-panel__ft">From {{ p.title }} · quantities as printed on the pack.</p>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Feature — label",
+  "settings": [
+    { "type": "text", "id": "product", "label": "Sample product handle",
+      "default": "helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules" }
+  ],
+  "presets": [{ "name": "Feature — label" }]
+}
+{% endschema %}

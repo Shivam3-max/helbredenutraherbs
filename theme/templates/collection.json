@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "main": { "type": "main-collection" },
+    "why":  { "type": "why-helbrede" }
+  },
+  "order": ["main", "why"]
+}

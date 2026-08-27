@@ -1,0 +1,28 @@
+{%- assign ings = product.hb.ingredients -%}
+{%- if ings.size > 0 -%}
+<section class="sec" id="ingredients" data-reveal>
+  <div class="wrap">
+    <div class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__pre">what is inside</span>
+        <h2 class="sec-head__main">Key ingredients</h2>
+      </div>
+      <a class="link-more" href="/pages/ingredients">Ingredient library {% render 'icon', name: 'arrow', size: 15 %}</a>
+    </div>
+    <div class="ings" data-reveal-stagger>
+      {%- for i in ings limit: 12 -%}
+        <article class="ing">
+          <div class="ing__hd">
+            <h3 class="ing__n">{{ i.name }}</h3>
+            {%- if i.dose != blank -%}<span class="ing__d">{{ i.dose }}</span>{%- endif -%}
+          </div>
+          {%- if i.body != blank -%}<p class="ing__b">{{ i.body }}</p>{%- endif -%}
+        </article>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{ "name": "Product — ingredients", "settings": [] }
+{% endschema %}
