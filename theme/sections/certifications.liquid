@@ -1,0 +1,63 @@
+{%- comment -%}
+  Certification badges, taken from the live Helbrede storefront.
+
+  Deliberately given a full section rather than a footer strip: in a category
+  where anyone can print a label, FSSAI / AYUSH / ISO / GMP / lab-tested is the
+  claim a buyer actually checks. Badges are decorative-only for screen readers
+  (each has a visible caption underneath), so they are marked aria-hidden and
+  the caption carries the meaning.
+{%- endcomment -%}
+<section class="sec sec--tight certs" data-reveal>
+  <div class="wrap">
+
+    {%- if section.settings.heading != blank -%}
+      <div class="certs__head">
+        <div class="sec-head sec-head--center">
+          <span class="sec-head__pre">{{ section.settings.pre }}</span>
+          <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+        </div>
+        {%- if section.settings.body != blank -%}
+          <p class="certs__lede">{{ section.settings.body }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <ul class="certs__row" data-reveal-stagger>
+      {%- for b in section.blocks -%}
+        <li class="cert">
+          <img class="cert__img" src="{{ b.settings.image | asset_url }}" alt=""
+               width="300" height="300" loading="lazy" aria-hidden="true">
+          <span class="cert__cap">{{ b.settings.caption }}</span>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Certifications",
+  "max_blocks": 6,
+  "settings": [
+    { "type": "text", "id": "pre", "label": "Small line", "default": "checked, registered and" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Certified" },
+    { "type": "textarea", "id": "body", "label": "Body",
+      "default": "Registered with FSSAI, compliant with AYUSH, manufactured in an ISO and GMP certified facility, and batch tested in a laboratory before it reaches you." }
+  ],
+  "blocks": [
+    { "type": "badge", "name": "Badge", "settings": [
+      { "type": "text", "id": "image", "label": "Asset filename" },
+      { "type": "text", "id": "caption", "label": "Caption" }
+    ]}
+  ],
+  "presets": [{
+    "name": "Certifications",
+    "blocks": [
+      { "type": "badge", "settings": { "image": "cert-fssai.png", "caption": "FSSAI registered" }},
+      { "type": "badge", "settings": { "image": "cert-ayush.png", "caption": "AYUSH compliant" }},
+      { "type": "badge", "settings": { "image": "cert-iso.png",   "caption": "ISO certified company" }},
+      { "type": "badge", "settings": { "image": "cert-gmp.png",   "caption": "GMP certified facility" }},
+      { "type": "badge", "settings": { "image": "cert-lab.png",   "caption": "Lab tested batches" }}
+    ]
+  }]
+}
+{% endschema %}

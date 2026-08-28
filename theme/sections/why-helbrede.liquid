@@ -1,42 +1,106 @@
-<section class="sec sec--deep" data-reveal>
+{%- comment -%}
+  "Why Helbrede" — the numbered editorial block Kapiva runs as "Why Kapiva?".
+
+  Kapiva stacks four full-width rows with a big peach numeral and a paragraph.
+  This keeps the numerals as the structural device (the order is real: it runs
+  from what is in the bottle, out to how it is made, then how it is used, then
+  who you can call) but sets them as watermarks behind a card grid, so the
+  section reads in one screen instead of four scrolls.
+
+  Every claim here is one the site can actually back up elsewhere — the dose
+  counts come from the parsed catalog, the certifications from the badges
+  section below.
+{%- endcomment -%}
+
+<section class="sec why" data-reveal>
   <div class="wrap">
-    <div class="sec-head sec-head--center">
-      <span class="sec-head__pre">why</span>
-      <h2 class="sec-head__main">Helbrede</h2>
-    </div>
-    <div class="vals" data-reveal-stagger>
+
+    <header class="why__head">
+      <div class="sec-head">
+        <span class="sec-head__pre">why</span>
+        <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+      </div>
+      {%- if section.settings.tagline != blank -%}
+        <p class="why__tagline">{{ section.settings.tagline }}</p>
+      {%- endif -%}
+    </header>
+
+    <div class="why__grid" data-reveal-stagger>
       {%- for b in section.blocks -%}
-        <div class="val">
-          <span class="val__ico">{% render 'icon', name: b.settings.icon, size: 21 %}</span>
-          <h3 class="val__t">{{ b.settings.title }}</h3>
-          <p class="val__b">{{ b.settings.body }}</p>
-        </div>
+        <article class="whycard">
+          <span class="whycard__num" aria-hidden="true">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+
+          <span class="whycard__ico">
+            {% render 'icon', name: b.settings.icon, size: 22 %}
+          </span>
+
+          <h3 class="whycard__t">{{ b.settings.title }}</h3>
+          <p class="whycard__b">{{ b.settings.body }}</p>
+
+          {%- if b.settings.proof != blank -%}
+            <p class="whycard__proof">
+              {% render 'icon', name: 'check', size: 13 %}
+              <span>{{ b.settings.proof }}</span>
+            </p>
+          {%- endif -%}
+        </article>
       {%- endfor -%}
     </div>
+
+    {%- if section.settings.cta_label != blank -%}
+      <div class="why__cta">
+        <a class="btn btn--primary btn--lg" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}</a>
+        <a class="link-more" href="/pages/about">Read the full story {% render 'icon', name: 'arrow', size: 15 %}</a>
+      </div>
+    {%- endif -%}
   </div>
 </section>
+
 {% schema %}
 {
   "name": "Why Helbrede",
-  "blocks": [{
-    "type": "value", "name": "Value",
-    "settings": [
-      { "type": "text", "id": "icon", "label": "Icon (leaf/flask/shield/truck/phone)" },
-      { "type": "text", "id": "title", "label": "Title" },
-      { "type": "textarea", "id": "body", "label": "Body" }
-    ]
-  }],
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Helbrede Nutraherbs" },
+    { "type": "text", "id": "tagline", "label": "Tagline", "default": "Read the label. Then decide." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Shop all formulas" },
+    { "type": "url", "id": "cta_link", "label": "Button link", "default": "/collections/all" }
+  ],
+  "blocks": [
+    {
+      "type": "reason",
+      "name": "Reason",
+      "settings": [
+        { "type": "text", "id": "icon", "label": "Icon (flask / shield / leaf / phone)" },
+        { "type": "text", "id": "title", "label": "Title" },
+        { "type": "textarea", "id": "body", "label": "Body" },
+        { "type": "text", "id": "proof", "label": "Proof line" }
+      ]
+    }
+  ],
   "presets": [{
     "name": "Why Helbrede",
     "blocks": [
-      { "type": "value", "settings": { "icon": "flask", "title": "Doses on the label",
-        "body": "Where a quantity exists, we print it — 500 mg Ashwagandha root, 10% Niacinamide, 400 mg Berberine. Where it does not, we say so." }},
-      { "type": "value", "settings": { "icon": "leaf", "title": "Ayurveda, not folklore",
-        "body": "Classical herbs formulated to a stated strength, with the traditional use described honestly rather than dressed up as a cure." }},
-      { "type": "value", "settings": { "icon": "shield", "title": "Made in a GMP facility",
-        "body": "Manufactured at Kenko Healthcare, Panchkula, and marketed by Helbrede Healthcare Ltd. The names are on every pack." }},
-      { "type": "value", "settings": { "icon": "phone", "title": "A person on the phone",
-        "body": "Ayurvedic consultation at no charge, and a number that a human answers between 10am and 7pm." }}
+      { "type": "reason", "settings": {
+        "icon": "flask",
+        "title": "Formulated to a stated dose",
+        "body": "Most wellness brands tell you a formula is “enriched with” something. That is a description, not a dose. We print the quantity of every active exactly as it appears on the pack — 500 mg Ashwagandha root, 10% Niacinamide, 400 mg Berberine — and where a pack does not declare one, we say so instead of filling the gap with language.",
+        "proof": "83 declared doses across the range" }},
+      { "type": "reason", "settings": {
+        "icon": "shield",
+        "title": "Made where we say it is made",
+        "body": "Manufactured at a GMP-certified facility — Kenko Healthcare, Panchkula — and marketed by Helbrede Healthcare Ltd. Both names are printed on every pack, which is not universal in this category. FSSAI registered, AYUSH compliant, ISO certified and lab tested.",
+        "proof": "FSSAI · AYUSH · ISO · GMP · Lab tested" }},
+      { "type": "reason", "settings": {
+        "icon": "leaf",
+        "title": "Both halves of the routine",
+        "body": "We make the tablet you take and the serum you apply. So a hair plan can be Biotin, Zinc and Selenium in the morning and a scalp serum at night — a full day, not a single bottle. Most brands can only sell you one half of that, because they only make one half.",
+        "proof": "35 formulas across 8 concerns" }},
+      { "type": "reason", "settings": {
+        "icon": "phone",
+        "title": "A person on the phone",
+        "body": "Ayurveda is not one-size-fits-all and a product page can only take you so far. Our consultants will talk it through at no charge, and they are allowed to tell you that you do not need a supplement at all.",
+        "proof": "Free consultation, 10am – 7pm" }}
     ]
   }]
 }

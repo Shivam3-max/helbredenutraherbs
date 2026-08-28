@@ -1,0 +1,82 @@
+{%- comment -%}
+  "Also available on" — Amazon and Flipkart.
+
+  The live site ships this as one flat PNG with the heading baked into the
+  image, which cannot be read, translated or resized. Here the copy is real
+  text and only the marketplace wordmarks are images, so they stay crisp and
+  the section scales.
+
+  The logos are marked slots rather than redrawn: they are third-party
+  trademarks and should be the official brand assets, not an approximation.
+{%- endcomment -%}
+<section class="sec mkt" data-reveal>
+  <div class="wrap mkt__in">
+
+    <div class="mkt__copy">
+      <div class="sec-head">
+        <span class="sec-head__pre">{{ section.settings.pre }}</span>
+        <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+      </div>
+      <p class="t-lede">{{ section.settings.body }}</p>
+      <p class="mkt__note">
+        {% render 'icon', name: 'shield', size: 16 %}
+        <span>{{ section.settings.note }}</span>
+      </p>
+    </div>
+
+    <div class="mkt__cards" data-reveal-stagger>
+      {%- for b in section.blocks -%}
+        {%- assign slot_code = b.settings.code -%}
+        {%- assign slot_label = b.settings.label -%}
+        <a class="mktcard" href="{{ b.settings.link }}" target="_blank" rel="noopener noreferrer">
+          <span class="mktcard__logo">
+            {% render 'media-slot', code: slot_code, label: slot_label,
+               w: 600, h: 180, src: b.settings.logo, alt: b.settings.name %}
+          </span>
+          <span class="mktcard__cta">
+            {{ b.settings.cta }}
+            {% render 'icon', name: 'arrow', size: 16 %}
+          </span>
+          <span class="sr">{{ b.settings.name }} — opens in a new tab</span>
+        </a>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Also available on",
+  "max_blocks": 4,
+  "settings": [
+    { "type": "text", "id": "pre", "label": "Small line", "default": "also available" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "On Amazon & Flipkart" },
+    { "type": "textarea", "id": "body", "label": "Body",
+      "default": "Prefer to order where you already shop? The full Helbrede range is listed on both marketplaces, with the same packs and the same batch-tested stock." },
+    { "type": "text", "id": "note", "label": "Note",
+      "default": "Buy only from the official Helbrede Nutraherbs seller — check the brand name on the listing." }
+  ],
+  "blocks": [
+    { "type": "store", "name": "Marketplace", "settings": [
+      { "type": "text", "id": "name", "label": "Marketplace name" },
+      { "type": "image_picker", "id": "logo", "label": "Logo (600 × 180)" },
+      { "type": "url", "id": "link", "label": "Store link" },
+      { "type": "text", "id": "cta", "label": "Button label" },
+      { "type": "text", "id": "code", "label": "Slot code" },
+      { "type": "text", "id": "label", "label": "Slot note" }
+    ]}
+  ],
+  "presets": [{
+    "name": "Also available on",
+    "blocks": [
+      { "type": "store", "settings": {
+        "name": "Amazon", "cta": "Shop on Amazon",
+        "link": "https://www.amazon.in/s?k=Helbrede+Nutraherbs",
+        "code": "MKT-AMAZON", "label": "Official Amazon wordmark, transparent PNG or SVG" }},
+      { "type": "store", "settings": {
+        "name": "Flipkart", "cta": "Shop on Flipkart",
+        "link": "https://www.flipkart.com/search?q=Helbrede+Nutraherbs",
+        "code": "MKT-FLIPKART", "label": "Official Flipkart wordmark, transparent PNG or SVG" }}
+    ]
+  }]
+}
+{% endschema %}

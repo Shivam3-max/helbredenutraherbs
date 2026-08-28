@@ -85,6 +85,24 @@ const run = async () => {
     check('home · section headings', count(html, /sec-head__main/g), gte(1));
   }
 
+  /* --------------------------------------------- why / certs / marketplaces */
+  {
+    const html = await get('/');
+    check('why · four reasons', count(html, /class="whycard"/g), 4);
+    check('why · numerals 01-04', count(html, /class="whycard__num"[^>]*>0[1-4]</g), 4);
+    check('why · proof lines', count(html, /class="whycard__proof"/g), 4);
+
+    check('certs · five badges', count(html, /class="cert"/g), 5);
+    check('certs · badge assets', count(html, /assets\/cert-(fssai|ayush|iso|gmp|lab)\.png/g), 5);
+    check('certs · captions', count(html, /class="cert__cap"/g), 5);
+
+    check('marketplaces · two cards', count(html, /class="mktcard"/g), 2);
+    check('marketplaces · amazon link', count(html, /amazon\.in/g), 1);
+    check('marketplaces · flipkart link', count(html, /flipkart\.com/g), 1);
+    check('marketplaces · outbound links safe', count(html, /rel="noopener noreferrer"/g), gte(2));
+    check('marketplaces · logo slots', count(html, /600 × 180 px/g), 2);
+  }
+
   /* ------------------------------------------------------- product page --- */
   {
     const handle = 'helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules';
@@ -114,7 +132,7 @@ const run = async () => {
     check('pdp · spec rows', count(html, /class="specs__row"/g), gte(3));
     check('pdp · ROUTINE', count(html, /data-ritual-item/g), gte(3));
     check('pdp · related rail', count(html, /data-rail/g), gte(1));
-    check('pdp · why helbrede', count(html, /class="val"/g), 4);
+    check('pdp · why helbrede', count(html, /class="whycard"/g), 4);
   }
 
   /* Every product must render its buy box and at least the parsed content. */
