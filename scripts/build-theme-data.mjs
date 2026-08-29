@@ -387,7 +387,18 @@ const out = {
 };
 
 fs.mkdirSync(path.join(ROOT, 'data'), { recursive: true });
-fs.writeFileSync(path.join(ROOT, 'data/shop.json'), JSON.stringify(out, null, 1));
+
+/* Only rewrite when the catalog itself changed. `generated_at` alone would
+   dirty the working tree on every `npm run dev`, which buries real data
+   changes in timestamp churn. */
+const outPath = path.join(ROOT, 'data/shop.json');
+const next = JSON.stringify(out, null, 1);
+const sansStamp = (t) => t.replace(/"generated_at": "[^"]*",?\n?/, '');
+let unchanged = false;
+if (fs.existsSync(outPath)) {
+  unchanged = sansStamp(fs.readFileSync(outPath, 'utf8')) === sansStamp(next);
+}
+if (!unchanged) fs.writeFileSync(outPath, next);
 
 /* seeded-data disclosure -------------------------------------------- */
 const doc = `# Seeded data
@@ -427,4 +438,5 @@ console.log(`concerns     ${Object.keys(concernFile).length}`);
 console.log(`collections  ${Object.keys(collections).length}`);
 console.log(`ingredients  ${ingredients.length}`);
 console.log(`images       ${built.reduce((n, p) => n + p.images.length, 0)}`);
-console.log(`-> data/shop.json, docs/SEEDED-DATA.md`);
+console.log(unchanged ? '-> no catalog change; data/shop.json left as is'
+                     : '-> data/shop.json, docs/SEEDED-DATA.md');
