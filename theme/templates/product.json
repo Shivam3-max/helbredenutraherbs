@@ -1,16 +1,94 @@
 {
   "sections": {
-    "main":        { "type": "main-product" },
-    "benefits":    { "type": "product-benefits" },
-    "label":       { "type": "product-label" },
-    "ingredients": { "type": "product-ingredients" },
-    "how":         { "type": "product-how" },
-    "ritual":      { "type": "product-ritual" },
-    "safety":      { "type": "product-safety" },
-    "faq":         { "type": "product-faq" },
-    "specs":       { "type": "product-specs" },
-    "related":     { "type": "product-related" },
-    "why":         { "type": "why-helbrede" }
+    "main": {
+      "type": "main-product"
+    },
+    "benefits": {
+      "type": "product-benefits"
+    },
+    "label": {
+      "type": "product-label"
+    },
+    "ingredients": {
+      "type": "product-ingredients"
+    },
+    "how": {
+      "type": "product-how"
+    },
+    "ritual": {
+      "type": "product-ritual"
+    },
+    "safety": {
+      "type": "product-safety"
+    },
+    "faq": {
+      "type": "product-faq"
+    },
+    "specs": {
+      "type": "product-specs"
+    },
+    "related": {
+      "type": "product-related"
+    },
+    "why": {
+      "type": "why-helbrede",
+      "blocks": {
+        "reason-1": {
+          "type": "reason",
+          "settings": {
+            "icon": "flask",
+            "title": "Formulated to a stated dose",
+            "body": "Most wellness brands tell you a formula is “enriched with” something. That is a description, not a dose. We print the quantity of every active exactly as it appears on the pack — 500 mg Ashwagandha root, 10% Niacinamide, 400 mg Berberine — and where a pack does not declare one, we say so instead of filling the gap with language.",
+            "proof": "83 declared doses across the range"
+          }
+        },
+        "reason-2": {
+          "type": "reason",
+          "settings": {
+            "icon": "shield",
+            "title": "Made where we say it is made",
+            "body": "Manufactured at a GMP-certified facility — Kenko Healthcare, Panchkula — and marketed by Helbrede Healthcare Ltd. Both names are printed on every pack, which is not universal in this category. FSSAI registered, AYUSH compliant, ISO certified and lab tested.",
+            "proof": "FSSAI · AYUSH · ISO · GMP · Lab tested"
+          }
+        },
+        "reason-3": {
+          "type": "reason",
+          "settings": {
+            "icon": "leaf",
+            "title": "Both halves of the routine",
+            "body": "We make the tablet you take and the serum you apply. So a hair plan can be Biotin, Zinc and Selenium in the morning and a scalp serum at night — a full day, not a single bottle. Most brands can only sell you one half of that, because they only make one half.",
+            "proof": "35 formulas across 8 concerns"
+          }
+        },
+        "reason-4": {
+          "type": "reason",
+          "settings": {
+            "icon": "phone",
+            "title": "A person on the phone",
+            "body": "Ayurveda is not one-size-fits-all and a product page can only take you so far. Our consultants will talk it through at no charge, and they are allowed to tell you that you do not need a supplement at all.",
+            "proof": "Free consultation, 10am – 7pm"
+          }
+        }
+      },
+      "block_order": [
+        "reason-1",
+        "reason-2",
+        "reason-3",
+        "reason-4"
+      ]
+    }
   },
-  "order": ["main","benefits","label","ingredients","how","ritual","safety","faq","specs","related","why"]
+  "order": [
+    "main",
+    "benefits",
+    "label",
+    "ingredients",
+    "how",
+    "ritual",
+    "safety",
+    "faq",
+    "specs",
+    "related",
+    "why"
+  ]
 }

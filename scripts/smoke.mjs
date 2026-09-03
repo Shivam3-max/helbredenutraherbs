@@ -314,6 +314,40 @@ const run = async () => {
     check('search page · results', count(html, /<article class="card"/g), gte(1));
   }
 
+  /* ------------------------------------------- JSON templates vs presets -- */
+  /* A section's `presets` are applied only when a merchant adds it through the
+     theme editor. A JSON template that names a block-driven section without
+     declaring `blocks` renders the section's shell and nothing inside it on a
+     real store. The dev server fabricates preset blocks, so this is invisible
+     locally — it shipped four empty sections to production before being
+     caught. Assert against the template files, not the DOM. */
+  {
+    const fs = await import('node:fs');
+    const path = await import('node:path');
+    const T = 'theme/templates', S = 'theme/sections';
+
+    const schemaOf = (type) => {
+      const f = path.join(S, `${type}.liquid`);
+      if (!fs.existsSync(f)) return null;
+      const m = fs.readFileSync(f, 'utf8').match(/\{%-?\s*schema\s*-?%\}([\s\S]*?)\{%-?\s*endschema\s*-?%\}/);
+      try { return m ? JSON.parse(m[1]) : null; } catch { return null; }
+    };
+
+    const relying = [];
+    for (const tf of fs.readdirSync(T).filter((f) => f.endsWith('.json'))) {
+      const tpl = JSON.parse(fs.readFileSync(path.join(T, tf), 'utf8'));
+      for (const [id, sec] of Object.entries(tpl.sections || {})) {
+        const sch = schemaOf(sec.type);
+        if (!sch) continue;
+        const usesBlocks = Array.isArray(sch.blocks) && sch.blocks.length > 0;
+        const hasPresetBlocks = (sch.presets || []).some((p) => Array.isArray(p.blocks) && p.blocks.length);
+        const declared = sec.blocks ? Object.keys(sec.blocks).length : 0;
+        if (usesBlocks && hasPresetBlocks && !declared) relying.push(`${tf}:${id}`);
+      }
+    }
+    check(`templates · no section relies on presets${relying.length ? ` (${relying.join(', ')})` : ''}`, relying.length, 0);
+  }
+
   /* ---------------------------------------------- catalog data integrity -- */
   {
     const shop = JSON.parse(
