@@ -29,9 +29,20 @@
         {%- assign slot_code = b.settings.code -%}
         {%- assign slot_label = b.settings.label -%}
         <a class="mktcard" href="{{ b.settings.link }}" target="_blank" rel="noopener noreferrer">
+          {%- comment -%}
+            The official wordmarks are third-party trademarks, so they are only
+            ever the merchant's own uploaded asset — never redrawn here. Until
+            one is set, fall back to the marketplace name as type rather than a
+            media-slot: the marked box is a working note, and this section is
+            customer-facing on the storefront.
+          {%- endcomment -%}
           <span class="mktcard__logo">
-            {% render 'media-slot', code: slot_code, label: slot_label,
-               w: 600, h: 180, src: b.settings.logo, alt: b.settings.name %}
+            {%- if b.settings.logo != blank -%}
+              {% render 'media-slot', code: slot_code, label: slot_label,
+                 w: 600, h: 180, src: b.settings.logo, alt: b.settings.name %}
+            {%- else -%}
+              <span class="mktcard__wordmark">{{ b.settings.name }}</span>
+            {%- endif -%}
           </span>
           <span class="mktcard__cta">
             {{ b.settings.cta }}

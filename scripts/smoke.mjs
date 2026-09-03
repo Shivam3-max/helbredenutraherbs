@@ -103,7 +103,10 @@ const run = async () => {
     check('marketplaces · amazon link', count(html, /amazon\.in/g), 1);
     check('marketplaces · flipkart link', count(html, /flipkart\.com/g), 1);
     check('marketplaces · outbound links safe', count(html, /rel="noopener noreferrer"/g), gte(2));
-    check('marketplaces · logo slots', count(html, /600 × 180 px/g), 2);
+    /* Was asserting the marked slot rendered — which pinned a working note as
+       correct storefront output. The logo is the merchant's uploaded asset or
+       the marketplace name as type; never the box. */
+    check('marketplaces · logo falls back to type', count(html, /mktcard__wordmark/g), 2);
   }
 
   /* ------------------------------------------------------- product page --- */
@@ -312,6 +315,19 @@ const run = async () => {
     const html = await get('/search?q=ashwagandha');
     assertChrome(html, 'search page');
     check('search page · results', count(html, /<article class="card"/g), gte(1));
+  }
+
+  /* ------------------------------------------------ customer-facing slots -- */
+  /* media-slot renders a marked box — slot code, purpose, pixel size — which is
+     a working note, not something a shopper should ever see. The marketplace
+     wordmarks are third-party trademarks and will stay unset until the merchant
+     uploads them, so that section must fall back to type rather than the box.
+     It reached the live storefront showing "MKT-AMAZON · 600 × 180 px". */
+  {
+    const html = await get('/');
+    check('marketplaces · wordmark fallback', count(html, /mktcard__wordmark/g), 2);
+    check('marketplaces · no marked slot', count(html, /MKT-AMAZON|MKT-FLIPKART/g), 0);
+    check('homepage · no unfilled slot codes', count(html, /class="slot__code"/g), 0);
   }
 
   /* --------------------------------------------------- theme settings ----- */
