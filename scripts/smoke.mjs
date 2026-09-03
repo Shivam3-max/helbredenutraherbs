@@ -184,6 +184,20 @@ const run = async () => {
     const cart = await (await fetch(`${BASE}/cart.js`)).json();
     check('cart · item count', cart.item_count, 2);
     check('cart · total > 0', cart.total_price, gt(0));
+
+    /* With a line in the cart, the page must be editable. It shipped read-only
+       — quantity as bare text, no remove — so anyone arriving at /cart from a
+       bookmark or a refresh was stuck with whatever the drawer had left. */
+    {
+      const html = await get('/cart');
+      check('cart page · line rows', count(html, /class="cartpage__row"/g), 1);
+      check('cart page · line key', count(html, /data-key="/g), 1);
+      check('cart page · quantity on row', count(html, /data-quantity="2"/g), 1);
+      check('cart page · qty buttons', count(html, /data-qty="/g), 2);
+      check('cart page · remove button', count(html, /data-remove/g), 1);
+      check('cart page · checkout button', count(html, /name="checkout"/g), 1);
+    }
+
     await fetch(`${BASE}/cart/clear.js`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
   }
 

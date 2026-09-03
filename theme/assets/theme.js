@@ -76,7 +76,7 @@
       if (!lines) return;
 
       lines.innerHTML = cart.items.map((i) => `
-        <li class="cl" data-key="${i.key}">
+        <li class="cl" data-key="${i.key}" data-quantity="${i.quantity}">
           ${i.image ? `<img class="cl__img" src="${i.image}" alt="" width="76" height="76">` : '<div class="cl__img"></div>'}
           <div>
             <a class="cl__t" href="${i.url}">${i.product_title}</a>
@@ -128,16 +128,25 @@
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: key, quantity }),
         });
+        /* The cart page is server-rendered, so repainting the drawer is not
+           enough — its own rows and subtotal would keep the old values. */
+        if (document.body.classList.contains('template-cart')) { window.location.reload(); return; }
         await refresh();
       } catch (_) {}
     }
 
-    lines?.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-qty]');
+    /* Delegated on the document rather than the drawer list, so the same
+       controls work on the cart page, whose rows Liquid renders server-side.
+       Quantity is read off the row instead of its text, so both markups agree. */
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-qty],[data-remove]');
       if (!btn) return;
-      const li = btn.closest('.cl');
-      const cur = Number(li.querySelector('.qty span').textContent);
-      change(li.dataset.key, cur + Number(btn.dataset.qty));
+      const row = btn.closest('[data-key]');
+      if (!row) return;
+      e.preventDefault();
+      const cur = Number(row.dataset.quantity || 0);
+      const next = btn.hasAttribute('data-remove') ? 0 : Math.max(0, cur + Number(btn.dataset.qty));
+      change(row.dataset.key, next);
     });
 
     document.addEventListener('click', (e) => {

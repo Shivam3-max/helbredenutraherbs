@@ -8,13 +8,25 @@
     {%- if cart.item_count > 0 -%}
       <ul class="cartpage">
         {%- for i in cart.items -%}
-          <li class="cartpage__row">
+          {%- comment -%}
+            data-key and data-quantity are the same contract the drawer uses, so
+            the delegated handler in theme.js drives both without a second code
+            path. Without these the cart page was read-only: a shopper who
+            landed here from a bookmark or a refresh could not change a
+            quantity or remove a line at all.
+          {%- endcomment -%}
+          <li class="cartpage__row" data-key="{{ i.key }}" data-quantity="{{ i.quantity }}">
             {%- if i.image -%}<img src="{{ i.image | image_url: width: 192 }}" alt="" width="96" height="96" loading="lazy">{%- endif -%}
             <div>
               <a class="cartpage__t" href="{{ i.url }}">{{ i.product_title }}</a>
               <p class="cl__v">{{ i.variant_title }}{% if i.pack_size %} · {{ i.pack_size }}{% endif %}</p>
+              <button class="cartpage__rm" type="button" data-remove>Remove</button>
             </div>
-            <span class="num">×{{ i.quantity }}</span>
+            <span class="qty">
+              <button type="button" data-qty="-1" aria-label="Decrease quantity">−</button>
+              <span>{{ i.quantity }}</span>
+              <button type="button" data-qty="1" aria-label="Increase quantity">+</button>
+            </span>
             <strong class="num">{{ i.line_price | money }}</strong>
           </li>
         {%- endfor -%}

@@ -366,9 +366,17 @@
 .cartpage__row img{width:96px;height:96px;object-fit:cover;border-radius:var(--r-sm);background:var(--bg-tint)}
 .cartpage__t{font-weight:700;font-size:var(--t-base);letter-spacing:-.02em}
 .cartpage__foot{max-width:26rem;margin-left:auto;margin-top:1.5rem}
+.cartpage__rm{
+  margin-top:.4rem;font-size:var(--t-sm);color:var(--ink-2);
+  text-decoration:underline;text-underline-offset:.2em;transition:color .2s;
+}
+.cartpage__rm:hover{color:var(--forest)}
 @media(max-width:600px){
+  /* Three columns and four children: the price wraps under the image, so let
+     it share that row with the quantity control rather than stranding it. */
   .cartpage__row{grid-template-columns:64px minmax(0,1fr) auto}
   .cartpage__row img{width:64px;height:64px}
+  .cartpage__row .num{grid-column:2/-1;justify-self:end}
   .cartpage__foot{max-width:none}
 }
 
