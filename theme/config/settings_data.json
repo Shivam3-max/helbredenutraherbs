@@ -10,6 +10,9 @@
     "whatsapp": "917009040553",
     "email": "info@helbredenutraherbs.com",
     "show_ratings": false,
-    "free_ship_threshold": 99900
+    "free_ship_threshold": 99900,
+    "announcement_1": "Free delivery on prepaid orders above ₹999",
+    "announcement_2": "Formulated by Ayurvedic experts · Made in India",
+    "announcement_3": "Flat ₹100 off on your first order — code HELLO100"
   }
 }

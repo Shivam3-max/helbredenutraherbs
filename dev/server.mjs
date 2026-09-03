@@ -340,25 +340,34 @@ engine.registerTag('section', {
 /* ========================================================================== *
  * 4. Globals
  * ========================================================================== */
-const settings = {
-  logo: null,
-  brand_name: 'Helbrede',
-  brand_sub: 'NUTRAHERBS',
-  tagline: 'Skin · Hair · Healthcare',
-  phone: '+91 70090 40553',
-  whatsapp: '917009040553',
-  email: 'info@helbredenutraherbs.com',
-  address: 'Sushant Complex SCO 2, Adjoining Union Bank of India, Devi Nagar, Sector 3, Panchkula, Haryana 134109',
-  legal_line: 'Marketed by Helbrede Healthcare Ltd · Manufactured at Kenko Healthcare, Panchkula, Haryana',
-  call_hours: '10am – 7pm, Mon to Sat',
-  show_ratings: false,
-  free_ship_threshold: 99900,
-  announcements: [
-    'Free delivery on prepaid orders above ₹999',
-    'Formulated by Ayurvedic experts · Made in India',
-    'Flat ₹100 off on your first order — code HELLO100',
-  ],
-};
+/*
+ * Theme settings come from the theme's own config, exactly as they do on
+ * Shopify: schema defaults first, then whatever settings_data.json overrides.
+ *
+ * This used to be a hardcoded object, which quietly invented settings the theme
+ * did not declare — `announcements` among them. Locally the announcement bar
+ * rotated three offers; on the real store `settings.announcements` was nil and
+ * the bar rendered empty, which also collapsed its height and shifted every
+ * section below it. Reading the real files means a setting the theme has not
+ * declared is missing here too, and the smoke run sees it.
+ */
+const settings = (() => {
+  const out = { logo: null };
+  const schemaPath = path.join(THEME, 'config/settings_schema.json');
+  if (fs.existsSync(schemaPath)) {
+    for (const group of JSON.parse(fs.readFileSync(schemaPath, 'utf8'))) {
+      for (const f of group.settings || []) {
+        if (f.id && f.default !== undefined) out[f.id] = f.default;
+      }
+    }
+  }
+  const dataPath = path.join(THEME, 'config/settings_data.json');
+  if (fs.existsSync(dataPath)) {
+    const raw = fs.readFileSync(dataPath, 'utf8').replace(/^﻿?\s*\/\*[\s\S]*?\*\//, '');
+    Object.assign(out, JSON.parse(raw).current || {});
+  }
+  return out;
+})();
 
 const routes = {
   root_url: '/', cart_url: '/cart', cart_add_url: '/cart/add', cart_change_url: '/cart/change',

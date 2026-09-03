@@ -314,6 +314,39 @@ const run = async () => {
     check('search page · results', count(html, /<article class="card"/g), gte(1));
   }
 
+  /* --------------------------------------------------- theme settings ----- */
+  /* dev/server.mjs used to hardcode its settings object and invented
+     `settings.announcements`, which the theme never declared. Locally the bar
+     rotated three offers; live it rendered empty and its collapsed height
+     shifted every section below it. The server now reads theme/config, so a
+     setting the theme has not declared is missing here too — assert the bar
+     actually has lines, and that none is left over from the old array. */
+  {
+    const html = await get('/');
+    check('announcement bar · present', count(html, /data-anno(?![-\w])/g), 1);
+    check('announcement bar · rotating lines', count(html, /data-anno-item/g), 3);
+    check('announcement bar · first line active', count(html, /anno__item is-on/g), 1);
+
+    const fs = await import('node:fs');
+    const declared = new Set();
+    for (const g of JSON.parse(fs.readFileSync('theme/config/settings_schema.json', 'utf8'))) {
+      for (const f of g.settings || []) if (f.id) declared.add(f.id);
+    }
+    const undeclared = new Set();
+    const walk = (d) => {
+      for (const e of fs.readdirSync(d, { withFileTypes: true })) {
+        const p = `${d}/${e.name}`;
+        if (e.isDirectory()) { if (e.name !== '.shopify') walk(p); continue; }
+        if (!/\.(liquid|js)$/.test(p)) continue;
+        for (const m of fs.readFileSync(p, 'utf8').matchAll(/(?<![.\w])settings\.([a-zA-Z_][a-zA-Z0-9_]*)/g)) {
+          if (!declared.has(m[1]) && m[1] !== 'logo') undeclared.add(`${m[1]} (${p})`);
+        }
+      }
+    };
+    walk('theme');
+    check(`settings · none undeclared${undeclared.size ? ` — ${[...undeclared].join(', ')}` : ''}`, undeclared.size, 0);
+  }
+
   /* ------------------------------------------------------- hb-catalog ----- */
   /* The Ritual Builder and Label Compare both JSON.parse this block, so one
      unprintable value anywhere in it takes both tools down silently. It

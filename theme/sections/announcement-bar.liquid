@@ -7,9 +7,21 @@
     <button class="anno__nav" data-anno-prev aria-label="Previous announcement">
       {% render 'icon', name: 'chevron', size: 14 %}
     </button>
+    {%- comment -%}
+      Shopify has no list-of-strings setting, so the rotation is three discrete
+      text settings assembled here. Blank lines drop out, and `is-on` goes on
+      the first line that actually survives rather than on forloop.first —
+      otherwise clearing Announcement 1 leaves the bar visibly empty.
+    {%- endcomment -%}
+    {%- capture anno_raw -%}{{ settings.announcement_1 }}~|~{{ settings.announcement_2 }}~|~{{ settings.announcement_3 }}{%- endcapture -%}
+    {%- assign anno_lines = anno_raw | split: '~|~' -%}
+    {%- assign anno_shown = 0 -%}
     <div class="anno__track" aria-live="polite">
-      {%- for a in settings.announcements -%}
-        <p class="anno__item {% if forloop.first %}is-on{% endif %}" data-anno-item>{{ a }}</p>
+      {%- for line in anno_lines -%}
+        {%- assign a = line | strip -%}
+        {%- if a == blank -%}{%- continue -%}{%- endif -%}
+        {%- assign anno_shown = anno_shown | plus: 1 -%}
+        <p class="anno__item {% if anno_shown == 1 %}is-on{% endif %}" data-anno-item>{{ a }}</p>
       {%- endfor -%}
     </div>
     <button class="anno__nav anno__nav--next" data-anno-next aria-label="Next announcement">

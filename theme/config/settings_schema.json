@@ -10,33 +10,126 @@
   {
     "name": "Brand",
     "settings": [
-      { "type": "image_picker", "id": "logo", "label": "Logo (SVG or 2x PNG)" },
-      { "type": "text", "id": "brand_name", "label": "Wordmark", "default": "Helbrede" },
-      { "type": "text", "id": "brand_sub", "label": "Wordmark sub-line", "default": "NUTRAHERBS" },
-      { "type": "text", "id": "tagline", "label": "Tagline", "default": "Skin · Hair · Healthcare" },
-      { "type": "textarea", "id": "address", "label": "Postal address",
-        "default": "Sushant Complex SCO 2, Adjoining Union Bank of India, Devi Nagar, Sector 3, Panchkula, Haryana 134109" },
-      { "type": "textarea", "id": "legal_line", "label": "Legal / manufacturing line",
-        "default": "Marketed by Helbrede Healthcare Ltd · Manufactured at Kenko Healthcare, Panchkula, Haryana" }
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo (SVG or 2x PNG)"
+      },
+      {
+        "type": "text",
+        "id": "brand_name",
+        "label": "Wordmark",
+        "default": "Helbrede"
+      },
+      {
+        "type": "text",
+        "id": "brand_sub",
+        "label": "Wordmark sub-line",
+        "default": "NUTRAHERBS"
+      },
+      {
+        "type": "text",
+        "id": "tagline",
+        "label": "Tagline",
+        "default": "Skin · Hair · Healthcare"
+      },
+      {
+        "type": "textarea",
+        "id": "address",
+        "label": "Postal address",
+        "default": "Sushant Complex SCO 2, Adjoining Union Bank of India, Devi Nagar, Sector 3, Panchkula, Haryana 134109"
+      },
+      {
+        "type": "textarea",
+        "id": "legal_line",
+        "label": "Legal / manufacturing line",
+        "default": "Marketed by Helbrede Healthcare Ltd · Manufactured at Kenko Healthcare, Panchkula, Haryana"
+      }
     ]
   },
   {
     "name": "Contact",
     "settings": [
-      { "type": "text", "id": "phone", "label": "Phone", "default": "+91 70090 40553" },
-      { "type": "text", "id": "call_hours", "label": "Call hours", "default": "10am – 7pm, Mon to Sat" },
-      { "type": "text", "id": "whatsapp", "label": "WhatsApp number (digits only, with country code)", "default": "917009040553" },
-      { "type": "text", "id": "email", "label": "Email", "default": "info@helbredenutraherbs.com" }
+      {
+        "type": "text",
+        "id": "phone",
+        "label": "Phone",
+        "default": "+91 70090 40553"
+      },
+      {
+        "type": "text",
+        "id": "call_hours",
+        "label": "Call hours",
+        "default": "10am – 7pm, Mon to Sat"
+      },
+      {
+        "type": "text",
+        "id": "whatsapp",
+        "label": "WhatsApp number (digits only, with country code)",
+        "default": "917009040553"
+      },
+      {
+        "type": "text",
+        "id": "email",
+        "label": "Email",
+        "default": "info@helbredenutraherbs.com"
+      }
     ]
   },
   {
     "name": "Commerce",
     "settings": [
-      { "type": "header", "content": "Ratings" },
-      { "type": "paragraph", "content": "Ratings render only when a reviews app supplies reviews.rating on the product. Leave off until one is installed — the card is designed to hold together without stars." },
-      { "type": "checkbox", "id": "show_ratings", "label": "Show star ratings", "default": false },
-      { "type": "header", "content": "Delivery" },
-      { "type": "number", "id": "free_ship_threshold", "label": "Free delivery threshold (paise)", "default": 99900 }
+      {
+        "type": "header",
+        "content": "Ratings"
+      },
+      {
+        "type": "paragraph",
+        "content": "Ratings render only when a reviews app supplies reviews.rating on the product. Leave off until one is installed — the card is designed to hold together without stars."
+      },
+      {
+        "type": "checkbox",
+        "id": "show_ratings",
+        "label": "Show star ratings",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Delivery"
+      },
+      {
+        "type": "number",
+        "id": "free_ship_threshold",
+        "label": "Free delivery threshold (paise)",
+        "default": 99900
+      }
+    ]
+  },
+  {
+    "name": "Announcement bar",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "One offer at a time, rotating slowly. Leave a line blank to drop it from the rotation."
+      },
+      {
+        "type": "text",
+        "id": "announcement_1",
+        "label": "Announcement 1",
+        "default": "Free delivery on prepaid orders above ₹999"
+      },
+      {
+        "type": "text",
+        "id": "announcement_2",
+        "label": "Announcement 2",
+        "default": "Formulated by Ayurvedic experts · Made in India"
+      },
+      {
+        "type": "text",
+        "id": "announcement_3",
+        "label": "Announcement 3",
+        "default": "Flat ₹100 off on your first order — code HELLO100"
+      }
     ]
   }
 ]
