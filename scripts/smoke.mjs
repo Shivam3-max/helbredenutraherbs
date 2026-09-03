@@ -314,6 +314,27 @@ const run = async () => {
     check('search page · results', count(html, /<article class="card"/g), gte(1));
   }
 
+  /* ------------------------------------------------------- hb-catalog ----- */
+  /* The Ritual Builder and Label Compare both JSON.parse this block, so one
+     unprintable value anywhere in it takes both tools down silently. It
+     shipped invalid: a nil pack emitted `"pack":,` and an imageless product
+     made image_url inject its error text into the document. Parse it, do not
+     just look for the tag. */
+  for (const route of ['/pages/ritual-builder', '/pages/label-check']) {
+    const html = await get(route);
+    const m = html.match(/<script type="application\/json" id="hb-catalog">([\s\S]*?)<\/script>/);
+    check(`hb-catalog · present on ${route}`, Boolean(m), true);
+    if (!m) continue;
+    check(`hb-catalog · no Liquid error on ${route}`, /Liquid error/.test(m[1]), false);
+    let parsed = null;
+    try { parsed = JSON.parse(m[1]); } catch (e) { fails.push(`hb-catalog on ${route} is not valid JSON — ${e.message}`); }
+    if (parsed) {
+      check(`hb-catalog · products on ${route}`, parsed.length, gte(20));
+      check(`hb-catalog · every entry has a handle`, parsed.every((p) => typeof p.h === 'string' && p.h), true);
+      check(`hb-catalog · every entry has a variant id`, parsed.every((p) => Number.isFinite(p.vid)), true);
+    }
+  }
+
   /* ------------------------------------------- JSON templates vs presets -- */
   /* A section's `presets` are applied only when a merchant adds it through the
      theme editor. A JSON template that names a block-driven section without

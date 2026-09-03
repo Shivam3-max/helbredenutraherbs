@@ -9,14 +9,32 @@
 {%- if catalog_products == blank -%}{%- assign catalog_products = all_products -%}{%- endif -%}
 {%- for p in catalog_products limit: 50 -%}
   {%- assign v = p.variants | first -%}
-  {%- assign p_sub = p.metafields.descriptors.subtitle.value | default: p.metafields.custom.subtitle.value | default: p.metafields.helbrede.subtitle.value -%}
-  {%- assign p_pack = p.metafields.custom.pack_size.value | default: p.metafields.helbrede.pack_size.value -%}
+  {%- comment -%}
+    Every value below is resolved to something printable before `| json` runs.
+    A nil reaching `| json` emits nothing at all in LiquidJS, producing
+    `"pack":,` and invalidating the whole document — and one malformed product
+    takes the Ritual Builder and Label Compare down with it, since both parse
+    this block.
+  {%- endcomment -%}
+  {%- assign p_sub = p.metafields.descriptors.subtitle.value | default: p.metafields.custom.subtitle.value | default: p.metafields.helbrede.subtitle.value | default: '' -%}
+  {%- assign p_pack = p.metafields.custom.pack_size.value | default: p.metafields.helbrede.pack_size.value | default: '' -%}
+  {%- comment -%}
+    image_url raises "invalid url input" on a product with no image, and the
+    error text lands inside the JSON. Guard it rather than assume every product
+    is photographed — the offer bundles are not.
+  {%- endcomment -%}
+  {%- assign p_img = '' -%}
+  {%- if p.featured_image != blank -%}
+    {%- assign p_img = p.featured_image | image_url: width: 300 -%}
+  {%- endif -%}
+  {%- assign p_ing = p.metafields.helbrede.ingredients.value -%}
+  {%- assign p_ben = p.metafields.helbrede.benefits.value -%}
   {"h":{{ p.handle | json }},"t":{{ p.title | json }},"s":{{ p_sub | json }},
    "c":{{ p.collections.first.handle | default: p.type | handleize | json }},"cl":{{ p.collections.first.title | default: p.type | default: p.vendor | json }},
-   "img":{{ p.featured_image | image_url: width: 300 | json }},"pack":{{ p_pack | json }},
+   "img":{{ p_img | json }},"pack":{{ p_pack | json }},
    "vid":{{ v.id }},"price":{{ v.price }},"was":{{ v.compare_at_price | default: 0 }},
-   "ing":[{% for i in p.metafields.helbrede.ingredients.value %}{"n":{{ i.name | json }},"d":{{ i.dose | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}],
-   "ben":{{ p.metafields.helbrede.benefits.value | json }}}{%- unless forloop.last -%},{%- endunless -%}
+   "ing":[{% for i in p_ing %}{"n":{{ i.name | default: '' | json }},"d":{{ i.dose | default: '' | json }}}{% unless forloop.last %},{% endunless %}{% endfor %}],
+   "ben":[{% for b in p_ben %}{{ b | json }}{% unless forloop.last %},{% endunless %}{% endfor %}]}{%- unless forloop.last -%},{%- endunless -%}
 {%- endfor -%}
 ]
 </script>
