@@ -13,6 +13,111 @@
     "free_ship_threshold": 99900,
     "announcement_1": "Free delivery on prepaid orders above ₹999",
     "announcement_2": "Formulated by Ayurvedic experts · Made in India",
-    "announcement_3": "Flat ₹100 off on your first order — code HELLO100"
+    "announcement_3": "Flat ₹100 off on your first order — code HELLO100",
+    "blocks": {
+      "13302613136903054318": {
+        "type": "shopify://apps/hellobrand-shoppable-videos/blocks/floating-video/e6640a26-af0c-45ee-abbf-6586ccac234f",
+        "disabled": false,
+        "settings": {
+          "desktop_size_multiplier": 8,
+          "desktop_horizontal_position": "right",
+          "desktop_horizontal_distance": 15,
+          "desktop_vertical_position": "bottom",
+          "desktop_vertical_distance": 15,
+          "mobile_size_multiplier": 8,
+          "mobile_horizontal_position": "right",
+          "mobile_horizontal_distance": 15,
+          "mobile_vertical_position": "bottom",
+          "mobile_vertical_distance": 15
+        }
+      },
+      "14060646107696862457": {
+        "type": "shopify://apps/judge-me-reviews/blocks/judgeme_core/61ccd3b1-a9f2-4160-9fe9-4fec8413e5d8",
+        "disabled": false,
+        "settings": {}
+      },
+      "16963237191767492405": {
+        "type": "shopify://apps/whatsapp-button/blocks/app-embed-block/96d80a63-e860-4262-a001-8b82ac4d00e6",
+        "disabled": false,
+        "settings": {}
+      },
+      "8419966592507824873": {
+        "type": "shopify://apps/seolab-seo-optimizer/blocks/app_embed/faf700f6-3b71-45c3-86d4-83ea9f7d9216",
+        "disabled": false,
+        "settings": {}
+      },
+      "16510219240223340300": {
+        "type": "shopify://apps/whatmore-shoppable-videos/blocks/app-embed/20db8a72-315a-4364-8885-64219ee48303",
+        "disabled": false,
+        "settings": {
+          "minimized_video_position": "right",
+          "horizontal-padding": 5,
+          "vertical-padding": 150,
+          "app-size": 50,
+          "minimized_video_position_landscape": "right",
+          "horizontal-padding-landscape": 5,
+          "vertical-padding-landscape": 150,
+          "app-size-landscape": 50,
+          "video-title": "",
+          "use-variant": "false"
+        }
+      },
+      "2118589882331710876": {
+        "type": "shopify://apps/essential-trust-badges/blocks/app-embed/0ff65b25-07e1-408e-950f-f54dd3d1751b",
+        "disabled": false,
+        "settings": {}
+      },
+      "5460033060862993441": {
+        "type": "shopify://apps/essential-announcer/blocks/app-embed/93b5429f-c8d6-4c33-ae14-250fd84f361b",
+        "disabled": false,
+        "settings": {}
+      },
+      "13768625480086291342": {
+        "type": "shopify://apps/forms/blocks/forms/8744a304-fcb1-4347-b211-bb6b4759a76a",
+        "disabled": false,
+        "settings": {}
+      },
+      "6674118600575954775": {
+        "type": "shopify://apps/packer-mix-and-match-products/blocks/mix-and-match/17afe134-13d2-494c-b274-f02a90418b3a",
+        "disabled": true,
+        "settings": {}
+      },
+      "15909290956780699707": {
+        "type": "shopify://apps/mw-bundle-builder/blocks/app-embed-block/5bcb1a6d-53b5-4d9c-b4f9-19f6620da62b",
+        "disabled": false,
+        "settings": {
+          "theme_text_primary_color": "#1a1c1d",
+          "theme_text_secondary_color": "#7c8488",
+          "theme_primary_button_background_color": "#1a1c1d",
+          "theme_primary_button_text_color": "#ffffff",
+          "theme_input_control_text_color": "#1a1c1d",
+          "theme_input_control_background_color": "#ffffff",
+          "theme_stars_background_color": "#ffd749",
+          "theme_positive_text_color": "#00ab2d",
+          "theme_negative_text_color": "#e51c00",
+          "theme_divider_background_color": "#ebebeb",
+          "theme_plus_icon_color": "#1a1c1d",
+          "theme_volume_title_color": "#7c8488",
+          "theme_volume_discount_bage_text_color": "#420000",
+          "theme_volume_discount_bage_background_color": "#fdd8d8",
+          "theme_volume_selected_state_color": "#1773b0",
+          "theme_volume_selected_state_background_color": "#f4f8fb",
+          "theme_volume_free_gifts_background_color": "#f6f6f6",
+          "theme_bogo_discount_bage_background_color": "#fdd8d8",
+          "theme_bogo_discount_bage_text_color": "#420000",
+          "volume_layout_style": "vertical",
+          "theme_font_family": "inter_n4",
+          "theme_heading_font_size": 20,
+          "theme_body_font_size": 16,
+          "disable_upsell_crossell_popup": false,
+          "custom_liquid": "",
+          "hide_wrapper_atc_in_cards": false,
+          "wrapper_atc_extra_selectors": "",
+          "hide_wrapper_price": false,
+          "wrapper_price_extra_selectors": "",
+          "wrapper_card_ancestor_selectors": ""
+        }
+      }
+    }
   }
 }
