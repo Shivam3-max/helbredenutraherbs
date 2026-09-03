@@ -108,10 +108,27 @@
         </span>
         <input type="hidden" name="quantity" value="1" data-qty-input>
       </div>
+      {%- comment -%}
+        A third of the catalogue is out of stock at any time. Offering an
+        enabled "Add to cart" on those sent the shopper to a 422 and an empty
+        cart drawer, so say it on the button instead.
+      {%- endcomment -%}
       <div class="pdp__cta">
-        <button class="btn btn--ghost btn--lg" data-add-to-cart data-variant-id="{{ v.id }}">Add to cart</button>
-        <button class="btn btn--primary btn--lg" data-buy-now data-variant-id="{{ v.id }}">Buy now</button>
+        {%- if v.available -%}
+          <button class="btn btn--ghost btn--lg" data-add-to-cart data-variant-id="{{ v.id }}">Add to cart</button>
+          <button class="btn btn--primary btn--lg" data-buy-now data-variant-id="{{ v.id }}">Buy now</button>
+        {%- else -%}
+          <button class="btn btn--ghost btn--lg" disabled aria-disabled="true">Sold out</button>
+          {%- assign in_stock_url = '/collections/all' -%}
+          {%- assign p_concern = p.metafields.helbrede.concern.value -%}
+          {%- if p_concern != blank and collections[p_concern].handle != blank -%}
+            {%- assign in_stock_url = collections[p_concern].url -%}
+          {%- endif -%}
+          <a class="btn btn--primary btn--lg" href="{{ in_stock_url }}">See what is in stock</a>
+        {%- endif -%}
       </div>
+      {%- comment -%} Populated by Cart.add when Shopify refuses the line. {%- endcomment -%}
+      <p class="pdp__cart-error" data-cart-error role="alert" hidden></p>
     </div>
     <p class="pdp__tax t-sm t-dim-3">MRP inclusive of all taxes.{% if pack_size != blank %} {{ pack_size }} per unit.{% endif %}</p>
 

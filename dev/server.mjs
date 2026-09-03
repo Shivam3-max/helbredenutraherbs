@@ -510,8 +510,26 @@ app.get('/collections/:handle', (req, res) => {
 });
 
 app.get('/products/:handle', (req, res) => {
-  const product = productByHandle.get(req.params.handle);
+  let product = productByHandle.get(req.params.handle);
   if (!product) return res.status(404).send(notFound(req.path));
+
+  /*
+   * `?stock=out` forces the sold-out buy box, the way `?only=` forces a single
+   * section. The seeded catalogue is uniformly in stock while a third of the
+   * real one is not, so without this the harness could never render that path —
+   * which is how an enabled "Add to cart" on a sold-out product reached the live
+   * store, where it answered 422 and opened an empty cart drawer.
+   */
+  if (req.query.stock === 'out') {
+    product = {
+      ...product,
+      available: false,
+      variants: product.variants.map((v) => ({ ...v, available: false })),
+    };
+    product.selected_or_first_available_variant = product.variants[0];
+    product.first_available_variant = product.variants[0];
+  }
+
   const related = products
     .filter((p) => p.concern === product.concern && p.handle !== product.handle)
     .slice(0, 8);

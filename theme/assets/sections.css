@@ -232,6 +232,12 @@
 .pdp__cta{display:flex;gap:.6rem;flex:1;min-width:min(100%,17rem)}
 .pdp__cta .btn{flex:1}
 .pdp__tax{margin-top:-.25rem}
+/* Shown only when Shopify refuses the line — sold out, or a stock limit. */
+.pdp__cart-error{
+  margin-top:.6rem;padding:.6rem .8rem;border-radius:var(--r-sm);
+  background:#fdf1ef;border:1px solid #e9c4bd;color:#8c2f1d;
+  font-size:var(--t-sm);line-height:1.45;
+}
 
 .pdp__pin{border:1px solid var(--line);border-radius:var(--r);padding:.75rem .9rem}
 .pdp__pin-row{display:flex;align-items:center;gap:.6rem;color:var(--ink-3)}

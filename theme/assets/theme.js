@@ -111,15 +111,42 @@
       try { paint(await (await fetch('/cart.js')).json()); } catch (_) {}
     }
 
+    /* fetch resolves on a 4xx, so a sold-out 422 used to fall straight through
+       to the drawer — which then opened empty with nothing explaining why.
+       Check the status, surface Shopify's own message, and only open the drawer
+       on a real add. Returns false so callers can abandon (buy-now must not
+       redirect to a checkout the line never reached). */
+    function showError(message) {
+      const box = $('[data-cart-error]');
+      if (!box) return;
+      box.textContent = message;
+      box.hidden = false;
+    }
+
+    function clearError() {
+      const box = $('[data-cart-error]');
+      if (box) { box.textContent = ''; box.hidden = true; }
+    }
+
     async function add(id, quantity = 1) {
+      clearError();
       try {
-        await fetch('/cart/add.js', {
+        const res = await fetch('/cart/add.js', {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ items: [{ id: Number(id), quantity: Number(quantity) }] }),
         });
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          showError(body.description || body.message || 'Sorry — that could not be added to your cart.');
+          return false;
+        }
         await refresh();
         Panels.show('cart');
-      } catch (_) {}
+        return true;
+      } catch (_) {
+        showError('Sorry — something went wrong. Please try again.');
+        return false;
+      }
     }
 
     async function change(key, quantity) {
@@ -520,8 +547,9 @@
     $('[data-buy-now]')?.addEventListener('click', async (e) => {
       e.preventDefault();
       const id = e.currentTarget.dataset.variantId;
-      await Cart.add(id, Number(qtyInput?.value || 1));
-      window.location.href = '/checkout';
+      /* Only leave the page if the line actually made it into the cart. */
+      const ok = await Cart.add(id, Number(qtyInput?.value || 1));
+      if (ok) window.location.href = '/checkout';
     });
   })();
 

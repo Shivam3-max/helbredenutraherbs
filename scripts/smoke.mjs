@@ -317,6 +317,26 @@ const run = async () => {
     check('search page · results', count(html, /<article class="card"/g), gte(1));
   }
 
+  /* ---------------------------------------------------- sold-out buy box -- */
+  /* fetch resolves on a 422, so a sold-out add used to fall through to the cart
+     drawer, which opened empty with nothing said. Twelve of the thirty-five
+     live products are out of stock at any time, and every one of them offered
+     an enabled "Add to cart". */
+  {
+    const handle = 'helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules';
+    const inStock = await get(`/products/${handle}`);
+    check('buy box · add to cart when in stock', count(inStock, /data-add-to-cart/g), 1);
+    check('buy box · buy now when in stock', count(inStock, /data-buy-now/g), 1);
+    check('buy box · error target present', count(inStock, /data-cart-error/g), 1);
+
+    const soldOut = await get(`/products/${handle}?stock=out`);
+    check('buy box · sold out label', count(soldOut, />Sold out</g), 1);
+    check('buy box · no add to cart when sold out', count(soldOut, /data-add-to-cart/g), 0);
+    check('buy box · no buy now when sold out', count(soldOut, /data-buy-now/g), 0);
+    check('buy box · disabled when sold out', count(soldOut, /aria-disabled="true"/g), gte(1));
+    check('buy box · offers an in-stock route', count(soldOut, /See what is in stock/g), 1);
+  }
+
   /* ------------------------------------------------ customer-facing slots -- */
   /* media-slot renders a marked box — slot code, purpose, pixel size — which is
      a working note, not something a shopper should ever see. The marketplace
