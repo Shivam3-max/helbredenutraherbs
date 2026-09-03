@@ -1,10 +1,14 @@
-{%- if related.size > 0 -%}
+{%- assign related_collection = product.collections.first -%}
+{%- assign hb_concern = product.metafields.helbrede.concern.value | default: product.concern -%}
+{%- if related_collection == blank and hb_concern != blank -%}{%- assign related_collection = collections[hb_concern] -%}{%- endif -%}
+{%- if related_collection == blank -%}{%- assign related_collection = product.collections.first -%}{%- endif -%}
+{%- if related_collection.products_count > 1 -%}
 <section class="sec" data-reveal>
   <div class="wrap">
     <div class="sec-head sec-head--row">
       <div>
         <span class="sec-head__pre">more for</span>
-        <h2 class="sec-head__main">{{ product.concern_label }}</h2>
+        <h2 class="sec-head__main">{{ related_collection.title }}</h2>
       </div>
       <div class="rail-nav">
         <button data-rail-prev aria-label="Scroll left">{% render 'icon', name: 'chevron', size: 16 %}</button>
@@ -13,7 +17,9 @@
     </div>
     <div data-rail-wrap>
       <div class="rail" data-rail>
-        {%- for p in related -%}{% render 'product-card', product: p %}{%- endfor -%}
+        {%- for p in related_collection.products limit: 9 -%}
+          {%- unless p.id == product.id -%}{% render 'product-card', product: p %}{%- endunless -%}
+        {%- endfor -%}
       </div>
     </div>
   </div>

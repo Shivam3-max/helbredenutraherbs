@@ -10,7 +10,7 @@
   Matching happens client-side against the product's real safety copy — nothing
   is generated, and if nothing matches it says so rather than inventing comfort.
 {%- endcomment -%}
-{%- assign lines = product.hb.safety -%}
+{%- assign lines = product.metafields.helbrede.safety.value -%}
 {%- if lines.size > 0 -%}
 <section class="sec" id="safety" data-reveal>
   <div class="wrap split">

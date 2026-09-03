@@ -156,9 +156,10 @@ Ratios are taken from TMC's own stylesheet (`padding-bottom: 28.645833%` and
 | mobile (<768px) | **1130 × 1640** | 0.689 : 1 |
 
 Two separate artworks per slide, because a 3.49:1 strip cannot be cropped into a
-portrait phone screen. Both render as marked placeholders (`HERO-01-D`,
-`HERO-01-M`, …) until images are set in the theme editor, so the slot codes double
-as the shot list.
+portrait phone screen. The default homepage includes three paired campaigns from
+`theme/assets` (Hair Care, Face Serum and Mahabali). A Theme Editor image takes
+precedence over the bundled fallback, so campaigns remain replaceable without a
+code change.
 
 The banner leads the homepage — `templates/index.json` order is
 `hero, concern, best, label, ritual, story, why`, the same order The Man Company
@@ -169,8 +170,9 @@ theme editor.
 
 Every image goes through `snippets/media-slot.liquid`, which renders a *marked*
 box — slot code, purpose, exact pixel size — until a real asset is set. Product
-photography is real (215 images pulled from the live store). Hero banners,
-concern portraits and trust marks are still slots; see §8 of `docs/roadmap.html`.
+photography is real (215 images pulled from the live store), as are the three
+homepage hero campaigns. Concern portraits and any unset editorial media remain
+marked slots; see §8 of `docs/roadmap.html`.
 
 > **Liquid trap worth knowing:** never put a filter inside `{% render %}`
 > arguments. LiquidJS lets the filter swallow every argument after it, so
@@ -190,11 +192,77 @@ renders nothing without one.
 
 ## Pushing to Shopify
 
+The theme is only half of it. Every content section reads store data, so a
+fresh push renders the buy box and hides everything else until the store is
+configured. Do both, in this order:
+
 ```bash
-npm run shopify:push     # uploads as an unpublished theme
+npm run shopify:configure:dry   # show what the store is missing, write nothing
+npm run shopify:configure       # create metafields, collections and pages
+npm run shopify:sync            # push to the unpublished theme #131259826258
 ```
 
-Before it will look right on a real store, the catalog needs the
-`helbrede.*` metafields defined in §6.4 of `docs/roadmap.html`. Until then the
-PDP renders the buy box and hides every content section, which is the intended
-degradation.
+`shopify:push` still exists and uploads a brand-new unpublished theme; use
+`shopify:sync` to update the one already on the store.
+
+### What the store has to provide
+
+The dev server injects `product.hb.*`, a global `concerns` list and eight
+concern collections. Shopify has none of those, so the theme reads:
+
+| theme reads | store must have |
+|---|---|
+| `product.metafields.helbrede.*` | 12 product metafield definitions, seeded on all 35 SKUs |
+| `collections[<concern>]` | the eight concern collections, by handle |
+| `/pages/ritual-builder`, `label-check`, `ingredients`, `consultancy`, `about`, `contact`, `faq` | pages carrying the matching `page.*` template suffix |
+
+`scripts/shopify-configure.mjs` creates all three. It is idempotent — it reads
+what is already there and writes only the difference — and takes `--dry-run`
+and `--only=defs,metafields,collections,pages`.
+
+Collections that predate the project are left alone, so a run cannot disturb the
+published storefront. `--sync-existing` opts in to topping them up with the
+products the local taxonomy expects; it only ever adds, never removes.
+
+#### Credentials
+
+Shopify retired admin-created custom apps on 2026-01-01, and Dev Dashboard apps
+never display an access token. The app trades its own credentials for one
+instead — the **client credentials grant** — which is permitted because the app
+and the store sit in the same Shopify organization. The script does that
+exchange itself; the token it gets back lives 24 hours.
+
+Install a Dev Dashboard app on the store with `write_products`, `write_content`,
+`write_online_store_pages` and `write_publications`, then put its credentials in
+a gitignored `.env` at the repo root:
+
+```
+SHOPIFY_CLIENT_ID=...
+SHOPIFY_CLIENT_SECRET=shpss_...
+```
+
+`SHOPIFY_ADMIN_TOKEN`, if set, is used directly and skips the exchange.
+
+The credential the CLI uses for `theme push` is *not* enough: it reaches theme
+files only, and `shopify auth logout` does not dislodge it, so re-authenticating
+the CLI will not produce a writable session.
+
+### The Ingredient Library
+
+The 158 ingredients are Shopify **metaobjects**, not pages. A metaobject
+definition with the `onlineStore` capability and `urlHandle: ingredients`
+routes every entry to `/pages/ingredients/<handle>` — the URL the theme always
+linked to — so the index, the breadcrumbs and the nav needed no link changes.
+
+| piece | where |
+|---|---|
+| index | `templates/page.ingredients.liquid`, iterating `shop.metaobjects.ingredient.values` |
+| detail | `templates/metaobject/ingredient.liquid`, entry exposed as `metaobject` |
+| seeding | `npm run shopify:configure -- --only=ingredients` |
+
+`dev/server.mjs` mirrors Shopify's metaobject shape exactly — a `system` block
+plus one wrapper per field, reachable through `shop.metaobjects` — so the
+templates are written once against the real shape and the smoke run proves it.
+
+Seeding needs `read_metaobject_definitions`, `write_metaobject_definitions` and
+`write_metaobjects` on top of the four scopes above.

@@ -15,26 +15,31 @@
     </div>
 
     <div class="cs__chips" role="group" aria-label="Choose a concern">
-      {%- for c in concerns -%}
+      {%- for block in section.blocks -%}
+        {%- assign coll = block.settings.collection -%}
+        {%- if coll.products == blank -%}{%- assign coll = collections[block.settings.collection] -%}{%- endif -%}
+        {%- if coll == blank -%}{%- continue -%}{%- endif -%}
         <button class="chip cs__chip {% if forloop.first %}is-on{% endif %}"
-                data-tab="{{ c.slug }}"
+                data-tab="{{ coll.handle }}"
                 aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
           <span class="chip__dot" aria-hidden="true"></span>
-          {{ c.label }}
+          {{ block.settings.label | default: coll.title }}
         </button>
       {%- endfor -%}
     </div>
 
-    {%- for c in concerns -%}
-      {%- assign coll = collections[c.slug] -%}
-      <div class="cs__pane" data-tab-pane="{{ c.slug }}" {% unless forloop.first %}hidden{% endunless %}>
+    {%- for block in section.blocks -%}
+      {%- assign coll = block.settings.collection -%}
+      {%- if coll.products == blank -%}{%- assign coll = collections[block.settings.collection] -%}{%- endif -%}
+      {%- if coll == blank -%}{%- continue -%}{%- endif -%}
+      <div class="cs__pane" data-tab-pane="{{ coll.handle }}" {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
 
         <div class="cs__pane-head">
           <div>
-            <h3 class="cs__pane-t">{{ c.label }}</h3>
-            <p class="cs__pane-s">{{ c.tagline }}</p>
+            <h3 class="cs__pane-t">{{ block.settings.label | default: coll.title }}</h3>
+            <p class="cs__pane-s">{{ block.settings.tagline | default: coll.description | strip_html | truncate: 120 }}</p>
           </div>
-          <a class="link-more" href="{{ c.url }}">
+          <a class="link-more" href="{{ coll.url }}">
             All {{ coll.products_count }} products {% render 'icon', name: 'arrow', size: 15 %}
           </a>
         </div>
@@ -59,6 +64,25 @@
     { "type": "textarea", "id": "body", "label": "Intro",
       "default": "Eight concerns, thirty-five formulas. Pick the one you came for and we will show you only what is relevant — including the topical and the ingestible halves of the same routine." }
   ],
-  "presets": [{ "name": "Concern switcher" }]
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "label", "label": "Display name" },
+        { "type": "text", "id": "tagline", "label": "Short description" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{
+    "name": "Concern switcher",
+    "blocks": [
+      { "type": "collection" },
+      { "type": "collection" },
+      { "type": "collection" }
+    ]
+  }]
 }
 {% endschema %}

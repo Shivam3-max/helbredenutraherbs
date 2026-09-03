@@ -206,6 +206,8 @@
     const slides = $$('[data-hero-slide]', root);
     const dots   = $$('[data-hero-dot]', root);
     if (slides.length < 2) return;
+    const autoplay = root.dataset.autoplay !== 'false';
+    const interval = Math.max(3000, Number(root.dataset.interval) || 5000);
     let i = 0, timer;
 
     function go(n) {
@@ -225,9 +227,9 @@
     }
 
     const start = () => {
-      if (reduceMotion) return;
+      if (reduceMotion || !autoplay) return;
       clearInterval(timer);
-      timer = setInterval(() => go(i + 1), 5000);
+      timer = setInterval(() => go(i + 1), interval);
     };
     const stop = () => clearInterval(timer);
 
@@ -510,7 +512,7 @@
       e.preventDefault();
       const id = e.currentTarget.dataset.variantId;
       await Cart.add(id, Number(qtyInput?.value || 1));
-      window.location.href = '/cart';
+      window.location.href = '/checkout';
     });
   })();
 

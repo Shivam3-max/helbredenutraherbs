@@ -1,4 +1,4 @@
-{%- assign ings = product.hb.ingredients -%}
+{%- assign ings = product.metafields.helbrede.ingredients.value -%}
 {%- if ings.size > 0 -%}
 <section class="sec" id="ingredients" data-reveal>
   <div class="wrap">

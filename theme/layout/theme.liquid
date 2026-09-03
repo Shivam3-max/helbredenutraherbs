@@ -45,6 +45,8 @@
   {{ 'components.css' | asset_url | stylesheet_tag }}
   {{ 'sections.css' | asset_url | stylesheet_tag }}
 
+  {{ content_for_header }}
+
   <script>
     /* `reveal-ready` gates the scroll-reveal styles. Nothing is hidden unless
        this runs AND IntersectionObserver exists, so a JS failure can never

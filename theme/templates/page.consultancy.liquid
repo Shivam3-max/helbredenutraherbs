@@ -28,7 +28,13 @@
         <div class="fld"><label for="c-phone">Phone</label><input id="c-phone" name="phone" inputmode="tel" required></div>
         <div class="fld"><label for="c-concern">What are you working on</label>
           <select id="c-concern" name="concern">
-            {%- for c in concerns -%}<option>{{ c.label }}</option>{%- endfor -%}
+            {%- assign hb_concerns = "skin-care,hair-care,liver-detox,weight-metabolism,sleep-stress,digestion-gut,strength-performance,daily-essentials" | split: "," -%}
+            {%- for hb_h in hb_concerns -%}
+              {%- assign c = collections[hb_h] -%}
+              {%- if c.handle == blank -%}{%- continue -%}{%- endif -%}
+              {%- if c.handle == 'all' or c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
+              <option>{{ c.title }}</option>
+            {%- endfor -%}
           </select>
         </div>
         <div class="fld"><label for="c-note">Anything we should know</label>

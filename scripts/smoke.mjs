@@ -66,17 +66,20 @@ const run = async () => {
        to a portrait phone screen, so they are separate slots */
     check('home · desktop banner slots', count(html, /class="hb__desk"/g), 3);
     check('home · mobile banner slots', count(html, /class="hb__mob"/g), 3);
-    check('home · banner slot codes', count(html, /HERO-0\d-[DM]/g), 6);
-    check('home · banner dimensions labelled', count(html, /1920 × 550 px/g), 3);
-    check('home · mobile dimensions labelled', count(html, /1130 × 1640 px/g), 3);
+    check('home · desktop banner assets',
+      count(html, /assets\/banner-(hair-care|face-serum|mahabali)-desktop\.jpg/g), 3);
+    check('home · mobile banner assets',
+      count(html, /assets\/banner-(hair-care|face-serum|mahabali)-mobile\.jpg/g), 3);
+    check('home · carousel settings',
+      count(html, /data-autoplay="true"\s+data-interval="5000"/g), 1);
     check('home · no empty slot labels', count(html, /class="slot__label"><\/div>/g), 0);
     /* the banner leads the page, the concern shelf follows it */
     check('home · hero leads the page',
       html.indexOf('shopify-section-hero') < html.indexOf('shopify-section-concern'), true);
-    check('home · concern chips', count(html, /class="chip cs__chip/g), 8);
-    check('home · concern panes', count(html, /data-tab-pane="/g), 8);
-    /* 35 in the concern switcher + 8 in the best-sellers rail */
-    check('home · product cards', count(html, /<article class="card"/g), 43);
+    check('home · concern chips', count(html, /class="chip cs__chip/g), 3);
+    check('home · concern panes', count(html, /data-tab-pane="/g), 3);
+    /* Native Shopify collections: health, hair and skin, plus best sellers. */
+    check('home · product cards', count(html, /<article class="card"/g), 29);
     check('home · best-seller rail', count(html, /data-rail-wrap/g), gte(1));
     check('home · label teaser', count(html, /class="label-panel"/g), 1);
     check('home · ritual teaser', count(html, /class="rit"/g), 3);
@@ -129,10 +132,34 @@ const run = async () => {
     check('pdp · safety conditions', count(html, /data-cond="/g), 7);
     check('pdp · safety lines', count(html, /<li>/g), gte(5));
     check('pdp · FAQ items', count(html, /class="acc__item"/g), gte(3));
-    check('pdp · spec rows', count(html, /class="specs__row"/g), gte(3));
+    /* This product's spec table was entirely torn fragments, so cleanSpecs drops
+       it and the section hides — assert that rather than the rows. The rendered
+       table is covered against a product that kept its specs, below. */
+    check('pdp · specs hidden when unusable', count(html, /class="specs__row"/g), 0);
     check('pdp · ROUTINE', count(html, /data-ritual-item/g), gte(3));
     check('pdp · related rail', count(html, /data-rail/g), gte(1));
     check('pdp · why helbrede', count(html, /class="whycard"/g), 4);
+  }
+
+  /* The spec table, on a product whose rows survived cleanSpecs. Also asserts
+     the orientation: the nutrient is the label, the amount is the value —
+     the raw parse had them the wrong way round. */
+  {
+    const handle = 'helbrede-nutraherbs-digestive-enzyme-tablets-fungal-diastase-papain';
+    const html = await get(`/products/${handle}`);
+    check('specs · rows rendered', count(html, /class="specs__row"/g), gte(3));
+    check('specs · no torn fragments', count(html, /<dd>[^<]*\s[.,]/g), 0);
+    /* Orientation: a bare quantity must never end up in the label column. */
+    check('specs · label is not a quantity', count(html, /<dt>[\d.,]+\s*(mg|mcg|g|ml|IU)\b/gi), 0);
+  }
+
+  /* The product whose rows the raw parse had reversed — "2,000 mg / L-Arginine".
+     cleanSpecs turns them round, so the nutrient must lead. */
+  {
+    const handle = 'helbrede-l-arginine-1000-mg-tablets-amino-acid-for-endurance-amp-workout-support-60-tablets';
+    const html = await get(`/products/${handle}`);
+    check('specs · reversed pair corrected', count(html, /<dt>L-Arginine<\/dt>\s*<dd>2,000 mg<\/dd>/g), 1);
+    check('specs · no quantity in label', count(html, /<dt>[\d.,]+\s*(mg|mcg|g|ml|IU)\b/gi), 0);
   }
 
   /* Every product must render its buy box and at least the parsed content. */

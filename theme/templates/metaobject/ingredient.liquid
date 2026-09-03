@@ -1,0 +1,40 @@
+{%- comment -%}
+  One ingredient. Shopify routes metaobject entries with the onlineStore
+  capability to /pages/{urlHandle}/{entry}, which is why the library index can
+  keep linking at /pages/ingredients/<handle> — the same URL the theme has
+  always used. The entry arrives as `metaobject`, one wrapper object per field.
+{%- endcomment -%}
+
+{%- assign ing_name = metaobject.name.value -%}
+{%- assign ing_body = metaobject.body.value -%}
+{%- assign ing_products = metaobject.products.value -%}
+
+<nav class="wrap crumbs" aria-label="Breadcrumb">
+  <a href="/">Home</a><span>/</span>
+  <a href="/pages/ingredients">Ingredients</a><span>/</span>
+  <span class="t-dim">{{ ing_name }}</span>
+</nav>
+
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap wrap--narrow">
+    <div class="sec-head">
+      <span class="sec-head__pre">ingredient</span>
+      <h1 class="sec-head__main">{{ ing_name }}</h1>
+    </div>
+    <p class="t-lede">{{ ing_body }}</p>
+  </div>
+</section>
+
+{%- if ing_products.size > 0 -%}
+<section class="sec sec--tint" data-reveal>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-head__pre">found in</span>
+      <h2 class="sec-head__main">{{ ing_products.size }} formula{% if ing_products.size != 1 %}s{% endif %}</h2>
+    </div>
+    <div class="grid grid--4">
+      {%- for p in ing_products -%}{% render 'product-card', product: p %}{%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}

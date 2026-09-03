@@ -4,11 +4,15 @@
   exist and light up the moment their data does.
 {%- endcomment -%}
 {%- assign v = product.variants | first -%}
+{%- assign product_category = product.type | default: product.vendor -%}
+{%- assign product_subtitle = product.metafields.descriptors.subtitle.value | default: product.metafields.custom.subtitle.value | default: product.metafields.helbrede.subtitle.value -%}
+{%- assign pack_size = product.metafields.custom.pack_size.value | default: product.metafields.helbrede.pack_size.value -%}
+{%- assign product_image_url = product.featured_image | image_url: width: 720 -%}
 <article class="card" data-reveal-child>
   <a class="card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     {% render 'media-slot',
        code: 'PDP-IMG', label: product.title, w: 1, h: 1,
-       src: product.featured_image.src, alt: product.title %}
+       src: product_image_url, alt: product.title %}
     <div class="card__flags">
       {%- if v.compare_at_price and v.compare_at_price > v.price -%}
         {%- assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price | round -%}
@@ -21,10 +25,10 @@
   </a>
 
   <div class="card__body">
-    <div class="card__concern">{{ product.concern_label }}</div>
+    <div class="card__concern">{{ product_category }}</div>
     <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
-    {%- if product.subtitle %}<p class="card__sub">{{ product.subtitle }}</p>{% endif -%}
-    {%- if product.pack_size %}<div class="card__pack">{{ product.pack_size }}</div>{% endif -%}
+    {%- if product_subtitle != blank %}<p class="card__sub">{{ product_subtitle }}</p>{% endif -%}
+    {%- if pack_size != blank %}<div class="card__pack">{{ pack_size }}</div>{% endif -%}
 
     <div class="card__foot">
       {% render 'price', amount: v.price, compare: v.compare_at_price %}

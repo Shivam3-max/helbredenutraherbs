@@ -12,3 +12,6 @@ tmp/
 # audit of the client's live storefront (its defects, pricing analysis and
 # commercial recommendations). Remove this line to publish it.
 docs/roadmap.html
+
+# local Shopify Admin API token — never commit
+.env

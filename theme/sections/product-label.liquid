@@ -6,7 +6,7 @@
   Where a dose is genuinely not declared in the source, it says so rather than
   inventing one — that honesty is the point of the feature.
 {%- endcomment -%}
-{%- assign ings = product.hb.ingredients -%}
+{%- assign ings = product.metafields.helbrede.ingredients.value -%}
 {%- if ings.size > 0 -%}
 {%- assign dosed = 0 -%}
 {%- for i in ings %}{% if i.dose != blank %}{% assign dosed = dosed | plus: 1 %}{% endif %}{% endfor -%}
@@ -34,7 +34,7 @@
     <div class="label-panel">
       <div class="label-panel__hd">
         <span class="label-panel__t">Supplement facts</span>
-        <span class="label-panel__s">{{ product.pack_size }}</span>
+        <span class="label-panel__s">{{ product.metafields.custom.pack_size.value | default: product.metafields.helbrede.pack_size.value | default: product.pack_size }}</span>
       </div>
       <div class="label-panel__rule"></div>
       {%- for i in ings -%}

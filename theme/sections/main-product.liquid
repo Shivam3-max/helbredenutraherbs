@@ -3,11 +3,14 @@
   pack ladder, quantity, call-to-order, delivery check, dual CTA, trust strip.
 {%- endcomment -%}
 {%- assign p = product -%}
-{%- assign v = p.variants | first -%}
+{%- assign v = p.selected_or_first_available_variant -%}
+{%- assign product_category = p.type | default: p.vendor -%}
+{%- assign product_subtitle = p.metafields.descriptors.subtitle.value | default: p.metafields.custom.subtitle.value | default: p.metafields.helbrede.subtitle.value -%}
+{%- assign pack_size = p.metafields.custom.pack_size.value | default: p.metafields.helbrede.pack_size.value -%}
 
 <nav class="wrap crumbs" aria-label="Breadcrumb">
   <a href="/">Home</a><span>/</span>
-  <a href="/collections/{{ p.concern }}">{{ p.concern_label }}</a><span>/</span>
+  {%- if product.collections.first -%}<a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a><span>/</span>{%- endif -%}
   <span class="t-dim">{{ p.title }}</span>
 </nav>
 
@@ -23,7 +26,7 @@
       {%- for img in p.images limit: 8 -%}
         <img class="pdp__shot {% if forloop.first %}is-on{% endif %}"
              data-shot="{{ forloop.index0 }}"
-             src="{{ img.src }}" alt="{{ img.alt }}"
+             src="{{ img | image_url: width: 1200 }}" alt="{{ img.alt | escape }}"
              width="900" height="900"
              {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}>
       {%- endfor -%}
@@ -34,7 +37,7 @@
           <button class="pdp__thumb {% if forloop.first %}is-on{% endif %}" data-thumb="{{ forloop.index0 }}"
                   role="tab" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
                   aria-label="View image {{ forloop.index }}">
-            <img src="{{ img.src }}" alt="" width="120" height="120" loading="lazy">
+            <img src="{{ img | image_url: width: 240 }}" alt="" width="120" height="120" loading="lazy">
           </button>
         {%- endfor -%}
       </div>
@@ -43,25 +46,25 @@
 
   {%- comment -%} ---------- buy box ---------- {%- endcomment -%}
   <div class="pdp__buy">
-    <p class="t-eyebrow">{{ p.concern_label }}</p>
+    <p class="t-eyebrow">{{ product_category }}</p>
     <h1 class="pdp__title">{{ p.title }}</h1>
-    {%- if p.subtitle -%}<p class="pdp__sub">{{ p.subtitle }}</p>{%- endif -%}
+    {%- if product_subtitle != blank -%}<p class="pdp__sub">{{ product_subtitle }}</p>{%- endif -%}
 
-    {%- if p.hb.description != blank -%}
+    {%- if p.description != blank -%}
       <div class="pdp__desc" data-clamp>
-        <p>{{ p.hb.description }}</p>
+        {{ p.description }}
       </div>
       <button class="pdp__more" data-clamp-toggle aria-expanded="false">Read more</button>
     {%- endif -%}
 
-    {%- if p.hb.benefits.size > 0 -%}
+    {%- if p.metafields.helbrede.benefits.value.size > 0 -%}
       <ul class="ticks pdp__ticks">
-        {%- for b in p.hb.benefits limit: 4 -%}<li>{{ b }}</li>{%- endfor -%}
+        {%- for b in p.metafields.helbrede.benefits.value limit: 4 -%}<li>{{ b }}</li>{%- endfor -%}
       </ul>
     {%- endif -%}
 
-    {%- if p.hb.usage_horizon != blank -%}
-      <p class="pdp__horizon">{% render 'icon', name: 'leaf', size: 15 %}{{ p.hb.usage_horizon }}</p>
+    {%- if p.metafields.helbrede.usage_horizon.value != blank -%}
+      <p class="pdp__horizon">{% render 'icon', name: 'leaf', size: 15 %}{{ p.metafields.helbrede.usage_horizon.value }}</p>
     {%- endif -%}
 
     {%- comment -%} ---------- pack ladder ---------- {%- endcomment -%}
@@ -110,7 +113,7 @@
         <button class="btn btn--primary btn--lg" data-buy-now data-variant-id="{{ v.id }}">Buy now</button>
       </div>
     </div>
-    <p class="pdp__tax t-sm t-dim-3">MRP inclusive of all taxes. {{ p.pack_size }} per unit.</p>
+    <p class="pdp__tax t-sm t-dim-3">MRP inclusive of all taxes.{% if pack_size != blank %} {{ pack_size }} per unit.{% endif %}</p>
 
     {%- comment -%} ---------- delivery check ---------- {%- endcomment -%}
     <div class="pdp__pin" data-pincode>

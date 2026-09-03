@@ -9,7 +9,13 @@
       it is usually faster than searching.
     </p>
     <div class="srch__quick" style="justify-content:center;margin-top:2rem">
-      {%- for c in concerns -%}<a class="chip" href="{{ c.url }}">{{ c.label }}</a>{%- endfor -%}
+      {%- assign hb_concerns = "skin-care,hair-care,liver-detox,weight-metabolism,sleep-stress,digestion-gut,strength-performance,daily-essentials" | split: "," -%}
+      {%- for hb_h in hb_concerns -%}
+        {%- assign c = collections[hb_h] -%}
+        {%- if c.handle == blank -%}{%- continue -%}{%- endif -%}
+        {%- if c.handle == 'all' or c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
+        <a class="chip" href="{{ c.url }}">{{ c.title }}</a>
+      {%- endfor -%}
     </div>
     <a class="btn btn--primary" href="/collections/all" style="margin-top:2rem">Shop all formulas</a>
   </div>

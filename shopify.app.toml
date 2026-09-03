@@ -1,0 +1,32 @@
+# Configuration for the "Store Manager" Dev Dashboard app, which exists solely
+# to give scripts/shopify-configure.mjs an Admin API credential for this store.
+#
+# The Dev Dashboard shows a version's scopes but will not edit them, so a scope
+# change means editing this file and running:
+#
+#     shopify app deploy
+#
+# then re-consenting the install so the store approves the new permissions:
+#
+#     https://admin.shopify.com/store/19veyk-g3/oauth/install?client_id=9e8f13b243828aa8fccef5a4430a143f
+#
+# Every value below other than the metaobject scopes is transcribed from the
+# already-released version 1.0 — deploying must not quietly change the app's
+# URL, embedding or API version.
+
+client_id = "9e8f13b243828aa8fccef5a4430a143f"
+name = "Store Manager"
+application_url = "https://example.com"
+embedded = true
+
+[access_scopes]
+# The first seventeen are version 1.0 verbatim. The four metaobject scopes are
+# the addition: they let the script create the `ingredient` definition and seed
+# its 158 entries for the Ingredient Library.
+scopes = "read_online_store_pages,write_online_store_pages,read_product_feeds,write_product_feeds,read_product_listings,write_product_listings,read_products,write_products,read_publications,write_publications,read_content,write_content,unauthenticated_read_product_pickup_locations,unauthenticated_read_product_inventory,unauthenticated_read_product_listings,unauthenticated_read_product_tags,unauthenticated_read_content,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects"
+
+[auth]
+redirect_urls = [ "https://example.com/api/auth" ]
+
+[webhooks]
+api_version = "2026-07"

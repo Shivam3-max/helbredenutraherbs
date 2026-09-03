@@ -29,10 +29,14 @@
         <div class="rb__step">
           <span class="rb__lbl t-mono">1 · What are you working on</span>
           <div class="rb__chips">
-            {%- for c in concerns -%}
+            {%- assign hb_concerns = "skin-care,hair-care,liver-detox,weight-metabolism,sleep-stress,digestion-gut,strength-performance,daily-essentials" | split: "," -%}
+            {%- for hb_h in hb_concerns -%}
+              {%- assign c = collections[hb_h] -%}
+              {%- if c.handle == blank -%}{%- continue -%}{%- endif -%}
+              {%- if c.handle == 'all' or c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
               <button class="chip {% if forloop.first %}is-on{% endif %}" type="button"
-                      data-rb-concern="{{ c.slug }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
-                <span class="chip__dot" aria-hidden="true"></span>{{ c.label }}
+                      data-rb-concern="{{ c.handle }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">
+                <span class="chip__dot" aria-hidden="true"></span>{{ c.title }}
               </button>
             {%- endfor -%}
           </div>

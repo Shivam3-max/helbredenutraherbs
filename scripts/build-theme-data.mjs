@@ -61,6 +61,32 @@ function splitTitle(raw) {
   };
 }
 
+/* A quantity like "500 mg", "2,000 mg", "60 capsules", "10%". */
+const QUANTITY = /^[\d.,]+\s*(mg|mcg|g|kg|ml|l|iu|%|caps?|capsules?|tablets?|servings?)\b/i;
+/* A clause the parser tore in half strands a space before its punctuation
+   ("Each tablet provides ."). Those rows are not specifications, they are
+   wreckage, and they render as visibly broken on the PDP. */
+const TORN = /\s[.,]/;
+
+/**
+ * The spec tables recovered from body_html carry two defects: about 30% of rows
+ * are torn sentence fragments, and the survivors hold the amount in the label
+ * position, so the PDP renders "2,000 mg / L-Arginine" instead of
+ * "L-Arginine / 2,000 mg". Drop the wreckage and turn each surviving pair the
+ * right way round. A product left with fewer than two usable rows gets no specs
+ * at all — product-specs.liquid then hides itself, which beats a one-row table.
+ */
+function cleanSpecs(specs) {
+  const rows = (specs || [])
+    .map((kv) => [String(kv[0] ?? '').trim(), String(kv[1] ?? '').trim()])
+    .filter(([k, v]) => k && v)
+    .filter(([k, v]) => !TORN.test(k) && !TORN.test(v))
+    .filter(([k, v]) => k.length <= 40 && v.length <= 60)
+    .map(([k, v]) => (QUANTITY.test(k) && !QUANTITY.test(v) ? [v, k] : [k, v]));
+
+  return rows.length >= 2 ? rows : [];
+}
+
 /* Pack size stated on the label, pulled out of the title or the spec table. */
 function packSize(p) {
   const hay = [p.title, ...(p.sections.specs || []).map((kv) => kv.join(' '))].join(' ');
@@ -283,7 +309,7 @@ const built = products
         suitable_for: s.suitable,
         faq: s.faq,
         safety: s.safety,
-        specs: s.specs,
+        specs: cleanSpecs(s.specs),
         description: s.description,
         usage_horizon: 'For best results, use consistently for at least 3 months',
       },

@@ -16,7 +16,7 @@
         <label class="sr" for="hdr-q">Search products</label>
         <input id="hdr-q" type="search" name="q" autocomplete="off"
                data-rotating-placeholder='["Ashwagandha","Hair fall","Liver detox","Glowing skin","Shilajit","Magnesium"]'
-               placeholder="Search for “Ashwagandha”">
+               placeholder="Search for Ashwagandha">
         <div class="hdr__suggest" data-suggest hidden></div>
       </form>
 
@@ -74,10 +74,14 @@
         <div class="hdr__mega" data-drop-panel hidden>
           <div class="wrap hdr__mega-in">
             <div class="hdr__mega-grid">
-              {%- for c in concerns -%}
+              {%- assign hb_concerns = "skin-care,hair-care,liver-detox,weight-metabolism,sleep-stress,digestion-gut,strength-performance,daily-essentials" | split: "," -%}
+              {%- for hb_h in hb_concerns -%}
+                {%- assign c = collections[hb_h] -%}
+                {%- if c.handle == blank -%}{%- continue -%}{%- endif -%}
+                {%- if c.handle == 'all' or c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
                 <a class="megaitem" href="{{ c.url }}">
-                  <span class="megaitem__t">{{ c.label }}<i>{{ c.count }}</i></span>
-                  <span class="megaitem__s">{{ c.tagline }}</span>
+                  <span class="megaitem__t">{{ c.title }}<i>{{ c.products_count }}</i></span>
+                  <span class="megaitem__s">{{ c.description | strip_html | truncate: 70 }}</span>
                 </a>
               {%- endfor -%}
             </div>
@@ -121,8 +125,12 @@
   <div class="drawer__body">
     <nav class="mnav" aria-label="Main">
       <span class="mnav__grp t-mono">Shop by concern</span>
-      {%- for c in concerns -%}
-        <a class="mnav__link" href="{{ c.url }}">{{ c.label }}<i>{{ c.count }}</i></a>
+      {%- assign hb_concerns = "skin-care,hair-care,liver-detox,weight-metabolism,sleep-stress,digestion-gut,strength-performance,daily-essentials" | split: "," -%}
+      {%- for hb_h in hb_concerns -%}
+        {%- assign c = collections[hb_h] -%}
+        {%- if c.handle == blank -%}{%- continue -%}{%- endif -%}
+        {%- if c.handle == 'all' or c.handle == 'frontpage' -%}{%- continue -%}{%- endif -%}
+        <a class="mnav__link" href="{{ c.url }}">{{ c.title }}<i>{{ c.products_count }}</i></a>
       {%- endfor -%}
       <span class="mnav__grp t-mono">Tools</span>
       <a class="mnav__link" href="/pages/ritual-builder">Build Your Ritual</a>

@@ -1,7 +1,6 @@
 {%- assign c = collection -%}
 <nav class="wrap crumbs" aria-label="Breadcrumb">
   <a href="/">Home</a><span>/</span>
-  {%- if c.kind == 'concern' -%}<span class="t-dim">Concern</span><span>/</span>{%- endif -%}
   <span class="t-dim">{{ c.title }}</span>
 </nav>
 
@@ -9,22 +8,23 @@
   <div class="wrap">
     <header class="coll__head">
       <div class="sec-head">
-        <span class="sec-head__pre">{% if c.kind == 'concern' %}for{% else %}browse{% endif %}</span>
+        <span class="sec-head__pre">browse</span>
         <h1 class="sec-head__main">{{ c.title }}</h1>
       </div>
-      {%- if c.tagline != blank -%}<p class="coll__tag">{{ c.tagline }}</p>{%- endif -%}
       {%- if c.description != blank -%}<p class="t-lede coll__desc">{{ c.description }}</p>{%- endif -%}
     </header>
 
     <div class="coll__bar" data-collection>
-      {%- if c.filters.size > 0 -%}
+      {%- assign filter_values = c.all_tags -%}
+      {%- if filter_values == blank -%}{%- assign filter_values = c.filters -%}{%- endif -%}
+      {%- if filter_values.size > 0 -%}
         <div class="coll__filters" role="group" aria-label="Refine">
           <button class="chip is-on" type="button" data-filter="*" aria-pressed="true">
             <span class="chip__dot" aria-hidden="true"></span>All {{ c.products_count }}
           </button>
-          {%- for f in c.filters -%}
-            <button class="chip" type="button" data-filter="{{ f }}" aria-pressed="false">
-              <span class="chip__dot" aria-hidden="true"></span>{{ f }}
+          {%- for tag in filter_values limit: 10 -%}
+            <button class="chip" type="button" data-filter="{{ tag | escape }}" aria-pressed="false">
+              <span class="chip__dot" aria-hidden="true"></span>{{ tag }}
             </button>
           {%- endfor -%}
         </div>
@@ -43,13 +43,25 @@
 
     <p class="coll__count" data-count hidden></p>
 
+    {%- paginate c.products by 24 -%}
     <div class="grid grid--4" data-grid>
       {%- for p in c.products -%}
-        <div data-item data-filters="{{ p.filters | join: '|' }}" data-price="{{ p.price }}" data-name="{{ p.title }}">
+        {%- assign product_filters = p.tags -%}
+        {%- if product_filters == blank -%}{%- assign product_filters = p.filters -%}{%- endif -%}
+        <div data-item data-filters="{{ product_filters | join: '|' | escape }}" data-price="{{ p.price }}" data-name="{{ p.title | escape }}">
           {% render 'product-card', product: p %}
         </div>
       {%- endfor -%}
     </div>
+
+    {%- if paginate.pages > 1 -%}
+      <nav class="coll__pagination" aria-label="Collection pages">
+        {%- if paginate.previous -%}<a class="btn btn--ghost btn--sm" href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+        <span class="t-mono">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+        {%- if paginate.next -%}<a class="btn btn--ghost btn--sm" href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+      </nav>
+    {%- endif -%}
+    {%- endpaginate -%}
 
     <p class="coll__none" data-none hidden>Nothing matches that combination. Clear a filter to see more.</p>
   </div>

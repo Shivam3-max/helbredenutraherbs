@@ -9,13 +9,17 @@
     desktop  1920 × 550   (28.65% padding-bottom — TMC's own ratio)
     mobile   1130 × 1640
 
-  Both render as marked placeholders until real artwork is set in the theme
-  editor, so the slot codes double as the shot list for the design team.
+  A block can use a Theme Editor image or a bundled theme asset. The bundled
+  fallback lets the default homepage ship with campaign artwork immediately;
+  an editor-picked image always takes precedence.
 {%- endcomment -%}
 {%- assign slides = section.blocks -%}
 
 {%- if slides.size > 0 -%}
-<section class="hb" data-hero aria-roledescription="carousel" aria-label="Featured offers">
+<section class="hb" data-hero
+         data-autoplay="{{ section.settings.autoplay }}"
+         data-interval="{{ section.settings.interval | times: 1000 }}"
+         aria-roledescription="carousel" aria-label="Featured offers">
 
   <div class="hb__viewport">
     {%- for b in slides -%}
@@ -28,6 +32,14 @@
       {%- assign slot_d = b.settings.code | default: 'HERO-D' -%}
       {%- assign slot_m = b.settings.code_mobile | default: 'HERO-M' -%}
       {%- assign slot_label = b.settings.label | default: 'Hero banner artwork — all copy baked into the image' -%}
+      {%- assign desktop_src = b.settings.image_desktop -%}
+      {%- assign mobile_src = b.settings.image_mobile -%}
+      {%- if desktop_src == blank and b.settings.asset_desktop != blank -%}
+        {%- capture desktop_src -%}{{ b.settings.asset_desktop | asset_url }}{%- endcapture -%}
+      {%- endif -%}
+      {%- if mobile_src == blank and b.settings.asset_mobile != blank -%}
+        {%- capture mobile_src -%}{{ b.settings.asset_mobile | asset_url }}{%- endcapture -%}
+      {%- endif -%}
       <a class="hb__slide {% if forloop.first %}is-on{% endif %}"
          href="{{ href }}"
          data-hero-slide
@@ -36,13 +48,13 @@
 
         <span class="hb__desk">
           {% render 'media-slot', code: slot_d, label: slot_label,
-             w: 1920, h: 550, src: b.settings.image_desktop,
+             w: 1920, h: 550, src: desktop_src,
              alt: b.settings.alt, eager: forloop.first %}
         </span>
 
         <span class="hb__mob">
           {% render 'media-slot', code: slot_m, label: slot_label,
-             w: 1130, h: 1640, src: b.settings.image_mobile,
+             w: 1130, h: 1640, src: mobile_src,
              alt: b.settings.alt, eager: forloop.first %}
         </span>
 
@@ -86,6 +98,8 @@
       "settings": [
         { "type": "image_picker", "id": "image_desktop", "label": "Desktop banner (1920 × 550)" },
         { "type": "image_picker", "id": "image_mobile", "label": "Mobile banner (1130 × 1640)" },
+        { "type": "text", "id": "asset_desktop", "label": "Bundled desktop asset filename", "info": "Fallback used when no desktop image is selected." },
+        { "type": "text", "id": "asset_mobile", "label": "Bundled mobile asset filename", "info": "Fallback used when no mobile image is selected." },
         { "type": "text", "id": "alt", "label": "Alt text (describe the offer)" },
         { "type": "url", "id": "link", "label": "Links to" },
         { "type": "text", "id": "code", "label": "Slot code (desktop)" },

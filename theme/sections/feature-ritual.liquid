@@ -4,9 +4,15 @@
   from three different concerns, which is the shelf an ingestibles-only brand
   cannot assemble.
 {%- endcomment -%}
-{%- assign morning = all_products | where: 'concern', 'hair-care' | first -%}
-{%- assign daily   = all_products | where: 'concern', 'daily-essentials' | first -%}
-{%- assign night   = all_products | where: 'concern', 'sleep-stress' | first -%}
+{%- assign morning = section.settings.morning_product -%}
+{%- assign daily   = section.settings.daily_product -%}
+{%- assign night   = section.settings.night_product -%}
+{%- if morning.variants == blank -%}{%- assign matches = collections.all.products | where: 'handle', section.settings.morning_product -%}{%- assign morning = matches.first -%}{%- endif -%}
+{%- if daily.variants == blank -%}{%- assign matches = collections.all.products | where: 'handle', section.settings.daily_product -%}{%- assign daily = matches.first -%}{%- endif -%}
+{%- if night.variants == blank -%}{%- assign matches = collections.all.products | where: 'handle', section.settings.night_product -%}{%- assign night = matches.first -%}{%- endif -%}
+{%- if morning == blank -%}{%- assign matches = all_products | where: 'handle', section.settings.morning_product -%}{%- assign morning = matches.first -%}{%- endif -%}
+{%- if daily == blank -%}{%- assign matches = all_products | where: 'handle', section.settings.daily_product -%}{%- assign daily = matches.first -%}{%- endif -%}
+{%- if night == blank -%}{%- assign matches = all_products | where: 'handle', section.settings.night_product -%}{%- assign night = matches.first -%}{%- endif -%}
 
 <section class="sec" data-reveal>
   <div class="wrap split split--flip">
@@ -24,10 +30,10 @@
             {%- assign v = pr.variants | first -%}
             <a class="rit" href="{{ pr.url }}">
               <span class="rit__slot">{{ slot }}</span>
-              <img class="rit__img" src="{{ pr.featured_image.src }}" alt="" width="64" height="64" loading="lazy">
+              <img class="rit__img" src="{{ pr.featured_image | image_url: width: 160 }}" alt="" width="64" height="64" loading="lazy">
               <span>
                 <span class="rit__t">{{ pr.title }}</span>
-                <span class="rit__n">{{ pr.concern_label }}</span>
+                <span class="rit__n">{{ pr.type | default: pr.vendor }}</span>
               </span>
               <span class="rit__p">{{ v.price | money }}</span>
             </a>
@@ -59,5 +65,13 @@
 </section>
 
 {% schema %}
-{ "name": "Feature — ritual", "settings": [], "presets": [{ "name": "Feature — ritual" }] }
+{
+  "name": "Feature — ritual",
+  "settings": [
+    { "type": "product", "id": "morning_product", "label": "Morning product" },
+    { "type": "product", "id": "daily_product", "label": "Daily product" },
+    { "type": "product", "id": "night_product", "label": "Night product" }
+  ],
+  "presets": [{ "name": "Feature — ritual" }]
+}
 {% endschema %}

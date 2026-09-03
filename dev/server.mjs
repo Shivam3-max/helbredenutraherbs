@@ -96,6 +96,21 @@ const ingredients = shopData.ingredients.map((i) => ({
   products: i.products.map((h) => productByHandle.get(h)).filter(Boolean),
 }));
 
+/*
+ * The ingredient library is backed by metaobjects on the real store. Shopify
+ * hands Liquid a `system` block plus one wrapper object per field, and reaches
+ * entries through `shop.metaobjects.<type>.values` — mirror that exactly, so the
+ * templates are written once against the real shape and this harness proves it.
+ * The URL matches Shopify's own `/pages/{urlHandle}/{entry}` routing.
+ */
+const ingredientMetaobjects = ingredients.map((i) => ({
+  system: { handle: i.handle, type: 'ingredient', url: `/pages/ingredients/${i.handle}` },
+  name: { value: i.name, type: 'single_line_text_field' },
+  body: { value: i.body, type: 'multi_line_text_field' },
+  products: { value: i.products, type: 'list.product_reference' },
+}));
+const ingredientMetaobjectByHandle = new Map(ingredientMetaobjects.map((m) => [m.system.handle, m]));
+
 /* ========================================================================== *
  * 2. Cart
  * ========================================================================== */
@@ -354,6 +369,7 @@ const routes = {
 const shop = {
   name: 'Helbrede Nutraherbs', email: settings.email, domain: 'helbredenutraherbs.com',
   url: 'https://helbredenutraherbs.com', currency: 'INR', money_format: '₹{{amount}}',
+  metaobjects: { ingredient: { values: ingredientMetaobjects, count: ingredientMetaobjects.length } },
 };
 
 const linklists = {
@@ -383,6 +399,9 @@ function baseGlobals(extra = {}) {
   return {
     settings, routes, shop, cart, linklists,
     collections, all_products: products, concerns, ingredients,
+    /* Global `metaobjects` is the current spelling; shop.metaobjects is the
+       deprecated alias Shopify still honours. Expose both, as the store does. */
+    metaobjects: shop.metaobjects,
     canonical_url: 'https://helbredenutraherbs.com',
     current_tags: [], powered_by_link: '',
     request: { design_mode: false, page_type: extra.template || 'index', path: extra.path || '/' },
@@ -528,12 +547,14 @@ app.get('/pages/:handle', (req, res) => {
   });
 });
 
+/* Shopify renders these through templates/metaobject/<type>.liquid, with the
+   entry exposed as `metaobject` — not as a page. */
 app.get('/pages/ingredients/:handle', (req, res) => {
-  const ing = ingredients.find((i) => i.handle === req.params.handle);
-  if (!ing) return res.status(404).send(notFound(req.path));
+  const entry = ingredientMetaobjectByHandle.get(req.params.handle);
+  if (!entry) return res.status(404).send(notFound(req.path));
   renderPage(res, {
-    template: 'page.ingredient', page_title: ing.name, path: req.path,
-    data: { page: { title: ing.name, handle: req.params.handle }, ingredient: ing },
+    template: 'metaobject/ingredient', page_title: entry.name.value, path: req.path,
+    data: { metaobject: entry },
   });
 });
 

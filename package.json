@@ -9,7 +9,10 @@
     "data": "node scripts/build-theme-data.mjs",
     "smoke": "node scripts/smoke.mjs",
     "shopify:push": "shopify theme push --path theme --unpublished",
-    "shopify:dev": "shopify theme dev --path theme"
+    "shopify:dev": "shopify theme dev --path theme",
+    "shopify:configure": "node scripts/shopify-configure.mjs",
+    "shopify:configure:dry": "node scripts/shopify-configure.mjs --dry-run",
+    "shopify:sync": "shopify theme push --path theme --theme 131259826258"
   },
   "dependencies": {
     "express": "^4.21.2",

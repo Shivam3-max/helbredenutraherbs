@@ -1,3 +1,15 @@
+{%- comment -%}
+  The library index. `metaobjects.<type>.values` enumerates the entries without
+  a store query (`shop.metaobjects` is the deprecated spelling), and each entry
+  carries its own routed URL in system.url — so the links stay correct even if
+  the definition's urlHandle changes later.
+
+  Liquid hands back at most 50 entries at a time, so with 158 ingredients this
+  has to paginate or the library silently stops at the letter C.
+{%- endcomment -%}
+
+{%- assign ings = metaobjects.ingredient.values -%}
+
 <nav class="wrap crumbs" aria-label="Breadcrumb">
   <a href="/">Home</a><span>/</span><span class="t-dim">Ingredient library</span>
 </nav>
@@ -9,22 +21,43 @@
         <span class="sec-head__pre">every herb, acid and mineral we use</span>
         <h1 class="sec-head__main">Ingredient library</h1>
       </div>
-      <p class="t-lede">
-        {{ ingredients.size }} ingredients across the range, each described the way it
-        appears on the pack it came from — with the products that contain it.
-      </p>
+      {%- if ings.size > 0 -%}
+        <p class="t-lede">
+          {{ ings.size }} ingredients across the range, each described the way it
+          appears on the pack it came from — with the products that contain it.
+        </p>
+      {%- endif -%}
     </header>
 
-    <div class="ings" data-reveal-stagger>
-      {%- for i in ingredients -%}
-        <article class="ing">
-          <div class="ing__hd">
-            <h2 class="ing__n"><a href="/pages/ingredients/{{ i.handle }}">{{ i.name }}</a></h2>
-            <span class="ing__d">{{ i.products.size }} product{% if i.products.size != 1 %}s{% endif %}</span>
-          </div>
-          <p class="ing__b">{{ i.body }}</p>
-        </article>
-      {%- endfor -%}
-    </div>
+    {%- if ings.size > 0 -%}
+      {%- paginate ings by 50 -%}
+        <div class="ings" data-reveal-stagger>
+          {%- for i in ings -%}
+            {%- assign n = i.products.value.size -%}
+            <article class="ing">
+              <div class="ing__hd">
+                <h2 class="ing__n"><a href="{{ i.system.url }}">{{ i.name.value }}</a></h2>
+                <span class="ing__d">{{ n }} product{% if n != 1 %}s{% endif %}</span>
+              </div>
+              <p class="ing__b">{{ i.body.value }}</p>
+            </article>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          <nav class="coll__more" aria-label="Pagination">
+            {%- if paginate.previous -%}<a class="btn btn--ghost btn--sm" href="{{ paginate.previous.url }}">Previous</a>{%- endif -%}
+            <span class="t-mono">Page {{ paginate.current_page }} of {{ paginate.pages }}</span>
+            {%- if paginate.next -%}<a class="btn btn--ghost btn--sm" href="{{ paginate.next.url }}">Next</a>{%- endif -%}
+          </nav>
+        {%- endif -%}
+      {%- endpaginate -%}
+    {%- else -%}
+      {%- comment -%}
+        No entries yet — say so plainly rather than rendering an empty grid that
+        reads as a broken page.
+      {%- endcomment -%}
+      <p class="t-lede">The ingredient library is being prepared and will be published shortly.</p>
+    {%- endif -%}
   </div>
 </section>

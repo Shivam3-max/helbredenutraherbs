@@ -1,10 +1,63 @@
 {
   "sections": {
     "hero": {
-      "type": "hero"
+      "type": "hero",
+      "settings": {
+        "autoplay": true,
+        "interval": 5
+      },
+      "blocks": {
+        "hair-care": {
+          "type": "banner",
+          "settings": {
+            "asset_desktop": "banner-hair-care-desktop.jpg",
+            "asset_mobile": "banner-hair-care-mobile.jpg",
+            "alt": "Helbrede hair care formulas for stronger, healthier-looking hair",
+            "link": "/collections/hair-care",
+            "code": "HERO-HAIR-D",
+            "code_mobile": "HERO-HAIR-M",
+            "label": "Hair care campaign"
+          }
+        },
+        "face-serum": {
+          "type": "banner",
+          "settings": {
+            "asset_desktop": "banner-face-serum-desktop.jpg",
+            "asset_mobile": "banner-face-serum-mobile.jpg",
+            "alt": "Explore Helbrede face serums for targeted daily skin care",
+            "link": "/collections/skin-care",
+            "code": "HERO-SERUM-D",
+            "code_mobile": "HERO-SERUM-M",
+            "label": "Face serum campaign"
+          }
+        },
+        "mahabali": {
+          "type": "banner",
+          "settings": {
+            "asset_desktop": "banner-mahabali-desktop.jpg",
+            "asset_mobile": "banner-mahabali-mobile.jpg",
+            "alt": "Discover Mahabali Ayurvedic strength, stamina and vitality support",
+            "link": "/collections/health-care",
+            "code": "HERO-MAHABALI-D",
+            "code_mobile": "HERO-MAHABALI-M",
+            "label": "Mahabali campaign"
+          }
+        }
+      },
+      "block_order": [
+        "hair-care",
+        "face-serum",
+        "mahabali"
+      ]
     },
     "concern": {
-      "type": "concern-switcher"
+      "type": "concern-switcher",
+      "blocks": {
+        "health": { "type": "collection", "settings": { "collection": "health-care", "label": "Health care", "tagline": "Daily wellness, strength and targeted support" } },
+        "hair": { "type": "collection", "settings": { "collection": "hair-care", "label": "Hair care", "tagline": "Support stronger, healthier-looking hair" } },
+        "skin": { "type": "collection", "settings": { "collection": "skin-care", "label": "Skin care", "tagline": "Targeted formulas for your daily skin routine" } }
+      },
+      "block_order": ["health", "hair", "skin"]
     },
     "best": {
       "type": "featured-rail",
@@ -15,10 +68,18 @@
       }
     },
     "label": {
-      "type": "feature-label"
+      "type": "feature-label",
+      "settings": {
+        "product": "helbrede-nutraherbs-magnesium-complex-5x-5-forms-of-magnesium-with-zinc-vitamin-d3-b12-vitamin-c-60-tablets"
+      }
     },
     "ritual": {
-      "type": "feature-ritual"
+      "type": "feature-ritual",
+      "settings": {
+        "morning_product": "helbrede-bio-fully-hair-tablet-hair-growth-supplement-with-biotin-zinc-selenium",
+        "daily_product": "helbrede-nutraherbs-magnesium-complex-5x-5-forms-of-magnesium-with-zinc-vitamin-d3-b12-vitamin-c-60-tablets",
+        "night_product": "helbrede-nutra-herbs-age-defense-face-serum-anti-aging-hydrating-skin-brightening-serum"
+      }
     },
     "story": {
       "type": "brand-story"

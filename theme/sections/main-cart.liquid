@@ -9,7 +9,7 @@
       <ul class="cartpage">
         {%- for i in cart.items -%}
           <li class="cartpage__row">
-            {%- if i.image -%}<img src="{{ i.image }}" alt="" width="96" height="96" loading="lazy">{%- endif -%}
+            {%- if i.image -%}<img src="{{ i.image | image_url: width: 192 }}" alt="" width="96" height="96" loading="lazy">{%- endif -%}
             <div>
               <a class="cartpage__t" href="{{ i.url }}">{{ i.product_title }}</a>
               <p class="cl__v">{{ i.variant_title }}{% if i.pack_size %} · {{ i.pack_size }}{% endif %}</p>
@@ -22,7 +22,9 @@
       <div class="cartpage__foot">
         <div class="cart-tot"><span>Subtotal</span><strong>{{ cart.total_price | money }}</strong></div>
         <p class="t-sm t-dim-3">Taxes included. Shipping calculated at checkout.</p>
-        <a class="btn btn--primary btn--lg btn--block" href="/checkout">Proceed to checkout</a>
+        <form action="{{ routes.cart_url }}" method="post">
+          <button class="btn btn--primary btn--lg btn--block" type="submit" name="checkout">Proceed to checkout</button>
+        </form>
       </div>
     {%- else -%}
       <div class="cart-empty">

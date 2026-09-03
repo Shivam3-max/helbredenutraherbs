@@ -1,4 +1,4 @@
-{%- assign faqs = product.hb.faq -%}
+{%- assign faqs = product.metafields.helbrede.faq.value -%}
 {%- if faqs.size > 0 -%}
 <section class="sec" id="faq" data-reveal>
   <div class="wrap wrap--narrow">

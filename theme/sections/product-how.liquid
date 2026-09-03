@@ -1,5 +1,5 @@
-{%- assign steps = product.hb.how_to_use -%}
-{%- assign who = product.hb.suitable_for -%}
+{%- assign steps = product.metafields.helbrede.how_to_use.value -%}
+{%- assign who = product.metafields.helbrede.suitable_for.value -%}
 {%- if steps.size > 0 or who.size > 0 -%}
 <section class="sec sec--tint" id="how" data-reveal>
   <div class="wrap split">
@@ -17,9 +17,9 @@
           </li>
         {%- endfor -%}
       </ol>
-      {%- if product.hb.usage_horizon != blank -%}
+      {%- if product.metafields.helbrede.usage_horizon.value != blank -%}
         <p class="note note--warn" style="margin-top:1.25rem">
-          {% render 'icon', name: 'leaf', size: 17 %} {{ product.hb.usage_horizon }}
+          {% render 'icon', name: 'leaf', size: 17 %} {{ product.metafields.helbrede.usage_horizon.value }}
         </p>
       {%- endif -%}
     </div>
