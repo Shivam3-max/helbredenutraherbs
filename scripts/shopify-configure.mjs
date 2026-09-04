@@ -714,6 +714,68 @@ async function stepIngredients() {
 }
 
 /* ========================================================================== *
+ * Step 6 — the pack ladder's automatic discounts
+ * ========================================================================== */
+
+/*
+ * The ladder on the product page sets quantity, not a variant, so the saving
+ * has to come from a discount. These two must stay in step with the
+ * pack_tier2_pct / pack_tier3_pct theme settings — the page quotes a figure the
+ * cart has to honour.
+ */
+const PACK_DISCOUNTS = [
+  { title: 'Pack of 2 — 10% off', quantity: 2, percentage: 0.10 },
+  { title: 'Pack of 3 — 15% off', quantity: 3, percentage: 0.15 },
+];
+
+async function stepDiscounts() {
+  console.log('\n── pack discounts ──────────────────────────────────────');
+
+  const existing = await gql(`
+    query {
+      automaticDiscountNodes(first: 50) {
+        edges { node { id automaticDiscount { __typename ... on DiscountAutomaticBasic { title status } } } }
+      }
+    }`);
+
+  const byTitle = new Map(
+    existing.automaticDiscountNodes.edges
+      .map((e) => [e.node.automaticDiscount?.title, e.node])
+      .filter(([t]) => t),
+  );
+
+  for (const d of PACK_DISCOUNTS) {
+    const found = byTitle.get(d.title);
+    if (found) {
+      console.log(`  = ${d.title} exists (${found.automaticDiscount.status})`);
+      continue;
+    }
+    if (DRY) { console.log(`  + ${d.title} would be created — min qty ${d.quantity}, ${d.percentage * 100}%`); continue; }
+
+    const res = await gql(`
+      mutation($d: DiscountAutomaticBasicInput!) {
+        discountAutomaticBasicCreate(automaticBasicDiscount: $d) {
+          automaticDiscountNode { id }
+          userErrors { field message }
+        }
+      }`, {
+      d: {
+        title: d.title,
+        startsAt: new Date().toISOString(),
+        minimumRequirement: { quantity: { greaterThanOrEqualToQuantity: String(d.quantity) } },
+        customerGets: { value: { percentage: d.percentage }, items: { all: true } },
+        /* Product discounts cannot combine on one line outside Plus, and this
+           store is on Basic. Say so explicitly rather than leaving it to a
+           default that might change. */
+        combinesWith: { productDiscounts: false, orderDiscounts: true, shippingDiscounts: true },
+      },
+    });
+    assertNoUserErrors(res.discountAutomaticBasicCreate, `create ${d.title}`);
+    console.log(`  + ${d.title} created — min qty ${d.quantity}, ${d.percentage * 100}% off all products`);
+  }
+}
+
+/* ========================================================================== *
  * Run
  * ========================================================================== */
 
@@ -729,6 +791,7 @@ async function main() {
   if (wants('collections')) await stepCollections();
   if (wants('pages')) await stepPages();
   if (wants('ingredients')) await stepIngredients();
+  if (wants('discounts')) await stepDiscounts();
 
   console.log(`\ndone — ${callCount} API calls${DRY ? ' (dry run)' : ''}\n`);
 }
