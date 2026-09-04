@@ -317,6 +317,23 @@ const run = async () => {
     check('search page · results', count(html, /<article class="card"/g), gte(1));
   }
 
+  /* ------------------------------------------------------ short titles ---- */
+  /* Shopify's product.title is the full merchandising string — brand, pipes,
+     specs, ~100 characters against the ~26 the card was designed for. Cards on
+     the live store ran four lines deep and pushed every rail out of shape. The
+     short name rides in helbrede.title; assert the card and PDP use it. */
+  {
+    const html = await get('/');
+    const titles = [...html.matchAll(/<h3 class="card__title"><a[^>]*>([^<]+)<\/a>/g)].map((m) => m[1].trim());
+    check('cards · titles rendered', titles.length, gte(4));
+    const longest = titles.reduce((n, t) => Math.max(n, t.length), 0);
+    check(`cards · short name used (longest ${longest})`, longest <= 60, true);
+
+    const pdp = await get('/products/helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules');
+    const h1 = (pdp.match(/<h1 class="pdp__title">([^<]*)</) || [])[1] || '';
+    check(`pdp · short name in heading (${h1.length} chars)`, h1.length > 0 && h1.length <= 60, true);
+  }
+
   /* ---------------------------------------------------- sold-out buy box -- */
   /* fetch resolves on a 422, so a sold-out add used to fall through to the cart
      drawer, which opened empty with nothing said. Twelve of the thirty-five

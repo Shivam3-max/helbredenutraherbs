@@ -5,6 +5,8 @@
 {%- endcomment -%}
 {%- assign v = product.variants | first -%}
 {%- assign product_category = product.type | default: product.vendor -%}
+{%- comment -%} Shopify product.title is the full merchandising string (~100 chars); the card is built around the short name. {%- endcomment -%}
+{%- assign product_name = product.metafields.helbrede.title.value | default: product.title -%}
 {%- assign product_subtitle = product.metafields.descriptors.subtitle.value | default: product.metafields.custom.subtitle.value | default: product.metafields.helbrede.subtitle.value -%}
 {%- assign pack_size = product.metafields.custom.pack_size.value | default: product.metafields.helbrede.pack_size.value -%}
 {%- assign product_image_url = product.featured_image | image_url: width: 720 -%}
@@ -26,7 +28,7 @@
 
   <div class="card__body">
     <div class="card__concern">{{ product_category }}</div>
-    <h3 class="card__title"><a href="{{ product.url }}">{{ product.title }}</a></h3>
+    <h3 class="card__title"><a href="{{ product.url }}">{{ product_name }}</a></h3>
     {%- if product_subtitle != blank %}<p class="card__sub">{{ product_subtitle }}</p>{% endif -%}
     {%- if pack_size != blank %}<div class="card__pack">{{ pack_size }}</div>{% endif -%}
 

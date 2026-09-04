@@ -196,6 +196,7 @@ const shop = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'shop.json'), 'u
  * from `.value`, which is exactly the shape the dev server handed the templates.
  */
 const DEFINITIONS = [
+  { key: 'title',         name: 'Short name',          type: 'single_line_text_field', description: 'Display name for cards and the PDP heading. product.title is the full merchandising title — brand, pipes, specs, ~100 characters — which the card layout cannot absorb.' },
   { key: 'subtitle',      name: 'Subtitle',            type: 'single_line_text_field', description: 'The line under the product title on cards and the PDP.' },
   { key: 'concern',       name: 'Concern handle',      type: 'single_line_text_field', description: 'Handle of the concern collection this product belongs to. Drives related products.' },
   { key: 'pack_size',     name: 'Pack size',           type: 'single_line_text_field', description: 'Net quantity printed on the pack, e.g. "60 capsules".' },
@@ -348,9 +349,13 @@ async function stepMetafields() {
     if (!target) { missing.push(p.handle); continue; }
 
     const values = { ...p.metafields };
-    // `concern` and `pack_size` sit at the top level of shop.json, not under metafields.
+    // `concern`, `pack_size` and the short `title` sit at the top level of
+    // shop.json, not under metafields. The short title matters: Shopify's own
+    // product.title is the full merchandising string, and the card layout was
+    // designed around this ~26-character name plus the subtitle.
     if (p.concern) values.concern = p.concern;
     if (p.pack_size) values.pack_size = p.pack_size;
+    if (p.title) values.title = p.title;
 
     for (const def of DEFINITIONS) {
       const v = values[def.key];

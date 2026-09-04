@@ -64,9 +64,17 @@ function toProduct(p) {
     featured_media: images[0] || null,
     options_with_values: [{ name: 'Pack', values: variants.map((v) => v.option1) }],
     has_only_default_variant: false,
-    /* Shopify exposes metafields as {namespace}.{key} objects with .value */
+    /* Shopify exposes metafields as {namespace}.{key} objects with .value.
+       `title`, `concern` and `pack_size` live at the top level of shop.json but
+       are seeded into the same namespace by scripts/shopify-configure.mjs, so
+       mirror the seeded set exactly — otherwise a template reading one of them
+       silently falls back here and only diverges on the real store. */
     metafields: {
-      helbrede: Object.fromEntries(Object.entries(mf).map(([k, v]) => [k, { value: v, type: typeof v === 'string' ? 'single_line_text_field' : 'json' }])),
+      helbrede: Object.fromEntries(
+        Object.entries({ ...mf, title: p.title, concern: p.concern, pack_size: p.pack_size })
+          .filter(([, v]) => v !== undefined && v !== null && v !== '')
+          .map(([k, v]) => [k, { value: v, type: typeof v === 'string' ? 'single_line_text_field' : 'json' }]),
+      ),
       reviews: { rating: { value: null }, rating_count: { value: null } },
     },
     /* flattened for template convenience */

@@ -16,6 +16,7 @@
     takes the Ritual Builder and Label Compare down with it, since both parse
     this block.
   {%- endcomment -%}
+  {%- assign p_name = p.metafields.helbrede.title.value | default: p.title -%}
   {%- assign p_sub = p.metafields.descriptors.subtitle.value | default: p.metafields.custom.subtitle.value | default: p.metafields.helbrede.subtitle.value | default: '' -%}
   {%- assign p_pack = p.metafields.custom.pack_size.value | default: p.metafields.helbrede.pack_size.value | default: '' -%}
   {%- comment -%}
@@ -29,7 +30,7 @@
   {%- endif -%}
   {%- assign p_ing = p.metafields.helbrede.ingredients.value -%}
   {%- assign p_ben = p.metafields.helbrede.benefits.value -%}
-  {"h":{{ p.handle | json }},"t":{{ p.title | json }},"s":{{ p_sub | json }},
+  {"h":{{ p.handle | json }},"t":{{ p_name | json }},"s":{{ p_sub | json }},
    "c":{{ p.collections.first.handle | default: p.type | handleize | json }},"cl":{{ p.collections.first.title | default: p.type | default: p.vendor | json }},
    "img":{{ p_img | json }},"pack":{{ p_pack | json }},
    "vid":{{ v.id }},"price":{{ v.price }},"was":{{ v.compare_at_price | default: 0 }},

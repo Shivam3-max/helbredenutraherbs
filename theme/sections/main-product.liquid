@@ -5,13 +5,14 @@
 {%- assign p = product -%}
 {%- assign v = p.selected_or_first_available_variant -%}
 {%- assign product_category = p.type | default: p.vendor -%}
+{%- assign product_name = p.metafields.helbrede.title.value | default: p.title -%}
 {%- assign product_subtitle = p.metafields.descriptors.subtitle.value | default: p.metafields.custom.subtitle.value | default: p.metafields.helbrede.subtitle.value -%}
 {%- assign pack_size = p.metafields.custom.pack_size.value | default: p.metafields.helbrede.pack_size.value -%}
 
 <nav class="wrap crumbs" aria-label="Breadcrumb">
   <a href="/">Home</a><span>/</span>
   {%- if product.collections.first -%}<a href="{{ product.collections.first.url }}">{{ product.collections.first.title }}</a><span>/</span>{%- endif -%}
-  <span class="t-dim">{{ p.title }}</span>
+  <span class="t-dim">{{ product_name }}</span>
 </nav>
 
 <section class="wrap pdp" data-product='{{ p.variants | json }}'>
@@ -47,7 +48,7 @@
   {%- comment -%} ---------- buy box ---------- {%- endcomment -%}
   <div class="pdp__buy">
     <p class="t-eyebrow">{{ product_category }}</p>
-    <h1 class="pdp__title">{{ p.title }}</h1>
+    <h1 class="pdp__title">{{ product_name }}</h1>
     {%- if product_subtitle != blank -%}<p class="pdp__sub">{{ product_subtitle }}</p>{%- endif -%}
 
     {%- if p.description != blank -%}
