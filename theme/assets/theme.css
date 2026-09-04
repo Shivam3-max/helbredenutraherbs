@@ -260,6 +260,12 @@ table{border-collapse:collapse;width:100%}
   display:grid;grid-auto-flow:column;grid-auto-columns:minmax(248px,1fr);
   gap:clamp(.8rem,1.6vw,1.4rem);overflow-x:auto;scroll-snap-type:x mandatory;
   padding-bottom:.5rem;margin-inline:calc(var(--gut)*-1);padding-inline:var(--gut);
+  /* The rail bleeds to the screen edge and pads itself back in, so the first
+     card lines up with the heading above it. Without scroll-padding, snapping
+     defeats that: `scroll-snap-align:start` snaps the card's edge to the
+     container's edge, so the rail rests at scrollLeft:16 and the first card
+     sits flush against the screen while every other element is inset. */
+  scroll-padding-inline:var(--gut);
   scrollbar-width:thin;scrollbar-color:var(--line-2) transparent;
 }
 .rail>*{scroll-snap-align:start}
