@@ -51,6 +51,9 @@ function assertChrome(html, where) {
   check(`${where} · phone`, count(html, /\+91 70090 40553/g), gte(1));
   check(`${where} · email`, count(html, /info@helbredenutraherbs\.com/g), gte(1));
   check(`${where} · whatsapp`, count(html, /wa\.me\/917009040553/g), gte(1));
+  /* The WhatsApp Button app embed renders the floating launcher. A second one
+     from the theme put a green bubble in each bottom corner of every page. */
+  check(`${where} · no theme whatsapp fab`, count(html, /class="wa-fab"/g), 0);
   check(`${where} · no stale contact`, count(html, /62838|care@helbrede/g), 0);
 }
 

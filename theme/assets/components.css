@@ -245,14 +245,8 @@
 .cart-tot span{font-weight:600;color:var(--ink-2)}
 .drawer__foot .btn{margin-top:.85rem}
 
-/* ---------- whatsapp fab -------------------------------------------------- */
-.wa-fab{
-  position:fixed;right:18px;bottom:18px;z-index:70;
-  width:52px;height:52px;border-radius:50%;display:grid;place-items:center;
-  background:#25D366;color:#fff;box-shadow:var(--shadow-3);
-  transition:.28s var(--ease);
-}
-.wa-fab:hover{transform:translateY(-2px) scale(1.04)}
+/* The .wa-fab floating button was removed with its markup in theme.liquid —
+   the WhatsApp Button app embed provides the launcher. */
 
 /* ---------- footer -------------------------------------------------------- */
 .ftr{background:var(--bg-tint);border-top:1px solid var(--line);margin-top:clamp(3rem,6vw,5rem)}

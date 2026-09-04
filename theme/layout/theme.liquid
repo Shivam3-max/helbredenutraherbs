@@ -78,10 +78,13 @@
 
   <div class="scrim" data-scrim hidden></div>
 
-  <a class="wa-fab" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener"
-     aria-label="Chat with us on WhatsApp">
-    {% render 'icon', name: 'whatsapp', size: 26 %}
-  </a>
+  {%- comment -%}
+    No floating WhatsApp button here. The store runs the WhatsApp Button app as
+    a theme app embed, which renders its own launcher — shipping one as well put
+    two green bubbles on every page, one in each bottom corner. The app owns it,
+    because it carries the business hours and message templates a bare wa.me
+    link cannot. The footer and contact page still link to WhatsApp directly.
+  {%- endcomment -%}
 
   <script src="{{ 'theme.js' | asset_url }}" defer></script>
 </body>
