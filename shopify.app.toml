@@ -20,10 +20,16 @@ application_url = "https://example.com"
 embedded = true
 
 [access_scopes]
-# The first seventeen are version 1.0 verbatim. The four metaobject scopes are
-# the addition: they let the script create the `ingredient` definition and seed
-# its 158 entries for the Ingredient Library.
-scopes = "read_online_store_pages,write_online_store_pages,read_product_feeds,write_product_feeds,read_product_listings,write_product_listings,read_products,write_products,read_publications,write_publications,read_content,write_content,unauthenticated_read_product_pickup_locations,unauthenticated_read_product_inventory,unauthenticated_read_product_listings,unauthenticated_read_product_tags,unauthenticated_read_content,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects"
+# The first seventeen are version 1.0 verbatim.
+#
+# The four metaobject scopes came next: they let the script create the
+# `ingredient` definition and seed its 158 entries for the Ingredient Library.
+#
+# read_discounts and write_discounts are the latest addition. The pack ladder
+# depends on two automatic quantity discounts, and neither fired in the cart or
+# at checkout — without read access there is no way to see how they are
+# configured, and no way to correct them.
+scopes = "read_online_store_pages,write_online_store_pages,read_product_feeds,write_product_feeds,read_product_listings,write_product_listings,read_products,write_products,read_publications,write_publications,read_content,write_content,unauthenticated_read_product_pickup_locations,unauthenticated_read_product_inventory,unauthenticated_read_product_listings,unauthenticated_read_product_tags,unauthenticated_read_content,read_metaobject_definitions,write_metaobject_definitions,read_metaobjects,write_metaobjects,read_discounts,write_discounts"
 
 [auth]
 redirect_urls = [ "https://example.com/api/auth" ]
