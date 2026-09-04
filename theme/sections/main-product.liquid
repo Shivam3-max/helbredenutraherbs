@@ -1,6 +1,7 @@
 {%- comment -%}
   Product buy box. Follows Kapiva's module order: gallery, promise, description,
-  pack ladder, quantity, call-to-order, delivery check, dual CTA, trust strip.
+  quantity, call-to-order, delivery check, dual CTA, trust strip. Kapiva's pack
+  ladder is deliberately absent — see the note above the CTA.
 {%- endcomment -%}
 {%- assign p = product -%}
 {%- assign v = p.selected_or_first_available_variant -%}
@@ -68,37 +69,15 @@
       <p class="pdp__horizon">{% render 'icon', name: 'leaf', size: 15 %}{{ p.metafields.helbrede.usage_horizon.value }}</p>
     {%- endif -%}
 
-    {%- comment -%} ---------- pack ladder ---------- {%- endcomment -%}
-    {%- if p.variants.size > 1 -%}
-      <div class="pdp__block">
-        <h2 class="pdp__block-h">Select a pack</h2>
-        <div class="packs" role="radiogroup" aria-label="Select a pack">
-          {%- for pv in p.variants -%}
-            <label class="pack {% if forloop.first %}is-on{% endif %}" data-pack="{{ pv.id }}">
-              <input class="sr" type="radio" name="id" value="{{ pv.id }}" {% if forloop.first %}checked{% endif %}>
-              <span class="pack__radio" aria-hidden="true"></span>
-              <span class="pack__mid">
-                <span class="pack__t">{{ pv.title }}</span>
-                <span class="pack__u">{{ pv.unit_label }}</span>
-                <span class="pack__ship {% unless pv.shipping == 'free' %}pack__ship--paid{% endunless %}">{{ pv.shipping_label }}</span>
-              </span>
-              <span class="pack__right">
-                <span class="pack__price">{{ pv.price | money }}</span>
-                {%- if pv.compare_at_price and pv.compare_at_price > pv.price -%}
-                  <span class="pack__was">{{ pv.compare_at_price | money }}</span>
-                {%- endif -%}
-                {%- if pv.units > 1 -%}<span class="pack__each">{{ pv.per_unit | money }} each</span>{%- endif -%}
-              </span>
-              {%- if pv.badge != blank -%}
-                <span class="badge {% if pv.badge == 'Super Saver' %}badge--best{% else %}badge--gold{% endif %} pack__badge">{{ pv.badge }}</span>
-              {%- endif -%}
-            </label>
-          {%- endfor -%}
-        </div>
-      </div>
-    {%- endif -%}
+    {%- comment -%}
+      No pack ladder. Every product is a single stocked bottle, so Pack of 2 /
+      3 as variants would each get their own inventory item starting at zero —
+      the ladder would render entirely sold out — and stocking them would count
+      the same physical bottles two and three times over. Packs belong to a
+      bundle app, which draws down the component stock. The markup is in git
+      history if genuinely pre-packed SKUs ever exist.
+    {%- endcomment -%}
 
-    {%- comment -%} ---------- quantity + CTA ---------- {%- endcomment -%}
     {%- comment -%}
       A third of the catalogue is out of stock at any time. Offering an enabled
       "Add to cart" on those sent the shopper to a 422 and an empty cart drawer,

@@ -121,9 +121,12 @@ const run = async () => {
     check('pdp · gallery shots', count(html, /class="pdp__shot/g), gte(5));
     check('pdp · gallery thumbs', count(html, /class="pdp__thumb/g), gte(5));
     check('pdp · title', count(html, /class="pdp__title"/g), 1);
-    check('pdp · pack ladder rows', count(html, /class="pack /g), 3);
-    check('pdp · pack badges', count(html, /pack__badge/g), 3);
-    check('pdp · per-unit price', count(html, /pack__each/g), 2);
+    /* No pack ladder. Every product is one stocked bottle, so Pack of 2 / 3 as
+       variants would each start at zero inventory and render sold out, and
+       stocking them would count the same bottles twice over. Assert it stays
+       gone: the seeded catalogue still carries three variants per product, so
+       reinstating the markup would look right locally and be wrong live. */
+    check('pdp · no pack ladder', count(html, /class="pack |pack__badge|pack__each/g), 0);
     check('pdp · add to cart', count(html, /data-add-to-cart/g), 1);
     /* The custom Buy now became Shopify's accelerated checkout buttons, which
        need a real product form to exist at all. */

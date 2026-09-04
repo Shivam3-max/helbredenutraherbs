@@ -84,7 +84,7 @@
       },
       "15909290956780699707": {
         "type": "shopify://apps/mw-bundle-builder/blocks/app-embed-block/5bcb1a6d-53b5-4d9c-b4f9-19f6620da62b",
-        "disabled": false,
+        "disabled": true,
         "settings": {
           "theme_text_primary_color": "#1a1c1d",
           "theme_text_secondary_color": "#7c8488",

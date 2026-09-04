@@ -521,26 +521,15 @@
     });
   })();
 
-  /* --- pack ladder + quantity --- */
+  /* --- quantity ---
+     The pack ladder that used to live here went with its markup: every product
+     is a single stocked bottle, so there is no variant to switch between. If
+     real pre-packed SKUs ever exist, the selector has to set both the add-to-
+     cart dataset and the form's hidden id input — the wallet buttons submit the
+     form directly and would otherwise check out the first-rendered variant. */
   (() => {
-    const packs = $$('.pack');
     const qtyVal = $('[data-qty-value]');
     const qtyInput = $('[data-qty-input]');
-
-    function setVariant(id) {
-      $$('[data-add-to-cart]').forEach((b) => { b.dataset.variantId = id; });
-      /* The wallet buttons submit the product form, so the form's own id input
-         has to follow the pack selection too — otherwise an express checkout
-         buys whichever variant was rendered first. */
-      const variantInput = $('[data-variant-input]');
-      if (variantInput) variantInput.value = id;
-    }
-
-    packs.forEach((pack) => pack.addEventListener('click', () => {
-      packs.forEach((p) => p.classList.toggle('is-on', p === pack));
-      pack.querySelector('input')?.setAttribute('checked', 'checked');
-      setVariant(pack.dataset.pack);
-    }));
 
     $$('[data-qty-step]').forEach((btn) => btn.addEventListener('click', () => {
       if (!qtyVal || !qtyInput) return;

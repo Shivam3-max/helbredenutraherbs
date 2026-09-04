@@ -126,32 +126,9 @@
 }
 
 /* ---------- pack ladder --------------------------------------------------- */
-.packs{display:grid;gap:.6rem}
-.pack{
-  position:relative;display:grid;
-  grid-template-columns:auto minmax(0,1fr) auto;gap:.85rem;align-items:center;
-  padding:.95rem 1rem;border:1.5px solid var(--line);border-radius:var(--r);
-  background:#fff;cursor:pointer;transition:.24s var(--ease);
-}
-.pack:hover{border-color:var(--line-2)}
-.pack.is-on{border-color:var(--forest);background:var(--bg-tint);box-shadow:var(--shadow-1)}
-.pack__radio{
-  width:18px;height:18px;border-radius:50%;border:1.6px solid var(--line-2);
-  display:grid;place-items:center;flex:none;transition:.24s;
-}
-.pack.is-on .pack__radio{border-color:var(--forest)}
-.pack.is-on .pack__radio::after{content:"";width:9px;height:9px;border-radius:50%;background:var(--forest)}
-/* the two side columns each stack their own lines, so nothing collides */
-.pack__mid{display:flex;flex-direction:column;gap:.1rem;min-width:0}
-.pack__t{font-weight:700;font-size:var(--t-base);letter-spacing:-.02em}
-.pack__u{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-3)}
-.pack__ship{font-size:var(--t-xs);color:var(--ok);font-weight:600}
-.pack__ship--paid{color:var(--ink-3)}
-.pack__right{display:flex;flex-direction:column;align-items:flex-end;gap:.05rem;text-align:right;flex:none}
-.pack__price{font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.pack__was{font-size:var(--t-xs);color:var(--ink-3);text-decoration:line-through;font-variant-numeric:tabular-nums}
-.pack__each{font-family:var(--f-mono);font-size:.64rem;color:var(--ink-3)}
-.pack__badge{position:absolute;top:-9px;right:12px}
+/* The pack ladder styles were removed with the markup: every product is a
+   single stocked bottle, so there is no ladder to render. In git history if
+   pre-packed SKUs ever exist. */
 
 /* ---------- routine / ritual --------------------------------------------- */
 .ritual{display:grid;gap:.7rem}
