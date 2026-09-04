@@ -236,7 +236,11 @@
    it draws vary by what the merchant has enabled — so match the theme's
    primary CTA rather than trying to restyle each wallet. The unbranded
    fallback ("Buy it now") is the one that needs to look like ours. */
-.pdp__cta .shopify-payment-button{flex:1;min-width:0}
+/* Both CTAs share the row evenly. min-width:0 has to be on both children:
+   a flex item defaults to min-width:auto, so Add to cart refuses to shrink to
+   its content width while the payment wrapper happily does — which left them
+   179px against 113px. */
+.pdp__cta > *{flex:1 1 0;min-width:0}
 .pdp__cta .shopify-payment-button__button{
   width:100%;min-height:52px;border-radius:var(--r-pill);
   font-family:inherit;font-size:var(--t-base);font-weight:700;letter-spacing:-.01em;
