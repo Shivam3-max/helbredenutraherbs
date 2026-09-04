@@ -71,6 +71,25 @@
 }
 .cs__chips::-webkit-scrollbar{display:none}
 .cs__chip{flex:none}
+/* Eight concerns will not fit one row on a narrow screen, and the scrollbar is
+   deliberately hidden — so five of them were simply invisible, with nothing to
+   suggest the row scrolled. Wrap instead of scrolling once the row runs out of
+   space: every concern is then on screen and reachable without a swipe. The
+   edge-to-edge bleed goes with the scrolling, since there is nothing to scroll. */
+@media(max-width:900px){
+  .cs__chips{
+    flex-wrap:wrap;overflow-x:visible;
+    margin-inline:0;padding-inline:0;padding-bottom:0;
+    row-gap:.55rem;
+  }
+}
+/* Wrapped, the longer labels — "Daily Essentials & Immunity" — each claim a
+   whole row, and eight concerns became five rows on a phone. Tighten the chip
+   itself so two fit per row without shrinking the tap target below 40px. */
+@media(max-width:600px){
+  .cs__chips .chip{padding:.5rem .7rem;font-size:.78rem;gap:.35rem;min-height:40px}
+  .cs__chips .chip__dot{width:6px;height:6px}
+}
 
 .cs__pane-head{
   display:flex;align-items:flex-end;justify-content:space-between;
