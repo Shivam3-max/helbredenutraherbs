@@ -232,6 +232,20 @@
 .pdp__cta{display:flex;gap:.6rem;flex:1;min-width:min(100%,17rem)}
 .pdp__cta .btn{flex:1}
 .pdp__tax{margin-top:-.25rem}
+/* Shopify owns the markup inside .shopify-payment-button — the wallet buttons
+   it draws vary by what the merchant has enabled — so match the theme's
+   primary CTA rather than trying to restyle each wallet. The unbranded
+   fallback ("Buy it now") is the one that needs to look like ours. */
+.pdp__cta .shopify-payment-button{flex:1;min-width:0}
+.pdp__cta .shopify-payment-button__button{
+  width:100%;min-height:52px;border-radius:var(--r-pill);
+  font-family:inherit;font-size:var(--t-base);font-weight:700;letter-spacing:-.01em;
+}
+.pdp__cta .shopify-payment-button__button--unbranded{
+  background:var(--forest);color:#fff;border:none;transition:.24s var(--ease);
+}
+.pdp__cta .shopify-payment-button__button--unbranded:hover{background:var(--leaf);box-shadow:var(--shadow-2)}
+.pdp__form{display:contents}
 /* Shown only when Shopify refuses the line — sold out, or a stock limit. */
 .pdp__cart-error{
   margin-top:.6rem;padding:.6rem .8rem;border-radius:var(--r-sm);

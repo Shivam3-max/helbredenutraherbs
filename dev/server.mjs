@@ -203,6 +203,18 @@ F('img_url', (img) => (typeof img === 'string' ? img : img?.src || ''));
 F('image_tag', (url, ...a) => `<img src="${url}" alt="" loading="lazy">`);
 F('money', money);
 F('money_with_currency', (v) => `${money(v)} INR`);
+/*
+ * Shopify renders the accelerated checkout buttons — Shop Pay, Google Pay and
+ * whatever else the merchant has enabled — from `{{ form | payment_button }}`.
+ * Stand in with the same wrapper and class names it emits, so the theme can be
+ * written and asserted against the real markup. The wallets themselves only
+ * appear on the live store; what matters here is that the button is inside a
+ * product form and lands where the design expects it.
+ */
+F('payment_button', () =>
+  '<div class="shopify-payment-button">'
+  + '<button type="submit" class="shopify-payment-button__button shopify-payment-button__button--unbranded">Buy it now</button>'
+  + '</div>');
 F('money_without_currency', (v) => (Number(v || 0) / 100).toFixed(2));
 F('money_without_trailing_zeros', money);
 F('handle', (v) => String(v || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''));
@@ -268,7 +280,12 @@ engine.registerTag('form', {
     const kind = (this.args.split(',')[0] || '').trim().replace(/^['"]|['"]$/g, '');
     const action = kind === 'product' ? '/cart/add' : kind === 'cart' ? '/cart' : '/';
     emitter.write(`<form method="post" action="${action}" accept-charset="UTF-8" class="form form--${kind}" data-form="${kind}">`);
+    /* Shopify exposes the form itself as `form` inside the block — that is what
+       `{{ form | payment_button }}` is filtering. Without it the filter reads
+       undefined and the accelerated buttons silently vanish. */
+    ctx.push({ form: { id: `${kind}-form`, kind } });
     yield this.liquid.renderer.renderTemplates(this.tpls, ctx, emitter);
+    ctx.pop();
     emitter.write('</form>');
   },
 });

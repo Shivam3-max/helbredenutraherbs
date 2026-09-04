@@ -99,26 +99,47 @@
     {%- endif -%}
 
     {%- comment -%} ---------- quantity + CTA ---------- {%- endcomment -%}
-    <div class="pdp__actions">
-      <div class="pdp__qty">
-        <span class="t-mono">Qty</span>
-        <span class="qty">
-          <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
-          <span data-qty-value>1</span>
-          <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
-        </span>
-        <input type="hidden" name="quantity" value="1" data-qty-input>
-      </div>
-      {%- comment -%}
-        A third of the catalogue is out of stock at any time. Offering an
-        enabled "Add to cart" on those sent the shopper to a 422 and an empty
-        cart drawer, so say it on the button instead.
-      {%- endcomment -%}
-      <div class="pdp__cta">
-        {%- if v.available -%}
-          <button class="btn btn--ghost btn--lg" data-add-to-cart data-variant-id="{{ v.id }}">Add to cart</button>
-          <button class="btn btn--primary btn--lg" data-buy-now data-variant-id="{{ v.id }}">Buy now</button>
-        {%- else -%}
+    {%- comment -%}
+      A third of the catalogue is out of stock at any time. Offering an enabled
+      "Add to cart" on those sent the shopper to a 422 and an empty cart drawer,
+      so say it on the button instead — and skip the form entirely, since
+      payment_button renders nothing for an unavailable variant anyway.
+    {%- endcomment -%}
+    {%- if v.available -%}
+      {%- form 'product', p, class: 'pdp__form' -%}
+        {%- comment -%}
+          A real product form, purely so `payment_button` has something to
+          filter: it is what draws Shop Pay, Google Pay and the rest. Add to
+          cart stays type="button" and keeps going through the AJAX path, so
+          the drawer behaviour is unchanged. The id and quantity inputs live
+          inside the form because the wallet buttons submit it directly and
+          would otherwise checkout the wrong variant at quantity 1.
+        {%- endcomment -%}
+        <input type="hidden" name="id" value="{{ v.id }}" data-variant-input>
+
+        <div class="pdp__actions">
+          <div class="pdp__qty">
+            <span class="t-mono">Qty</span>
+            <span class="qty">
+              <button type="button" data-qty-step="-1" aria-label="Decrease quantity">−</button>
+              <span data-qty-value>1</span>
+              <button type="button" data-qty-step="1" aria-label="Increase quantity">+</button>
+            </span>
+            <input type="hidden" name="quantity" value="1" data-qty-input>
+          </div>
+
+          <div class="pdp__cta">
+            <button type="button" class="btn btn--ghost btn--lg" data-add-to-cart data-variant-id="{{ v.id }}">Add to cart</button>
+            {{ form | payment_button }}
+          </div>
+
+          {%- comment -%} Populated by Cart.add when Shopify refuses the line. {%- endcomment -%}
+          <p class="pdp__cart-error" data-cart-error role="alert" hidden></p>
+        </div>
+      {%- endform -%}
+    {%- else -%}
+      <div class="pdp__actions">
+        <div class="pdp__cta">
           <button class="btn btn--ghost btn--lg" disabled aria-disabled="true">Sold out</button>
           {%- assign in_stock_url = '/collections/all' -%}
           {%- assign p_concern = p.metafields.helbrede.concern.value -%}
@@ -126,11 +147,9 @@
             {%- assign in_stock_url = collections[p_concern].url -%}
           {%- endif -%}
           <a class="btn btn--primary btn--lg" href="{{ in_stock_url }}">See what is in stock</a>
-        {%- endif -%}
+        </div>
       </div>
-      {%- comment -%} Populated by Cart.add when Shopify refuses the line. {%- endcomment -%}
-      <p class="pdp__cart-error" data-cart-error role="alert" hidden></p>
-    </div>
+    {%- endif -%}
     <p class="pdp__tax t-sm t-dim-3">MRP inclusive of all taxes.{% if pack_size != blank %} {{ pack_size }} per unit.{% endif %}</p>
 
     {%- comment -%} ---------- delivery check ---------- {%- endcomment -%}

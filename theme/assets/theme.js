@@ -528,7 +528,12 @@
     const qtyInput = $('[data-qty-input]');
 
     function setVariant(id) {
-      $$('[data-add-to-cart],[data-buy-now]').forEach((b) => { b.dataset.variantId = id; });
+      $$('[data-add-to-cart]').forEach((b) => { b.dataset.variantId = id; });
+      /* The wallet buttons submit the product form, so the form's own id input
+         has to follow the pack selection too — otherwise an express checkout
+         buys whichever variant was rendered first. */
+      const variantInput = $('[data-variant-input]');
+      if (variantInput) variantInput.value = id;
     }
 
     packs.forEach((pack) => pack.addEventListener('click', () => {
@@ -544,13 +549,8 @@
       qtyInput.value = next;
     }));
 
-    $('[data-buy-now]')?.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const id = e.currentTarget.dataset.variantId;
-      /* Only leave the page if the line actually made it into the cart. */
-      const ok = await Cart.add(id, Number(qtyInput?.value || 1));
-      if (ok) window.location.href = '/checkout';
-    });
+    /* The custom "Buy now" was replaced by Shopify's own accelerated checkout
+       buttons, which submit the product form directly — no handler needed. */
   })();
 
   /* --- delivery estimate ---

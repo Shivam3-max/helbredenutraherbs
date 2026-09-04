@@ -125,7 +125,11 @@ const run = async () => {
     check('pdp · pack badges', count(html, /pack__badge/g), 3);
     check('pdp · per-unit price', count(html, /pack__each/g), 2);
     check('pdp · add to cart', count(html, /data-add-to-cart/g), 1);
-    check('pdp · buy now', count(html, /data-buy-now/g), 1);
+    /* The custom Buy now became Shopify's accelerated checkout buttons, which
+       need a real product form to exist at all. */
+    check('pdp · product form', count(html, /data-form="product"/g), 1);
+    check('pdp · payment button', count(html, /class="shopify-payment-button"/g), 1);
+    check('pdp · variant input in form', count(html, /data-variant-input/g), 1);
     check('pdp · pincode check', count(html, /data-pincode/g), 1);
     check('pdp · call to order', count(html, /class="pdp__call"/g), 1);
     check('pdp · benefit cards', count(html, /class="ben"/g), gte(4));
@@ -361,13 +365,14 @@ const run = async () => {
     const handle = 'helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules';
     const inStock = await get(`/products/${handle}`);
     check('buy box · add to cart when in stock', count(inStock, /data-add-to-cart/g), 1);
-    check('buy box · buy now when in stock', count(inStock, /data-buy-now/g), 1);
+    check('buy box · payment button when in stock', count(inStock, /class="shopify-payment-button"/g), 1);
     check('buy box · error target present', count(inStock, /data-cart-error/g), 1);
 
     const soldOut = await get(`/products/${handle}?stock=out`);
     check('buy box · sold out label', count(soldOut, />Sold out</g), 1);
     check('buy box · no add to cart when sold out', count(soldOut, /data-add-to-cart/g), 0);
-    check('buy box · no buy now when sold out', count(soldOut, /data-buy-now/g), 0);
+    check('buy box · no payment button when sold out', count(soldOut, /shopify-payment-button/g), 0);
+    check('buy box · no product form when sold out', count(soldOut, /data-form="product"/g), 0);
     check('buy box · disabled when sold out', count(soldOut, /aria-disabled="true"/g), gte(1));
     check('buy box · offers an in-stock route', count(soldOut, /See what is in stock/g), 1);
   }
