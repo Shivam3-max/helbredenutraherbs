@@ -53,35 +53,80 @@
     "concern": {
       "type": "concern-switcher",
       "blocks": {
-        "health": {
-          "type": "collection",
-          "settings": {
-            "collection": "health-care",
-            "label": "Health care",
-            "tagline": "Daily wellness, strength and targeted support"
-          }
-        },
-        "hair": {
-          "type": "collection",
-          "settings": {
-            "collection": "hair-care",
-            "label": "Hair care",
-            "tagline": "Support stronger, healthier-looking hair"
-          }
-        },
-        "skin": {
+        "skin-care": {
           "type": "collection",
           "settings": {
             "collection": "skin-care",
-            "label": "Skin care",
-            "tagline": "Targeted formulas for your daily skin routine"
+            "label": "Skin Care",
+            "tagline": "Actives that do the work, botanicals that keep it calm"
+          }
+        },
+        "hair-care": {
+          "type": "collection",
+          "settings": {
+            "collection": "hair-care",
+            "label": "Hair Care",
+            "tagline": "From the scalp out, and from within"
+          }
+        },
+        "liver-detox": {
+          "type": "collection",
+          "settings": {
+            "collection": "liver-detox",
+            "label": "Liver & Detox",
+            "tagline": "Support for the organs that clear the load"
+          }
+        },
+        "weight-metabolism": {
+          "type": "collection",
+          "settings": {
+            "collection": "weight-metabolism",
+            "label": "Weight & Metabolism",
+            "tagline": "Metabolism, appetite and healthy weight"
+          }
+        },
+        "sleep-stress": {
+          "type": "collection",
+          "settings": {
+            "collection": "sleep-stress",
+            "label": "Sleep & Stress",
+            "tagline": "Wind down, and stay down"
+          }
+        },
+        "digestion-gut": {
+          "type": "collection",
+          "settings": {
+            "collection": "digestion-gut",
+            "label": "Digestion & Gut",
+            "tagline": "Digestion that stops getting in the way"
+          }
+        },
+        "strength-performance": {
+          "type": "collection",
+          "settings": {
+            "collection": "strength-performance",
+            "label": "Strength & Performance",
+            "tagline": "Strength, stamina and everyday power"
+          }
+        },
+        "daily-essentials": {
+          "type": "collection",
+          "settings": {
+            "collection": "daily-essentials",
+            "label": "Daily Essentials & Immunity",
+            "tagline": "The everyday base layer"
           }
         }
       },
       "block_order": [
-        "health",
-        "hair",
-        "skin"
+        "skin-care",
+        "hair-care",
+        "liver-detox",
+        "weight-metabolism",
+        "sleep-stress",
+        "digestion-gut",
+        "strength-performance",
+        "daily-essentials"
       ]
     },
     "best": {

@@ -1,0 +1,27 @@
+{%- comment -%}
+  App block host. `@app` lets a merchant drop any installed app's block into a
+  template from the theme editor — without it there is nowhere for an app to
+  render, which is why the Judge.me review widget vanished when this theme was
+  published: Corano had this section, and this theme did not.
+
+  The wrapper carries the site's own width and rhythm so an app block does not
+  sit flush against the page edge.
+{%- endcomment -%}
+<section class="sec sec--tight" data-reveal>
+  <div class="wrap">
+    {%- for block in section.blocks -%}
+      <div class="appblock" {{ block.shopify_attributes }}>
+        {%- render block -%}
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "App block",
+  "settings": [],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "App block" }]
+}
+{% endschema %}

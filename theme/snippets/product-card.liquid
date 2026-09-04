@@ -28,8 +28,16 @@
         {%- assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price | round -%}
         <span class="badge badge--save">{{ pct }}% off</span>
       {%- else -%}<span></span>{%- endif -%}
-      {%- if settings.show_ratings and product.metafields.reviews.rating.value -%}
-        <span class="badge badge--gold">{{ product.metafields.reviews.rating.value }} ★</span>
+      {%- comment -%}
+        `reviews.rating` is a rating-type metafield, so `.value` is an object of
+        scale_min / scale_max / rating — printing it directly dumps the object
+        rather than the score. Judge.me writes this, and only where a product
+        actually has reviews, so the badge stays absent on the rest rather than
+        advertising a zero.
+      {%- endcomment -%}
+      {%- assign review_score = product.metafields.reviews.rating.value.rating -%}
+      {%- if settings.show_ratings and review_score -%}
+        <span class="badge badge--gold">{{ review_score }} ★</span>
       {%- endif -%}
     </div>
   </a>

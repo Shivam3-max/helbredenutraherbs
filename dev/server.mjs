@@ -75,6 +75,12 @@ function toProduct(p) {
           .filter(([, v]) => v !== undefined && v !== null && v !== '')
           .map(([k, v]) => [k, { value: v, type: typeof v === 'string' ? 'single_line_text_field' : 'json' }]),
       ),
+      /* Judge.me writes reviews.rating as a rating-type metafield, whose Liquid
+         value is an object — scale_min, scale_max and the score under `rating`,
+         not a bare number. Mirror that shape so a template reading it wrongly
+         fails here rather than printing "RatingDrop" on the storefront. Null
+         until `?reviews=on`, because almost nothing in the catalogue has a
+         review yet and the card is designed to hold together without stars. */
       reviews: { rating: { value: null }, rating_count: { value: null } },
     },
     /* flattened for template convenience */
@@ -471,10 +477,17 @@ async function renderPage(res, { template, page_title, page_description, path: p
         if (def.settings) Object.assign(section.settings, def.settings);
         if (def.blocks) {
           const order2 = def.block_order || Object.keys(def.blocks);
-          section.blocks = order2.map((bk, i) => ({
-            id: `${key}-${i}`, type: def.blocks[bk].type,
-            settings: def.blocks[bk].settings || {}, shopify_attributes: '',
-          }));
+          section.blocks = order2
+            /* An app block is `{% render block %}` on Shopify, where the block
+               object itself is renderable. LiquidJS's render tag only takes a
+               file name, so an app block here throws and takes the whole page
+               with it. Drop them: the app's markup comes from Shopify's servers
+               and cannot be reproduced locally anyway. */
+            .filter((bk) => !String(def.blocks[bk].type || '').startsWith('shopify://apps/'))
+            .map((bk, i) => ({
+              id: `${key}-${i}`, type: def.blocks[bk].type,
+              settings: def.blocks[bk].settings || {}, shopify_attributes: '',
+            }));
         }
         section.id = key;
         const html = await engine.parseAndRender(src, { section }, { globals });
@@ -545,9 +558,31 @@ app.get('/collections/:handle', (req, res) => {
     };
   }
 
+  const data = { collection };
+
+  /* `?reviews=on` supplies the rating object Judge.me writes, so the star badge
+     on the card is renderable. Nothing in the seeded catalogue has a review. */
+  if (req.query.reviews === 'on') {
+    collection = {
+      ...collection,
+      products: collection.products.map((p) => ({
+        ...p,
+        metafields: {
+          ...p.metafields,
+          reviews: {
+            rating: { value: { rating: '4.8', scale_min: '1.0', scale_max: '5.0' } },
+            rating_count: { value: 12 },
+          },
+        },
+      })),
+    };
+    data.collection = collection;
+    data.settings = { ...settings, show_ratings: true };
+  }
+
   renderPage(res, {
     template: 'collection', page_title: collection.title, path: req.path,
-    page_description: collection.description, data: { collection },
+    page_description: collection.description, data,
   });
 });
 
@@ -584,6 +619,25 @@ app.get('/products/:handle', (req, res) => {
      long as it stays disabled. */
   const data = { product, collection: collections[product.concern], related, routine };
   if (req.query.packs === 'on') data.settings = { ...settings, pack_tiers_on: true };
+
+  /* `?reviews=on` supplies the rating object Judge.me would write, so the star
+     badge is renderable. Two products on the store carry a real rating; nothing
+     in the seeded catalogue does. */
+  if (req.query.reviews === 'on') {
+    const rated = (p) => ({
+      ...p,
+      metafields: {
+        ...p.metafields,
+        reviews: {
+          rating: { value: { rating: '4.8', scale_min: '1.0', scale_max: '5.0' } },
+          rating_count: { value: 12 },
+        },
+      },
+    });
+    data.product = rated(data.product);
+    data.related = related.map(rated);
+    data.settings = { ...(data.settings || settings), show_ratings: true };
+  }
 
   renderPage(res, {
     template: 'product', page_title: product.title, path: req.path,

@@ -79,10 +79,12 @@ const run = async () => {
     /* the banner leads the page, the concern shelf follows it */
     check('home · hero leads the page',
       html.indexOf('shopify-section-hero') < html.indexOf('shopify-section-concern'), true);
-    check('home · concern chips', count(html, /class="chip cs__chip/g), 3);
-    check('home · concern panes', count(html, /data-tab-pane="/g), 3);
-    /* Native Shopify collections: health, hair and skin, plus best sellers. */
-    check('home · product cards', count(html, /<article class="card"/g), 29);
+    check('home · concern chips', count(html, /class="chip cs__chip/g), 8);
+    check('home · concern panes', count(html, /data-tab-pane="/g), 8);
+    /* Eight concern panes plus the best-seller rail. The switcher carried three
+       blocks pointing at the old health/hair/skin collections, next to copy that
+       promised eight concerns. */
+    check('home · product cards', count(html, /<article class="card"/g), 43);
     check('home · best-seller rail', count(html, /data-rail-wrap/g), gte(1));
     check('home · label teaser', count(html, /class="label-panel"/g), 1);
     check('home · ritual teaser', count(html, /class="rit"/g), 3);
@@ -369,6 +371,26 @@ const run = async () => {
     const ritualNames = [...html.matchAll(/<span class="rit__t">([^<]*)</g)].map((m) => m[1].trim());
     const ritLongest = ritualNames.reduce((n, t) => Math.max(n, t.length), 0);
     check(`ritual rail · short names (longest ${ritLongest})`, ritualNames.length > 0 && ritLongest <= 60, true);
+  }
+
+  /* ------------------------------------------------------------- reviews -- */
+  /* Judge.me writes reviews.rating as a rating-type metafield, so its Liquid
+     value is an object of scale_min / scale_max / rating. Printing `.value`
+     directly dumps the object; the score is `.value.rating`. Only two products
+     on the store carry a rating, so the badge has to stay absent elsewhere
+     rather than advertising a zero. */
+  {
+    const rated = await get('/collections/skin-care?reviews=on');
+    check('reviews · badge renders the score', count(rated, /badge--gold">4\.8 ★/g), gte(1));
+    check('reviews · no object leak', count(rated, /RatingDrop|\[object/g), 0);
+
+    const plain = await get('/collections/skin-care');
+    check('reviews · no badge without a rating', count(plain, /badge--gold/g), 0);
+
+    /* The app-block host. Corano had one and this theme did not, which is why
+       the Judge.me widget disappeared when it was published. */
+    const pdp = await get('/products/helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules');
+    check('reviews · app block section present', count(pdp, /shopify-section-reviews/g), 1);
   }
 
   /* ------------------------------------------------- sold-out on the grid -- */
