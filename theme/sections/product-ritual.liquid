@@ -25,7 +25,7 @@
             <span class="rit__slot">{{ r.slot }}</span>
             <img class="rit__img" src="{{ r.product.featured_image | image_url: width: 160 }}" alt="" width="64" height="64" loading="lazy">
             <span>
-              <span class="rit__t">{{ r.product.title }}</span>
+              <span class="rit__t">{{ r.product.metafields.helbrede.title.value | default: r.product.title }}</span>
               <span class="rit__n">{{ r.note }}</span>
             </span>
             <span class="rit__p">{{ rv.price | money }}</span>

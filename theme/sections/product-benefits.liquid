@@ -4,7 +4,7 @@
   <div class="wrap">
     <div class="sec-head">
       <span class="sec-head__pre">what it does</span>
-      <h2 class="sec-head__main">Benefits of {{ product.title }}</h2>
+      <h2 class="sec-head__main">Benefits of {{ product.metafields.helbrede.title.value | default: product.title }}</h2>
     </div>
     <div class="bens" data-reveal-stagger>
       {%- for b in items limit: 9 -%}

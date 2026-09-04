@@ -339,6 +339,11 @@ const run = async () => {
     const panelName = (html.match(/<span class="label-row__d">([^<]*)</) || [])[1] || '';
     check(`label panel · short name (${panelName.length} chars)`, panelName.length > 0 && panelName.length <= 60, true);
 
+
+    /* The benefits heading interpolates the name into a sentence, so the full
+       title turned it into a two-line shout on every PDP. */
+    const benefitsH2 = (pdp.match(/<h2 class="sec-head__main">Benefits of ([^<]*)</) || [])[1] || "";
+    check(`pdp · benefits heading short (${benefitsH2.length} chars)`, benefitsH2.length > 0 && benefitsH2.length <= 60, true);
     const ritualNames = [...html.matchAll(/<span class="rit__t">([^<]*)</g)].map((m) => m[1].trim());
     const ritLongest = ritualNames.reduce((n, t) => Math.max(n, t.length), 0);
     check(`ritual rail · short names (longest ${ritLongest})`, ritualNames.length > 0 && ritLongest <= 60, true);
