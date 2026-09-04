@@ -246,6 +246,16 @@
    half the row the default padding wraps "Add to cart" onto two, making it
    76px against the payment button's 52px. */
 .pdp__cta [data-add-to-cart]{white-space:nowrap;height:52px;min-height:52px;padding-top:0;padding-bottom:0}
+/* Two columns need ~311px: the label is 87px of text inside 32px of padding
+   either side, so each button wants 151px. Below that the nowrap label breaks
+   out of the pill — the button has overflow:visible, so it spills rather than
+   truncating. Stack them instead; full-width CTAs are the better phone pattern
+   anyway. Measured on the live page, not guessed: scrollWidth under-reports
+   this overflow, so it has to be checked against the rendered text range. */
+@media(max-width:400px){
+  .pdp__cta{grid-template-columns:1fr}
+  .pdp__cta [data-add-to-cart]{white-space:normal}
+}
 .pdp__cta .shopify-payment-button__button{
   width:100%;min-height:52px;border-radius:var(--r-pill);
   font-family:inherit;font-size:var(--t-base);font-weight:700;letter-spacing:-.01em;
