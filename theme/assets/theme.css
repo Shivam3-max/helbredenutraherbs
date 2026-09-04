@@ -192,6 +192,8 @@ table{border-collapse:collapse;width:100%}
 .badge--gold{background:var(--gold-wash);color:var(--gold-deep)}
 .badge--best{background:var(--forest);color:#fff}
 .badge--alert{background:var(--alert-bg);color:var(--alert)}
+/* Out of stock: stated plainly, not dressed up as a promotion. */
+.badge--out{background:var(--bg-tint);color:var(--ink-3);border:1px solid var(--line)}
 
 /* ---------- 7. price ----------------------------------------------------- */
 .price{display:flex;align-items:baseline;gap:.5rem;flex-wrap:wrap}
@@ -232,6 +234,13 @@ table{border-collapse:collapse;width:100%}
 .card__pack{font-family:var(--f-mono);font-size:.68rem;color:var(--ink-3);letter-spacing:.06em}
 .card__foot{margin-top:auto;padding-top:.7rem;display:flex;flex-direction:column;gap:.7rem}
 .card__cta{width:100%}
+/* Out of stock. The image is dimmed so the row reads at a glance, but the copy
+   and price stay at full contrast — the shopper still needs to read them, and
+   the card still links through to the product. */
+.card--out .card__media img{opacity:.45;filter:saturate(.6)}
+.card--out:hover .card__media img{transform:none}
+.card__cta--out{color:var(--ink-3);border-color:var(--line)}
+.card__cta--out:hover{background:var(--bg-tint);color:var(--ink-2)}
 
 /* ---------- 10. grids + rails -------------------------------------------- */
 .grid{display:grid;gap:clamp(.8rem,1.6vw,1.4rem)}

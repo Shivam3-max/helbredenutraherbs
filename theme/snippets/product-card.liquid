@@ -10,13 +10,21 @@
 {%- assign product_subtitle = product.metafields.descriptors.subtitle.value | default: product.metafields.custom.subtitle.value | default: product.metafields.helbrede.subtitle.value -%}
 {%- assign pack_size = product.metafields.custom.pack_size.value | default: product.metafields.helbrede.pack_size.value -%}
 {%- assign product_image_url = product.featured_image | image_url: width: 720 -%}
-<article class="card" data-reveal-child>
+{%- comment -%}
+  A third of the catalogue is out of stock at any time, and the card said
+  nothing about it: same price, same Buy now, indistinguishable from something
+  you can actually buy. The shopper only found out on the product page.
+{%- endcomment -%}
+{%- assign card_available = product.available -%}
+<article class="card{% unless card_available %} card--out{% endunless %}" data-reveal-child>
   <a class="card__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
     {% render 'media-slot',
        code: 'PDP-IMG', label: product.title, w: 1, h: 1,
        src: product_image_url, alt: product.title %}
     <div class="card__flags">
-      {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+      {%- if card_available == false -%}
+        <span class="badge badge--out">Sold out</span>
+      {%- elsif v.compare_at_price and v.compare_at_price > v.price -%}
         {%- assign pct = v.compare_at_price | minus: v.price | times: 100 | divided_by: v.compare_at_price | round -%}
         <span class="badge badge--save">{{ pct }}% off</span>
       {%- else -%}<span></span>{%- endif -%}
@@ -34,7 +42,11 @@
 
     <div class="card__foot">
       {% render 'price', amount: v.price, compare: v.compare_at_price %}
-      <a class="btn btn--primary btn--sm card__cta" href="{{ product.url }}">Buy now</a>
+      {%- if card_available -%}
+        <a class="btn btn--primary btn--sm card__cta" href="{{ product.url }}">Buy now</a>
+      {%- else -%}
+        <a class="btn btn--ghost btn--sm card__cta card__cta--out" href="{{ product.url }}">Sold out</a>
+      {%- endif -%}
     </div>
   </div>
 </article>

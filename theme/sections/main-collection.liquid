@@ -43,14 +43,25 @@
 
     <p class="coll__count" data-count hidden></p>
 
+    {%- comment -%}
+      In-stock products lead. Some concerns are half out of stock — hair care
+      and daily essentials are both three of six or five — so leaving Shopify's
+      order alone puts unbuyable products at the top of the grid. Two passes
+      over the same page rather than a sort, because Liquid cannot sort on
+      `available`.
+    {%- endcomment -%}
     {%- paginate c.products by 24 -%}
     <div class="grid grid--4" data-grid>
-      {%- for p in c.products -%}
-        {%- assign product_filters = p.tags -%}
-        {%- if product_filters == blank -%}{%- assign product_filters = p.filters -%}{%- endif -%}
-        <div data-item data-filters="{{ product_filters | join: '|' | escape }}" data-price="{{ p.price }}" data-name="{{ p.metafields.helbrede.title.value | default: p.title | escape }}">
-          {% render 'product-card', product: p %}
-        </div>
+      {%- for pass in (1..2) -%}
+        {%- for p in c.products -%}
+          {%- if pass == 1 and p.available == false -%}{%- continue -%}{%- endif -%}
+          {%- if pass == 2 and p.available -%}{%- continue -%}{%- endif -%}
+          {%- assign product_filters = p.tags -%}
+          {%- if product_filters == blank -%}{%- assign product_filters = p.filters -%}{%- endif -%}
+          <div data-item data-filters="{{ product_filters | join: '|' | escape }}" data-price="{{ p.price }}" data-name="{{ p.metafields.helbrede.title.value | default: p.title | escape }}" data-available="{{ p.available }}">
+            {% render 'product-card', product: p %}
+          </div>
+        {%- endfor -%}
       {%- endfor -%}
     </div>
 

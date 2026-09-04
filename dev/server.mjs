@@ -526,8 +526,25 @@ app.get('/collections/all', (req, res) => renderPage(res, {
 }));
 
 app.get('/collections/:handle', (req, res) => {
-  const collection = collections[req.params.handle];
+  let collection = collections[req.params.handle];
   if (!collection) return res.status(404).send(notFound(req.path));
+
+  /*
+   * `?stock=mixed` marks every second product unavailable, the way `?stock=out`
+   * does for one product page. The seeded catalogue is entirely in stock while
+   * a third of the real one is not — hair care and daily essentials are each
+   * about half — so without this the grid can never render a sold-out card or
+   * show whether in-stock products actually lead.
+   */
+  if (req.query.stock === 'mixed') {
+    collection = {
+      ...collection,
+      products: collection.products.map((p, i) => (i % 2 === 1
+        ? { ...p, available: false, variants: p.variants.map((v) => ({ ...v, available: false })) }
+        : p)),
+    };
+  }
+
   renderPage(res, {
     template: 'collection', page_title: collection.title, path: req.path,
     page_description: collection.description, data: { collection },

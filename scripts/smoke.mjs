@@ -356,6 +356,29 @@ const run = async () => {
     check(`ritual rail · short names (longest ${ritLongest})`, ritualNames.length > 0 && ritLongest <= 60, true);
   }
 
+  /* ------------------------------------------------- sold-out on the grid -- */
+  /* The card said nothing about availability: same price, same Buy now, and the
+     shopper only discovered the truth on the product page. Some concerns are
+     half out of stock, so unbuyable products also led the grid. */
+  {
+    const html = await get('/collections/strength-performance?stock=mixed');
+    check('grid · cards rendered', count(html, /<article class="card/g), 8);
+    check('grid · sold-out cards marked', count(html, /card--out/g), 4);
+    check('grid · sold-out badge', count(html, /badge--out/g), 4);
+    check('grid · sold-out cta', count(html, /card__cta--out/g), 4);
+    check('grid · buy now only when buyable', count(html, />Buy now</g), 4);
+
+    const order = [...html.matchAll(/data-available="(true|false)"/g)].map((m) => m[1]);
+    const firstOut = order.indexOf('false');
+    const lastIn = order.lastIndexOf('true');
+    check('grid · in-stock products lead', firstOut === -1 || lastIn < firstOut, true);
+
+    /* And the ordinary case is untouched. */
+    const plain = await get('/collections/strength-performance');
+    check('grid · nothing marked when all in stock', count(plain, /card--out/g), 0);
+    check('grid · every card buyable', count(plain, />Buy now</g), 8);
+  }
+
   /* ---------------------------------------------------- sold-out buy box -- */
   /* fetch resolves on a 422, so a sold-out add used to fall through to the cart
      drawer, which opened empty with nothing said. Twelve of the thirty-five
