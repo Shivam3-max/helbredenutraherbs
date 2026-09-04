@@ -78,6 +78,12 @@
 }
 .cs__pane-t{font-family:var(--f-display);font-size:var(--t-xl);letter-spacing:-.02em;line-height:1.15}
 .cs__pane-s{font-size:var(--t-sm);color:var(--ink-3);margin-top:.15rem}
+/* On a phone the head wraps, so "All N products" lands on its own line directly
+   above the rail and 1.15rem is the only thing separating a text link from a
+   card edge. Give the rail room once that wrap happens. */
+@media(max-width:600px){
+  .cs__pane-head{margin-bottom:1.9rem}
+}
 
 /* ---------- value / trust strip ------------------------------------------ */
 .vals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(1rem,2vw,2rem)}
