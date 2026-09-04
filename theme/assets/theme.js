@@ -530,12 +530,27 @@
   (() => {
     const qtyVal = $('[data-qty-value]');
     const qtyInput = $('[data-qty-input]');
+    const packs = $$('[data-pack-qty]');
+
+    /* The ladder and the stepper drive the same number, so they have to agree
+       in both directions — otherwise the highlighted pack can contradict the
+       quantity actually being added. */
+    function setQty(n) {
+      const next = Math.max(1, Number(n) || 1);
+      if (qtyVal) qtyVal.textContent = next;
+      if (qtyInput) qtyInput.value = next;
+      packs.forEach((p) => {
+        const on = Number(p.dataset.packQty) === next;
+        p.classList.toggle('is-on', on);
+        p.setAttribute('aria-checked', String(on));
+      });
+    }
+
+    packs.forEach((p) => p.addEventListener('click', () => setQty(p.dataset.packQty)));
 
     $$('[data-qty-step]').forEach((btn) => btn.addEventListener('click', () => {
       if (!qtyVal || !qtyInput) return;
-      const next = Math.max(1, Number(qtyVal.textContent) + Number(btn.dataset.qtyStep));
-      qtyVal.textContent = next;
-      qtyInput.value = next;
+      setQty(Number(qtyVal.textContent) + Number(btn.dataset.qtyStep));
     }));
 
     /* The custom "Buy now" was replaced by Shopify's own accelerated checkout

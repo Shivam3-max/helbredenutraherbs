@@ -96,6 +96,62 @@
         {%- endcomment -%}
         <input type="hidden" name="id" value="{{ v.id }}" data-variant-input>
 
+        {%- comment -%}
+          The pack ladder sets QUANTITY, not variant. Every product is a single
+          stocked bottle, so three bottles is quantity 3 of one SKU — inventory
+          decrements correctly and no new SKU exists to run out separately. The
+          saving is a Shopify automatic discount keyed on minimum quantity; the
+          percentages here and there must agree, which is why they come from one
+          pair of theme settings rather than being written into the markup.
+        {%- endcomment -%}
+        {%- if settings.pack_tiers_on -%}
+          {%- assign keep2 = 100 | minus: settings.pack_tier2_pct -%}
+          {%- assign keep3 = 100 | minus: settings.pack_tier3_pct -%}
+          {%- assign total2 = v.price | times: 2 | times: keep2 | divided_by: 100 -%}
+          {%- assign total3 = v.price | times: 3 | times: keep3 | divided_by: 100 -%}
+          {%- assign each2 = total2 | divided_by: 2 -%}
+          {%- assign each3 = total3 | divided_by: 3 -%}
+          <div class="pdp__block">
+            <h2 class="pdp__block-h">Choose your pack</h2>
+            <div class="packs" role="radiogroup" aria-label="Choose your pack">
+              <button type="button" class="pack is-on" data-pack-qty="1" role="radio" aria-checked="true">
+                <span class="pack__radio" aria-hidden="true"></span>
+                <span class="pack__mid">
+                  <span class="pack__t">1 bottle</span>
+                  <span class="pack__u">try it</span>
+                </span>
+                <span class="pack__right"><span class="pack__price">{{ v.price | money }}</span></span>
+              </button>
+
+              <button type="button" class="pack" data-pack-qty="2" role="radio" aria-checked="false">
+                <span class="pack__radio" aria-hidden="true"></span>
+                <span class="pack__mid">
+                  <span class="pack__t">2 bottles</span>
+                  <span class="pack__u">{{ each2 | money }} each</span>
+                </span>
+                <span class="pack__right">
+                  <span class="pack__price">{{ total2 | money }}</span>
+                  <span class="pack__each">save {{ settings.pack_tier2_pct }}%</span>
+                </span>
+              </button>
+
+              <button type="button" class="pack" data-pack-qty="3" role="radio" aria-checked="false">
+                <span class="pack__radio" aria-hidden="true"></span>
+                <span class="pack__mid">
+                  <span class="pack__t">3 bottles</span>
+                  <span class="pack__u">{{ each3 | money }} each</span>
+                </span>
+                <span class="pack__right">
+                  <span class="pack__price">{{ total3 | money }}</span>
+                  <span class="pack__each">save {{ settings.pack_tier3_pct }}%</span>
+                </span>
+                <span class="badge badge--best pack__badge">Best value</span>
+              </button>
+            </div>
+            <p class="packs__note t-sm t-dim-3">Saving applied at checkout.</p>
+          </div>
+        {%- endif -%}
+
         <div class="pdp__actions">
           <div class="pdp__qty">
             <span class="t-mono">Qty</span>

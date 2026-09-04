@@ -118,6 +118,9 @@
           "wrapper_card_ancestor_selectors": ""
         }
       }
-    }
+    },
+    "pack_tiers_on": false,
+    "pack_tier2_pct": 10,
+    "pack_tier3_pct": 15
   }
 }

@@ -121,12 +121,24 @@ const run = async () => {
     check('pdp · gallery shots', count(html, /class="pdp__shot/g), gte(5));
     check('pdp · gallery thumbs', count(html, /class="pdp__thumb/g), gte(5));
     check('pdp · title', count(html, /class="pdp__title"/g), 1);
-    /* No pack ladder. Every product is one stocked bottle, so Pack of 2 / 3 as
-       variants would each start at zero inventory and render sold out, and
-       stocking them would count the same bottles twice over. Assert it stays
-       gone: the seeded catalogue still carries three variants per product, so
-       reinstating the markup would look right locally and be wrong live. */
-    check('pdp · no pack ladder', count(html, /class="pack |pack__badge|pack__each/g), 0);
+    /* The pack ladder sets quantity, never a variant — one stocked bottle per
+       product, so three bottles is quantity 3 of one SKU. Assert it never grows
+       a variant selector again: the seeded catalogue still carries three
+       variants each, so a variant ladder would look right here and oversell on
+       the store. */
+    check('pdp · ladder hidden while disabled', count(html, /data-pack-qty/g), 0);
+  }
+
+  /* The ladder itself, forced on. It ships disabled until the matching Shopify
+     automatic discounts are confirmed to apply at checkout — the store is on
+     Basic, where two product discounts cannot combine on one line, so which
+     tier wins at quantity 3 has to be observed rather than assumed. */
+  {
+    const html = await get('/products/helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules?packs=on');
+    check('pdp · pack tiers', count(html, /data-pack-qty="[123]"/g), 3);
+    check('pdp · tiers set quantity, not variant', count(html, /data-pack="|name="id" value="\d+" \/?>[\s\S]{0,40}pack__radio/g), 0);
+    check('pdp · best value badge', count(html, /pack__badge/g), 1);
+    check('pdp · saving shown per tier', count(html, /save 1[05]%/g), 2);
     check('pdp · add to cart', count(html, /data-add-to-cart/g), 1);
     /* The custom Buy now became Shopify's accelerated checkout buttons, which
        need a real product form to exist at all. */

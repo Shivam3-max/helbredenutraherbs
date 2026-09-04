@@ -576,10 +576,18 @@ app.get('/products/:handle', (req, res) => {
     .filter((p) => p.concern === product.concern && p.handle !== product.handle)
     .slice(0, 8);
   const routine = buildRoutine(product);
+
+  /* `?packs=on` forces the pack ladder regardless of the stored theme setting.
+     The ladder ships switched off until the matching Shopify automatic
+     discounts are proven to apply, and settings_data.json is the same file
+     locally and live — so without this the markup would go untested for as
+     long as it stays disabled. */
+  const data = { product, collection: collections[product.concern], related, routine };
+  if (req.query.packs === 'on') data.settings = { ...settings, pack_tiers_on: true };
+
   renderPage(res, {
     template: 'product', page_title: product.title, path: req.path,
-    page_description: product.subtitle,
-    data: { product, collection: collections[product.concern], related, routine },
+    page_description: product.subtitle, data,
   });
 });
 

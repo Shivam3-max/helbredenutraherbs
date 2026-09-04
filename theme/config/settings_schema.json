@@ -131,5 +131,38 @@
         "default": "Flat ₹100 off on your first order — code HELLO100"
       }
     ]
+  },
+  {
+    "name": "Pack pricing",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "The pack ladder sets the QUANTITY of one bottle — it does not create variants, so stock stays correct. The saving must also exist as an automatic discount in Shopify with the same minimum quantity and percentage, or the price shown here will not match the cart."
+      },
+      {
+        "type": "checkbox",
+        "id": "pack_tiers_on",
+        "label": "Show the pack ladder",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "pack_tier2_pct",
+        "label": "Saving on 2 (%)",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "default": 10
+      },
+      {
+        "type": "range",
+        "id": "pack_tier3_pct",
+        "label": "Saving on 3 (%)",
+        "min": 0,
+        "max": 50,
+        "step": 1,
+        "default": 15
+      }
+    ]
   }
 ]
