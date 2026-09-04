@@ -4,6 +4,7 @@
 {%- if p == blank -%}{%- assign selected_products = all_products | where: 'handle', section.settings.product -%}{%- assign p = selected_products.first -%}{%- endif -%}
 {%- if p == blank -%}{%- assign p = collections.all.products.first -%}{%- endif -%}
 {%- if p == blank -%}{%- assign p = all_products.first -%}{%- endif -%}
+{%- assign product_name = p.metafields.helbrede.title.value | default: p.title -%}
 <section class="sec sec--tint" data-reveal>
   <div class="wrap split">
     <div>
@@ -28,11 +29,11 @@
         <span class="label-panel__s">{{ p.vendor }}</span>
       </div>
       <div class="label-panel__rule"></div>
-      <div class="label-row"><span class="label-row__n">Product</span><span class="label-row__d">{{ p.title }}</span></div>
+      <div class="label-row"><span class="label-row__n">Product</span><span class="label-row__d">{{ product_name }}</span></div>
       <div class="label-row"><span class="label-row__n">Price</span><span class="label-row__d">{{ p.price | money }}</span></div>
       <div class="label-row"><span class="label-row__n">Category</span><span class="label-row__d">{{ p.type | default: p.vendor }}</span></div>
       <div class="label-row"><span class="label-row__n">Availability</span><span class="label-row__d">{% if p.available %}In stock{% else %}Sold out{% endif %}</span></div>
-      <p class="label-panel__ft">Live catalogue information for {{ p.title }}.</p>
+      <p class="label-panel__ft">Live catalogue information for {{ product_name }}.</p>
     </div>
   </div>
 </section>

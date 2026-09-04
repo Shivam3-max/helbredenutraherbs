@@ -48,7 +48,7 @@
       {%- for p in c.products -%}
         {%- assign product_filters = p.tags -%}
         {%- if product_filters == blank -%}{%- assign product_filters = p.filters -%}{%- endif -%}
-        <div data-item data-filters="{{ product_filters | join: '|' | escape }}" data-price="{{ p.price }}" data-name="{{ p.title | escape }}">
+        <div data-item data-filters="{{ product_filters | join: '|' | escape }}" data-price="{{ p.price }}" data-name="{{ p.metafields.helbrede.title.value | default: p.title | escape }}">
           {% render 'product-card', product: p %}
         </div>
       {%- endfor -%}

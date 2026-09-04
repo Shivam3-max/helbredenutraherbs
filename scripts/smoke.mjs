@@ -332,6 +332,16 @@ const run = async () => {
     const pdp = await get('/products/helbrede-berberine-capsules-400mg-berberis-aristata-with-cinnamon-black-pepper-metabolic-wellness-support-60-capsules');
     const h1 = (pdp.match(/<h1 class="pdp__title">([^<]*)</) || [])[1] || '';
     check(`pdp · short name in heading (${h1.length} chars)`, h1.length > 0 && h1.length <= 60, true);
+
+    /* The label panel and the ritual rail render product names too, and were
+       missed on the first pass — the panel is narrow and a 100-character title
+       overflowed it on the live homepage. */
+    const panelName = (html.match(/<span class="label-row__d">([^<]*)</) || [])[1] || '';
+    check(`label panel · short name (${panelName.length} chars)`, panelName.length > 0 && panelName.length <= 60, true);
+
+    const ritualNames = [...html.matchAll(/<span class="rit__t">([^<]*)</g)].map((m) => m[1].trim());
+    const ritLongest = ritualNames.reduce((n, t) => Math.max(n, t.length), 0);
+    check(`ritual rail · short names (longest ${ritLongest})`, ritualNames.length > 0 && ritLongest <= 60, true);
   }
 
   /* ---------------------------------------------------- sold-out buy box -- */

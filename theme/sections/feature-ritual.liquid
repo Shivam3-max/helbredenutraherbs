@@ -32,7 +32,7 @@
               <span class="rit__slot">{{ slot }}</span>
               <img class="rit__img" src="{{ pr.featured_image | image_url: width: 160 }}" alt="" width="64" height="64" loading="lazy">
               <span>
-                <span class="rit__t">{{ pr.title }}</span>
+                <span class="rit__t">{{ pr.metafields.helbrede.title.value | default: pr.title }}</span>
                 <span class="rit__n">{{ pr.type | default: pr.vendor }}</span>
               </span>
               <span class="rit__p">{{ v.price | money }}</span>
