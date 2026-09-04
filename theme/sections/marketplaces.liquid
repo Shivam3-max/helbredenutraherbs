@@ -38,8 +38,15 @@
           {%- endcomment -%}
           <span class="mktcard__logo">
             {%- if b.settings.logo != blank -%}
+              {%- comment -%}
+                media-slot takes a URL, not an image object — every other caller
+                passes one through image_url. Handing it the raw picker value
+                skips sizing entirely, so the uploaded wordmark would be served
+                at whatever resolution the merchant happened to upload.
+              {%- endcomment -%}
+              {%- assign logo_url = b.settings.logo | image_url: width: 600 -%}
               {% render 'media-slot', code: slot_code, label: slot_label,
-                 w: 600, h: 180, src: b.settings.logo, alt: b.settings.name %}
+                 w: 600, h: 180, src: logo_url, alt: b.settings.name %}
             {%- else -%}
               <span class="mktcard__wordmark">{{ b.settings.name }}</span>
             {%- endif -%}
