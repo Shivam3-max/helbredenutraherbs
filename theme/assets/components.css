@@ -26,7 +26,12 @@
 .anno__nav{
   width:26px;height:26px;display:grid;place-items:center;border-radius:50%;
   color:var(--gold-pale);transition:.24s var(--ease);flex:none;
+  position:relative;
 }
+/* The announcement bar is only 38px tall, so the button cannot grow to a
+   thumb-sized target without stretching the bar. Extend the hit area instead —
+   26px + 9px each side is 44px, and nothing moves. */
+.anno__nav::after{content:"";position:absolute;inset:-9px}
 .anno__nav:hover{background:rgba(255,255,255,.12);color:#fff}
 .anno__nav svg{transform:rotate(180deg)}
 .anno__nav--next svg{transform:none}
@@ -168,6 +173,10 @@
 .hdr__msearch input{
   flex:1;min-width:0;border:0;background:none;outline:0;
   font-size:15px;color:var(--ink);
+  /* Fill the bar. The input's own line box is 26px inside a 46px bar, so the
+     top and bottom 10px of the store's primary search affordance looked
+     tappable and did nothing. */
+  align-self:stretch;height:100%;
 }
 .hdr__msearch input::placeholder{color:var(--ink-3)}
 .hdr__msearch .hdr__suggest{top:calc(100% + .45rem)}
