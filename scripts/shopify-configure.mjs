@@ -723,9 +723,23 @@ async function stepIngredients() {
  * pack_tier2_pct / pack_tier3_pct theme settings — the page quotes a figure the
  * cart has to honour.
  */
+/*
+ * The percentages here are NOT the headline tiers. Shopify applies both of
+ * these to the same line when both qualify, and each is calculated off the
+ * original price rather than compounding — so 10% and 15% billed 25% at
+ * quantity 3, observed on a real cart.
+ *
+ * They are therefore expressed as increments: 10%, then a further 5%.
+ *
+ *   quantity 2   10%              = 10%   matches pack_tier2_pct
+ *   quantity 3+  10% + 5%         = 15%   matches pack_tier3_pct
+ *
+ * Change one of these and the theme settings must move with it, or the page
+ * will quote a saving the cart does not honour.
+ */
 const PACK_DISCOUNTS = [
   { title: 'Pack of 2 — 10% off', quantity: 2, percentage: 0.10 },
-  { title: 'Pack of 3 — 15% off', quantity: 3, percentage: 0.15 },
+  { title: 'Pack of 3 — extra 5% off', quantity: 3, percentage: 0.05 },
 ];
 
 async function stepDiscounts() {
