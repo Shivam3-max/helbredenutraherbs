@@ -1,0 +1,90 @@
+{%- comment -%}
+  Customer testimonials, carried over from the Corano storefront.
+
+  These are written testimonials held in the theme, not Judge.me reviews — the
+  app holds only four reviews across three products, so the shelf a shopper used
+  to see on the homepage came from here. They are real customer words with real
+  names and faces, so they are ported verbatim rather than rewritten; only the
+  four Corano demo entries ("Vivamus a lobortis ipsum…") were dropped.
+
+  Layout follows the product rails: same head, same nav buttons, same scroll
+  behaviour, so it reads as part of the page rather than a bolted-on widget.
+{%- endcomment -%}
+{%- if section.blocks.size > 0 -%}
+<section class="sec sec--tint tst" data-reveal>
+  <div class="wrap">
+    <div class="sec-head sec-head--row">
+      <div>
+        <span class="sec-head__pre">{{ section.settings.pre }}</span>
+        <h2 class="sec-head__main">{{ section.settings.heading }}</h2>
+      </div>
+      <div class="rail-nav">
+        <button data-rail-prev aria-label="Scroll left">{% render 'icon', name: 'chevron', size: 16 %}</button>
+        <button data-rail-next aria-label="Scroll right">{% render 'icon', name: 'chevron', size: 16 %}</button>
+      </div>
+    </div>
+
+    {%- if section.settings.body != blank -%}
+      <p class="t-lede tst__lede">{{ section.settings.body }}</p>
+    {%- endif -%}
+
+    <div data-rail-wrap>
+      <div class="rail" data-rail>
+        {%- for block in section.blocks -%}
+          <figure class="tst__card" {{ block.shopify_attributes }}>
+            {%- if block.settings.stars > 0 -%}
+              {%- comment -%}
+                The visible glyphs are decorative; the score is stated once in
+                text for anything not reading the page visually.
+              {%- endcomment -%}
+              <div class="tst__stars" aria-hidden="true">
+                {%- for i in (1..block.settings.stars) -%}★{%- endfor -%}
+              </div>
+              <span class="sr">Rated {{ block.settings.stars }} out of 5</span>
+            {%- endif -%}
+
+            <blockquote class="tst__q">{{ block.settings.quote }}</blockquote>
+
+            <figcaption class="tst__by">
+              {%- if block.settings.image != blank -%}
+                <img class="tst__face" src="{{ block.settings.image | image_url: width: 96 }}"
+                     alt="" width="48" height="48" loading="lazy">
+              {%- else -%}
+                <span class="tst__face tst__face--none" aria-hidden="true">
+                  {{ block.settings.author | slice: 0 | upcase }}
+                </span>
+              {%- endif -%}
+              <span class="tst__name">{{ block.settings.author }}</span>
+            </figcaption>
+          </figure>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</section>
+{%- endif -%}
+{% schema %}
+{
+  "name": "Testimonials",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "pre", "label": "Small line", "default": "what customers say" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Why customers choose Nutraherbs" },
+    { "type": "textarea", "id": "body", "label": "Intro",
+      "default": "Trusted by families across India for premium Ayurvedic and Nutraceutical solutions." }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "text", "id": "author", "label": "Name" },
+        { "type": "richtext", "id": "quote", "label": "Testimonial" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "range", "id": "stars", "label": "Stars", "min": 0, "max": 5, "step": 1, "default": 5 }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Testimonials" }]
+}
+{% endschema %}

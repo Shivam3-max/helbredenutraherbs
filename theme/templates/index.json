@@ -276,6 +276,158 @@
         "store-1",
         "store-2"
       ]
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "settings": {
+        "pre": "what customers say",
+        "heading": "Why Customers Choose Nutraherbs",
+        "body": "Trusted by families across India for premium Ayurvedic and Nutraceutical solutions"
+      },
+      "blocks": {
+        "quote-1": {
+          "type": "quote",
+          "settings": {
+            "author": "shreya bansal",
+            "quote": "<p><strong>\"Stopped my hair fall in weeks!\"</strong> <br/>\"I cannot recommend Nutraherbs Virgin<strong> </strong>Hair Oil enough. The blend of pure Ayurvedic extracts like Amla and Bhringraj has significantly reduced my daily hair breakage. My roots feel completely rejuvenated, and my scalp feels deeply nourished after every application. This 100 ML bottle is pure gold!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/girl_face_3.jpg"
+          }
+        },
+        "quote-2": {
+          "type": "quote",
+          "settings": {
+            "author": "Harshita Saini",
+            "quote": "<p><strong>\"The perfect formula for a hydrated, oil-free glow!\"</strong> <br/>\"Finding a serum that balances oil control with hydration is tough, but Helbrede Nutraherbs got it right. This serum keeps my skin intensely hydrated throughout the day without making it greasy. It absorbs instantly, controls excess oil, and leaves behind a beautiful, natural radiance. A must-have for glowing skin!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/indian_girl_face_1.jpg"
+          }
+        },
+        "quote-3": {
+          "type": "quote",
+          "settings": {
+            "author": "Pawan Kumar Bansal",
+            "quote": "<p><strong>\"More Energy Throughout the Day!\"</strong></p><p>\"I've been using Mahabali Drops for over a month, and I've noticed a real difference in my daily energy. My workouts feel more productive, and I don't feel as tired after long workdays. The Ayurvedic ingredients were the main reason I chose this product, and I'm happy with the quality. Highly recommended!\" </p>",
+            "stars": 5,
+            "image": "shopify://shop_images/new_pawan.png"
+          }
+        },
+        "quote-4": {
+          "type": "quote",
+          "settings": {
+            "author": "Anvi sharma",
+            "quote": "<p><strong>\"The perfect partner for your fitness journey!\"</strong> <br/>\"If you are looking for safe, Ayurvedic metabolism support, this is it! Helbrede Fat Burner Capsules are easy to take, lightweight on the stomach, and keep my body feeling light and active all day. Definitely helps me stay on track with my body transformation!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/dce189eac47ae14c7e35d2aa3b29f58c.jpg"
+          }
+        },
+        "quote-5": {
+          "type": "quote",
+          "settings": {
+            "author": "Aditya Kapoor",
+            "quote": "<p><strong>\"A Great Addition to My Hair Care Routine!”</strong></p><p>“I’ve been using Helbrede Bio Fully Hair Tablets regularly and I’m really happy with the overall experience. I wanted a simple supplement to support my hair from within, and the combination of Biotin, Zinc and Selenium made it a great choice for me. My hair feels healthier, stronger and more nourished with consistent use. The tablets are also easy to include in my daily routine. Definitely a product I would recommend to anyone looking to support their overall hair health!”</p><p></p>",
+            "stars": 5,
+            "image": "shopify://shop_images/boy1.jpg"
+          }
+        },
+        "quote-6": {
+          "type": "quote",
+          "settings": {
+            "author": "Parisha gupta",
+            "quote": "<p><strong>\"Cleared my stubborn breakouts!\"</strong> <br/>\"I have been struggling with sudden breakouts and painful bumps, but the Helbrede Balance & Clear Face Serum has completely saved my skin. The potent mix of 10% Niacinamide and 2% Salicylic Acid targets active acne immediately and stops new pimples from forming. My face looks clearer, smoother, and completely balanced!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/girl_image_2.jpg"
+          }
+        },
+        "quote-7": {
+          "type": "quote",
+          "settings": {
+            "author": "Rohan Sharma",
+            "quote": "<p> <strong>“Great Addition to My Fitness Routine!”</strong></p><p>I’ve been using Mahabali Capsules as part of my daily fitness routine and have had a really positive experience. I like that it combines traditional Ayurvedic ingredients such as Shilajit, Ashwagandha, Safed Musli and Kaunch Beej. I feel more energetic during my workouts and it has become a regular part of my routine. Overall, a great Ayurvedic supplement for anyone focused on strength, stamina and daily vitality.</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/boy_2.jpg"
+          }
+        },
+        "quote-8": {
+          "type": "quote",
+          "settings": {
+            "author": "Shivam Bhandari",
+            "quote": "<p><strong>\"The ultimate natural strength booster for the gym!\"</strong> <br/>\"As someone who trains heavily, finding a clean, plant-based supplement was crucial. Helbrede Mahabali Capsules have completely elevated my workouts. The combination of Shilajit, Ashwagandha, and<strong> </strong>Safed Musli provides clean, sustained energy without any crashes. My muscle recovery is faster, and my overall gym stamina has skyrocketed. An absolute essential for athletes!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/shivam.jpg"
+          }
+        },
+        "quote-9": {
+          "type": "quote",
+          "settings": {
+            "author": "Ashok Aggarwal",
+            "quote": "<p><strong>\"Incredible boost in stamina and daily power!\"</strong> <br/>\"I have been using Mahabali Capsules for a while now to combat fatigue and improve my athletic performance. It is a true Ayurvedic power booster. I feel much stronger during my high-intensity training sessions, and the inclusion of Kaunch Beej helps me maintain peak focus and endurance. Highly recommend it to both men and women looking to level up their strength!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/fufa.jpg"
+          }
+        },
+        "quote-10": {
+          "type": "quote",
+          "settings": {
+            "author": "Swarika Sharma",
+            "quote": "<p><strong>The ultimate glow-boosting serum! </strong><br/>\"I have been using the Helbrede NutraHerbs Radiance Vitamin C Face Serum as part of my daily routine, and my skin has never looked better. It provides a massive boost of hydration without being greasy, and it has visibly brightened my dull complexion. My dark spots are fading, and my skin has a healthy, natural glow!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/pari.jpg"
+          }
+        },
+        "quote-11": {
+          "type": "quote",
+          "settings": {
+            "author": "Monika Sharma",
+            "quote": "<p><strong>Major reduction in hair fall!</strong><br/>\"I started using the Nutraherbs Virgin Hair<strong> </strong>Oi<strong>l</strong> to tackle post-stress hair shedding, and it has worked wonders. The blend of 70 traditional Ayurvedic extracts like Amla, Bhringraj, Brahmi, and Hibiscus has deeply nourished my dry scalp. My roots feel significantly stronger, and I can see a visible reduction in daily breakage! Highly recommend it!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/mona_resize.jpg"
+          }
+        },
+        "quote-12": {
+          "type": "quote",
+          "settings": {
+            "author": "Naveesh kalra",
+            "quote": "<p><strong>Say goodbye to bloating and indigestion!</strong><br/>\"I have struggled with severe gas and sluggish digestion for a long time, but  Livohél Gold Liver Detox Powder has completely turned things around. Taking this Ayurvedic formula regularly has noticeably improved my digestion and eliminated that heavy, bloated feeling after meals. It feels amazing to have a light and happy gut again!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/naveesh.jpg"
+          }
+        },
+        "quote-13": {
+          "type": "quote",
+          "settings": {
+            "author": "manish pathak",
+            "quote": "<p><strong>\"100% natural energy that actually delivers!\"</strong> <br/>\"If you want to unleash your true potential in the gym, Helbrede Nutraherbs Mahabali is the answer. It’s packed with potent Ayurvedic extracts that fight fatigue, boost everyday performance, and support lean muscle endurance. No chemicals, no shortcuts—just pure strength!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/b677cc613b6b84fdf855eb81bc8b59af.jpg"
+          }
+        },
+        "quote-14": {
+          "type": "quote",
+          "settings": {
+            "author": "Raghav Gupta",
+            "quote": "<p><strong>\"Major reduction in hair fall and new hair growth!\"</strong> <br/>\"I started taking the Helbrede Bio Fully Hair Tablet because of sudden hair thinning, and it has been a lifesaver. The combination of Biotin, Zinc, and Selenium has completely brought my hair fall under control. I can see new baby hairs growing along my hairline, and my overall hair density feels much thicker. Highly recommend this herbal supplement!\"</p>",
+            "stars": 5,
+            "image": "shopify://shop_images/indian_boy_1.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "quote-1",
+        "quote-2",
+        "quote-3",
+        "quote-4",
+        "quote-5",
+        "quote-6",
+        "quote-7",
+        "quote-8",
+        "quote-9",
+        "quote-10",
+        "quote-11",
+        "quote-12",
+        "quote-13",
+        "quote-14"
+      ]
     }
   },
   "order": [
@@ -286,6 +438,7 @@
     "ritual",
     "why",
     "story",
+    "testimonials",
     "certs",
     "mkt"
   ]

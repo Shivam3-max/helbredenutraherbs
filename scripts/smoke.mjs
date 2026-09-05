@@ -373,6 +373,19 @@ const run = async () => {
     check(`ritual rail · short names (longest ${ritLongest})`, ritualNames.length > 0 && ritLongest <= 60, true);
   }
 
+  /* -------------------------------------------------------- testimonials -- */
+  /* Ported from Corano, which carried two testimonial sections: fourteen real
+     customer entries and four of the theme's demo placeholders. Assert the
+     count, and that none of the demo copy came across with them. */
+  {
+    const html = await get('/');
+    check('testimonials · cards', count(html, /class="tst__card"/g), 14);
+    check('testimonials · every card has a face', count(html, /tst__face/g), 14);
+    check('testimonials · star rows', count(html, /class="tst__stars"/g), 14);
+    check('testimonials · no demo copy', count(html, /Vivamus a lobortis|lorem ipsum/gi), 0);
+    check('testimonials · rating stated for screen readers', count(html, /Rated 5 out of 5/g), 14);
+  }
+
   /* ------------------------------------------------------------- reviews -- */
   /* Judge.me writes reviews.rating as a rating-type metafield, so its Liquid
      value is an object of scale_min / scale_max / rating. Printing `.value`
